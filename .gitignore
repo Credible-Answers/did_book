@@ -1,0 +1,21 @@
+# Quarto build output
+/_book/
+/.quarto/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# R session files
+.Rhistory
+.RData
+.Rproj.user/
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Environment files
+.env
+.venv/

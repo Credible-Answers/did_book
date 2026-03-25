@@ -1,0 +1,38 @@
+# Preface {.unnumbered}
+
+This book provides complete, executable solutions to all **green questions** (coding exercises) from:
+
+> **Credible Answers to Hard Questions: Differences-in-Differences for Natural Experiments**
+> by Clément de Chaisemartin & Xavier D'Haultfœuille (Princeton University Press, forthcoming)
+
+Every exercise is solved in **three programming languages** — Stata, R, and Python — and the code **executes directly** inside this book, producing outputs, tables, and graphs so the reader can verify that results are exactly the same across all three languages.
+
+Each chapter is presented in three separate pages, one per language, so that all outputs are generated live.
+
+## Datasets
+
+| Chapters | Paper                    | Stata (.dta) | R (.RData) | Python (.parquet) |
+|----------|--------------------------|:---:|:---:|:---:|
+| 3 & 4    | Moser & Voena (2012)     | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet) |
+| 5 & 8    | Gentzkow et al. (2011)   | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.parquet) |
+| 6        | Wolfers (2006)           | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet) |
+| 7        | Pierce & Schott (2016)   | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet) |
+
+Download the dataset in your preferred format and place it in your working directory. All code blocks in the chapters assume the dataset is in the current directory.
+
+## Requirements
+
+- **Quarto** ≥ 1.4: <https://quarto.org/docs/download/>
+- **Stata 17+** with `nbstata`: `pip install nbstata && python -m nbstata.install`
+- **R** with packages: `install.packages(c("haven", "fixest", "dplyr", "ggplot2", "broom", "car"))`
+- **Python** with packages: `pip install pandas numpy pyfixest scipy matplotlib pyreadstat`
+
+## Source code
+
+<https://github.com/Credible-Answers/did_book>
+
+## Contributors
+
+- [Anthony Quispe](https://github.com/anzonyquispe)
+- [Karla Vega](https://karlavegaleg.github.io)
+- [Joshbel Damian](https://damianrojasjhosbel-sudo.github.io/)
