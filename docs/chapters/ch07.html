@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Chapter 7: Designs with Variation in Treatment Dose – DID Textbook: Translations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/ch08.html" rel="next">
+<link href="../chapters/ch06.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/ch07.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">DID Textbook: Translations</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Chapter 3: The Classical DID Design</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 4: Alternatives to Parallel Trends</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Chapter 5: TWFE Estimators Outside of the Classical Design</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter 6: Designs with Variation in Treatment Timing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch07.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Chapter 8: General Designs</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">5.1</span> Overview</a></li>
+  <li><a href="#panelview" id="toc-panelview" class="nav-link" data-scroll-target="#panelview"><span class="header-section-number">5.2</span> PanelView</a></li>
+  <li><a href="#gq1-7.3.1-twfe-regressions" id="toc-gq1-7.3.1-twfe-regressions" class="nav-link" data-scroll-target="#gq1-7.3.1-twfe-regressions"><span class="header-section-number">5.3</span> GQ1 (§7.3.1): TWFE Regressions</a></li>
+  <li><a href="#gq2-7.3.1-decompose-twfe-weights" id="toc-gq2-7.3.1-decompose-twfe-weights" class="nav-link" data-scroll-target="#gq2-7.3.1-decompose-twfe-weights"><span class="header-section-number">5.4</span> GQ2 (§7.3.1): Decompose TWFE Weights</a></li>
+  <li><a href="#gq3-7.3.3-test-random-assignment-of-treatment-dose" id="toc-gq3-7.3.3-test-random-assignment-of-treatment-dose" class="nav-link" data-scroll-target="#gq3-7.3.3-test-random-assignment-of-treatment-dose"><span class="header-section-number">5.5</span> GQ3 (§7.3.3): Test Random Assignment of Treatment Dose</a></li>
+  <li><a href="#gq4-7.3.4.3-stute-tests-of-linearity" id="toc-gq4-7.3.4.3-stute-tests-of-linearity" class="nav-link" data-scroll-target="#gq4-7.3.4.3-stute-tests-of-linearity"><span class="header-section-number">5.6</span> GQ4 (§7.3.4.3): Stute Tests of Linearity</a></li>
+  <li><a href="#gq5-7.3.4.5-pre-trend-tests-without-linear-trends" id="toc-gq5-7.3.4.5-pre-trend-tests-without-linear-trends" class="nav-link" data-scroll-target="#gq5-7.3.4.5-pre-trend-tests-without-linear-trends"><span class="header-section-number">5.7</span> GQ5 (§7.3.4.5): Pre-Trend Tests (Without Linear Trends)</a></li>
+  <li><a href="#gq6-7.3.4.5-pre-trend-tests-with-linear-trends" id="toc-gq6-7.3.4.5-pre-trend-tests-with-linear-trends" class="nav-link" data-scroll-target="#gq6-7.3.4.5-pre-trend-tests-with-linear-trends"><span class="header-section-number">5.8</span> GQ6 (§7.3.4.5): Pre-Trend Tests WITH Linear Trends</a></li>
+  <li><a href="#gq7-7.3.4.5-stute-tests-of-mean-independence-with-linear-trends" id="toc-gq7-7.3.4.5-stute-tests-of-mean-independence-with-linear-trends" class="nav-link" data-scroll-target="#gq7-7.3.4.5-stute-tests-of-mean-independence-with-linear-trends"><span class="header-section-number">5.9</span> GQ7 (§7.3.4.5): Stute Tests of Mean Independence (With Linear Trends)</a></li>
+  <li><a href="#gq8-7.3.4.5-twfe-with-industry-specific-linear-trends" id="toc-gq8-7.3.4.5-twfe-with-industry-specific-linear-trends" class="nav-link" data-scroll-target="#gq8-7.3.4.5-twfe-with-industry-specific-linear-trends"><span class="header-section-number">5.10</span> GQ8 (§7.3.4.5): TWFE With Industry-Specific Linear Trends</a></li>
+  <li><a href="#gq9-7.3.4.5-stute-tests-of-linearity-with-linear-trends" id="toc-gq9-7.3.4.5-stute-tests-of-linearity-with-linear-trends" class="nav-link" data-scroll-target="#gq9-7.3.4.5-stute-tests-of-linearity-with-linear-trends"><span class="header-section-number">5.11</span> GQ9 (§7.3.4.5): Stute Tests of Linearity (With Linear Trends)</a></li>
+  <li><a href="#quasi-stayer-test" id="toc-quasi-stayer-test" class="nav-link" data-scroll-target="#quasi-stayer-test"><span class="header-section-number">5.12</span> Quasi-Stayer Test</a></li>
+  <li><a href="#computing-commands-7.3.2.2-contdid-and-did_multiplegt_stat-syntax" id="toc-computing-commands-7.3.2.2-contdid-and-did_multiplegt_stat-syntax" class="nav-link" data-scroll-target="#computing-commands-7.3.2.2-contdid-and-did_multiplegt_stat-syntax"><span class="header-section-number">5.13</span> Computing Commands (§7.3.2.2): <code>contdid</code> and <code>did_multiplegt_stat</code> Syntax</a></li>
+  <li><a href="#gq10-7.3.5-did_had-event-study-estimates" id="toc-gq10-7.3.5-did_had-event-study-estimates" class="nav-link" data-scroll-target="#gq10-7.3.5-did_had-event-study-estimates"><span class="header-section-number">5.14</span> GQ10 (§7.3.5): <code>did_had</code> Event-Study Estimates</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">5.1</span> Overview</h2>
+<p>Dataset: <strong>Pierce &amp; Schott (2016)</strong> — <code>pierce_schott_didtextbook.dta</code> (103 industries, 22 variables)</p>
+<p>This chapter applies the <strong>Heterogeneous Adoption Design (HAD)</strong> framework to study how China’s permanent normal trade relations (PNTR) status affected US manufacturing employment. The key feature: treatment is <strong>continuous</strong> (the NTR gap, ranging from 0.02 to 0.64), not binary. All 103 US industries are “treated” — there are no pure control groups, but industries with near-zero NTR gaps serve as quasi-stayers.</p>
+<p><strong>Packages used:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 29%">
+<col style="width: 12%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Stata</th>
+<th>R</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>OLS + HC2 SE</td>
+<td><code>reg, vce(hc2)</code></td>
+<td><code>sandwich</code> + <code>lmtest</code></td>
+<td><code>statsmodels</code> (HC2)</td>
+</tr>
+<tr class="even">
+<td>Weight decomposition</td>
+<td><code>twowayfeweights</code> (SSC)</td>
+<td><code>TwoWayFEWeights</code> (CRAN)</td>
+<td>Not available for <code>fdTR</code></td>
+</tr>
+<tr class="odd">
+<td>Stute linearity test</td>
+<td><code>stute_test</code> (GitHub)</td>
+<td><code>StuteTest</code> (GitHub)</td>
+<td>Manual implementation</td>
+</tr>
+<tr class="even">
+<td>Treatment visualization</td>
+<td><code>panelview</code> (SSC)</td>
+<td><code>panelView</code> (CRAN)</td>
+<td><code>matplotlib</code> (manual)</td>
+</tr>
+<tr class="odd">
+<td>F-test</td>
+<td><code>test</code> (built-in)</td>
+<td><code>car::linearHypothesis</code></td>
+<td><code>scipy</code> + <code>f_test</code></td>
+</tr>
+<tr class="even">
+<td>HAD event-study</td>
+<td><code>did_had</code> (SSC) + <code>nprobust</code> (GitHub) + <code>gtools</code> (SSC)</td>
+<td><code>DIDHAD</code> (GitHub) + <code>nprobust</code> (CRAN)</td>
+<td><code>did-had</code> (PyPI)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="panelview" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="panelview"><span class="header-section-number">5.2</span> PanelView</h2>
+<blockquote class="blockquote">
+<p>Note: In the Pierce &amp; Schott (2016) application, treatment is continuous (NTR gap), so the standard binary PanelView is not applicable. See the code below for reference, but plots are omitted.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install panelview, <span class="kw">replace</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">reshape</span> <span class="kw">long</span> delta deltalintrend, i(indusid) j(<span class="fu">year</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>panelview delta ntrgap, i(indusid) t(<span class="fu">year</span>) <span class="dv">type</span>(treat) <span class="bn">title</span>(<span class="st">"Treatment Dose: Pierce &amp; Schott (2016)"</span>) <span class="bn">legend</span>(<span class="kw">off</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"$FIGDIR\ch07_panelview_stata.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(panelView); <span class="fu">library</span>(tidyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"delta"</span>), <span class="at">names_to =</span> <span class="st">"variable"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df_long<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"delta"</span>, <span class="st">""</span>, df_long<span class="sc">$</span>variable))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> df_long[<span class="sc">!</span><span class="fu">is.na</span>(df_long<span class="sc">$</span>year), ]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>df_long<span class="sc">$</span>treated <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df_long<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2001</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/ch07_panelview_R.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">panelview</span>(value <span class="sc">~</span> treated, <span class="at">data =</span> df_long, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"indusid"</span>, <span class="st">"year"</span>), <span class="at">type =</span> <span class="st">"treat"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="st">"Pierce &amp; Schott (2016)"</span>, <span class="at">ylab =</span> <span class="st">""</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> mcolors</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>cmap <span class="op">=</span> plt.cm.Blues</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>norm <span class="op">=</span> mcolors.Normalize(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span>df[<span class="st">'ntrgap'</span>].<span class="bu">max</span>() <span class="op">*</span> <span class="fl">1.1</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Heatmap: each row = industry (sorted by ntrgap), each column = year</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Color intensity = NTR gap (continuous treatment dose)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="gq1-7.3.1-twfe-regressions" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="gq1-7.3.1-twfe-regressions"><span class="header-section-number">5.3</span> GQ1 (§7.3.1): TWFE Regressions</h2>
+<blockquote class="blockquote">
+<p>Regress <span class="math inline">\(\Delta_{2000}^t Y_g\)</span> on <span class="math inline">\(D_g\)</span> (NTR gap) for <span class="math inline">\(t \in \{2001, 2002, 2004, 2005\}\)</span>, with HC2 standard errors.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> delta2001 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> delta2002 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> delta2004 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> delta2005 ntrgap, <span class="kw">vce</span>(hc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- 2001 ---  N = 103, R² = 0.0237
+             |             Robust HC2
+   delta2001 | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      ntrgap |  -.0612112   .0401833    -1.52   0.131    -.1409241    .0185017
+       _cons |  -.0141423   .0129623    -1.09   0.278     -.039856    .0115714
+
+--- 2002 ---  N = 103, R² = 0.1263
+      ntrgap |  -.2598747   .0754512    -3.44   0.001    -.4095496   -.1101999
+       _cons |  -.0550989   .0220561    -2.50   0.014    -.0988522   -.0113456
+
+--- 2004 ---  N = 103, R² = 0.0857
+      ntrgap |  -.5397825   .1527447    -3.53   0.001    -.8427868   -.2367782
+       _cons |  -.0868008   .0524821    -1.65   0.101    -.1909111    .0173095
+
+--- 2005 ---  N = 103, R² = 0.0707
+      ntrgap |  -.5317591   .1666765    -3.19   0.002    -.8624004   -.2011179
+       _cons |  -.1056161   .0536739    -1.97   0.052    -.2120906    .0008584</code></pre>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(sandwich); <span class="fu">library</span>(lmtest)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (yr <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>)) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"delta"</span>, yr, <span class="st">" ~ ntrgap"</span>)), <span class="at">data =</span> df)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">coeftest</span>(fit, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(fit, <span class="at">type =</span> <span class="st">"HC2"</span>)))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- 2001 ---  N = 103, R² = 0.02366
+             Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -0.0141423  0.0129623 -1.0910   0.2779
+ntrgap      -0.0612112  0.0401833 -1.5233   0.1308
+
+--- 2002 ---  N = 103, R² = 0.12631
+(Intercept) -0.0550989  0.0220561 -2.4981   0.0141
+ntrgap      -0.2598747  0.0754512 -3.4443   0.0008
+
+--- 2004 ---  N = 103, R² = 0.08567
+(Intercept) -0.0868008  0.0524821 -1.6539   0.1012
+ntrgap      -0.5397825  0.1527447 -3.5339   0.0006
+
+--- 2005 ---  N = 103, R² = 0.07072
+(Intercept) -0.1056161  0.0536739 -1.9677   0.0518
+ntrgap      -0.5317591  0.1666765 -3.1904   0.0019</code></pre>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> [<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>]:</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[<span class="ss">f'delta</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> sm.add_constant(df[<span class="st">'ntrgap'</span>])</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> sm.OLS(y, X).fit(cov_type<span class="op">=</span><span class="st">'HC2'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- 2001 ---  N = 103, R² = 0.02366
+  Variable                     Coef      Std.Err          t      P&gt;|t|
+  const                  -0.0141423    0.0129623     -1.091     0.2753
+  ntrgap                 -0.0612112    0.0401833     -1.523     0.1277
+
+--- 2002 ---  N = 103, R² = 0.12631
+  const                  -0.0550989    0.0220561     -2.498     0.0125
+  ntrgap                 -0.2598747    0.0754512     -3.444     0.0006
+
+--- 2004 ---  N = 103, R² = 0.08567
+  const                  -0.0868008    0.0524821     -1.654     0.0981
+  ntrgap                 -0.5397825    0.1527447     -3.534     0.0004
+
+--- 2005 ---  N = 103, R² = 0.07072
+  const                  -0.1056161    0.0536739     -1.968     0.0491
+  ntrgap                 -0.5317591    0.1666765     -3.190     0.0014</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> The NTR gap has a significant negative effect on manufacturing employment growth starting from 2002. The effect grows over time: a 10 pp increase in the NTR gap is associated with roughly 5 pp lower employment growth by 2004–2005.</p>
+<hr>
+</section>
+<section id="gq2-7.3.1-decompose-twfe-weights" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="gq2-7.3.1-decompose-twfe-weights"><span class="header-section-number">5.4</span> GQ2 (§7.3.1): Decompose TWFE Weights</h2>
+<blockquote class="blockquote">
+<p>Use <code>twowayfeweights</code> with <code>type(fdTR)</code> to assess whether <span class="math inline">\(\hat{\beta}_{fe}\)</span> estimates a convex combination of effects.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install twowayfeweights, <span class="kw">replace</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>twowayfeweights delta2001 indusid cons ntrgap ntrgap, <span class="dv">type</span>(fdTR)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Under the common trends assumption,
+the TWFE coefficient beta, equal to -0.0612, estimates a weighted sum of 103 ATTs.
+62 ATTs receive a positive weight, and 41 receive a negative weight.
+------------------------------------------------
+Treat. var: ntrgap      # ATTs      Σ weights
+------------------------------------------------
+Positive weights        62          1.3190
+Negative weights        41          -0.3190
+------------------------------------------------
+Total                   103         1.0000
+------------------------------------------------</code></pre>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Workaround: fdTR with constant time variable crashes in R.</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a 2-period panel and use feTR (equivalent with T=2).</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>df_panel <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">indusid =</span> df<span class="sc">$</span>indusid, <span class="at">time =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">0</span>, <span class="at">D =</span> <span class="dv">0</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">indusid =</span> df<span class="sc">$</span>indusid, <span class="at">time =</span> <span class="dv">2</span>, <span class="at">Y =</span> df<span class="sc">$</span>delta2001, <span class="at">D =</span> df<span class="sc">$</span>ntrgap)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>gq2 <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df_panel, <span class="st">"Y"</span>, <span class="st">"indusid"</span>, <span class="st">"time"</span>, <span class="st">"D"</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                        <span class="at">type =</span> <span class="st">"feTR"</span>, <span class="at">summary_measures =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Under the common trends assumption,
+the TWFE coefficient beta, equal to -0.0612, estimates a weighted sum of 103 ATTs.
+62 ATTs receive a positive weight, and 41 receive a negative weight.
+
+Treat. var: D       ATTs    Σ weights
+Positive weights      62        1.319
+Negative weights      41       -0.319
+Total                103            1
+
+Summary Measures:
+  min σ(Δ) compatible with β_fe and Δ_TR = 0: 0.0317
+  min σ(Δ) compatible with opposite sign: 0.0642</code></pre>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"cons"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"ntrgap_D0"</span>] <span class="op">=</span> df[<span class="st">"ntrgap"</span>]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> twowayfeweights(df, <span class="st">"delta2001"</span>, <span class="st">"indusid"</span>, <span class="st">"cons"</span>, <span class="st">"ntrgap"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                          <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>, D0<span class="op">=</span><span class="st">"ntrgap_D0"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Under the common trends assumption,
+beta estimates a weighted sum of 103 ATTs.
+62 ATTs receive a positive weight, and 41 receive a negative weight.
+------------------------------------------------
+Treat. var: ntrgap      # ATTs      Σ weights
+------------------------------------------------
+Positive weights        62          1.3190
+Negative weights        41          -0.3190
+------------------------------------------------
+Total                   103         1.0000
+------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> 41 out of 103 industry ATTs receive negative weights, summing to −0.3190. The TWFE estimator does <em>not</em> estimate a convex combination of effects. However, the textbook notes this is expected in the HAD framework and motivates the Stute linearity tests below.</p>
+<hr>
+</section>
+<section id="gq3-7.3.3-test-random-assignment-of-treatment-dose" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="gq3-7.3.3-test-random-assignment-of-treatment-dose"><span class="header-section-number">5.5</span> GQ3 (§7.3.3): Test Random Assignment of Treatment Dose</h2>
+<blockquote class="blockquote">
+<p>Regress the NTR gap on pre-treatment employment levels (1997–2000) and test their joint significance.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> ntrgap lemp1997 lemp1998 lemp1999 lemp2000, <span class="kw">vce</span>(hc2)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">test</span> lemp1997 lemp1998 lemp1999 lemp2000</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>             |             Robust HC2
+      ntrgap | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lemp1997 |  -.0219594   .1325814    -0.17   0.869    -.2850629    .2411441
+    lemp1998 |   .6043265   .3103595     1.95   0.054    -.0115719    1.220225
+    lemp1999 |  -.2260641   .4573776    -0.49   0.622    -1.133715    .6815867
+    lemp2000 |  -.3418326   .2938878    -1.16   0.248    -.9250434    .2413782
+       _cons |   .1204804   .1396417     0.86   0.390     -.156634    .3975949
+
+F(4, 98) = 2.39     Prob &gt; F = 0.0560</code></pre>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(car)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(ntrgap <span class="sc">~</span> lemp1997 <span class="sc">+</span> lemp1998 <span class="sc">+</span> lemp1999 <span class="sc">+</span> lemp2000, <span class="at">data =</span> df)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftest</span>(m3, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(m3, <span class="at">type =</span> <span class="st">"HC2"</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">linearHypothesis</span>(m3, <span class="fu">c</span>(<span class="st">"lemp1997=0"</span>,<span class="st">"lemp1998=0"</span>,<span class="st">"lemp1999=0"</span>,<span class="st">"lemp2000=0"</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">vcov. =</span> <span class="fu">vcovHC</span>(m3, <span class="at">type =</span> <span class="st">"HC2"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>             Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)  0.1204804  0.1396417  0.8628   0.3904
+lemp1997    -0.0219594  0.1325814 -0.1656   0.8688
+lemp1998     0.6043265  0.3103595  1.9472   0.0544
+lemp1999    -0.2260641  0.4573776 -0.4943   0.6222
+lemp2000    -0.3418326  0.2938878 -1.1631   0.2476
+
+F(4, 98) = 2.3901     Pr(&gt;F) = 0.05597</code></pre>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>X_vars <span class="op">=</span> [<span class="st">'lemp1997'</span>, <span class="st">'lemp1998'</span>, <span class="st">'lemp1999'</span>, <span class="st">'lemp2000'</span>]</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'ntrgap'</span>]<span class="op">;</span> X <span class="op">=</span> sm.add_constant(df[X_vars])</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> sm.OLS(y, X).fit(cov_type<span class="op">=</span><span class="st">'HC2'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># F-test for joint significance</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>  Variable                     Coef      Std.Err          t      P&gt;|t|
+  const                   0.1204804    0.1396417      0.863     0.3883
+  lemp1997               -0.0219594    0.1325814     -0.166     0.8684
+  lemp1998                0.6043265    0.3103595      1.947     0.0515
+  lemp1999               -0.2260641    0.4573776     -0.494     0.6211
+  lemp2000               -0.3418326    0.2938878     -1.163     0.2448
+
+F(4, 98) = 2.3901     Prob &gt; F = 0.0560</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> The joint F-test yields <span class="math inline">\(p = 0.056\)</span>, marginally insignificant at 5%. Pre-treatment employment levels are not strong predictors of the NTR gap, consistent with (approximate) random assignment of the treatment dose.</p>
+<hr>
+</section>
+<section id="gq4-7.3.4.3-stute-tests-of-linearity" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="gq4-7.3.4.3-stute-tests-of-linearity"><span class="header-section-number">5.6</span> GQ4 (§7.3.4.3): Stute Tests of Linearity</h2>
+<blockquote class="blockquote">
+<p>Test whether <span class="math inline">\(E[\Delta Y | D]\)</span> is linear in <span class="math inline">\(D\)</span> using the Stute (1997) Cramér–von Mises test, for each post-treatment year and jointly.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>stute_test delta2001 ntrgap, <span class="dv">seed</span>(1)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>stute_test delta2002 ntrgap, <span class="dv">seed</span>(1)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>stute_test delta2004 ntrgap, <span class="dv">seed</span>(1)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>stute_test delta2005 ntrgap, <span class="dv">seed</span>(1)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="kw">reshape</span> <span class="kw">long</span> delta deltalintrend, i(indusid) j(<span class="fu">year</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>stute_test delta ntrgap indusid <span class="fu">year</span> <span class="kw">if</span> <span class="fu">year</span>&gt;=2001, <span class="dv">seed</span>(1)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable       |   t stat    p-value
+   delta2001      |  .0004426      .042
+   delta2002      |  .0011319      .134
+   delta2004      |  .0039215      .478
+   delta2005      |  .0033582      .716
+
+Panel Joint Test:
+             |    t stat    p-value
+        2001 |  .0004426       .042
+        2002 |  .0011319       .134
+        2004 |  .0039215       .478
+        2005 |  .0033582       .716
+Joint Stute test: 0.0089 (0.5400)</code></pre>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(StuteTest)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (yr <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stute_test</span>(<span class="at">df =</span> df, <span class="at">Y =</span> <span class="fu">paste0</span>(<span class="st">"delta"</span>, yr), <span class="at">D =</span> <span class="st">"ntrgap"</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Panel joint test</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>df_panel_gq4 <span class="ot">&lt;-</span> df_long <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2001</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stute_test</span>(<span class="at">df =</span> df_panel_gq4, <span class="at">Y =</span> <span class="st">"delta"</span>, <span class="at">D =</span> <span class="st">"ntrgap"</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">group =</span> <span class="st">"indusid"</span>, <span class="at">time =</span> <span class="st">"year"</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable       |   t stat    p-value
+   delta2001      |  0.0004426    0.054
+   delta2002      |  0.0011319    0.152
+   delta2004      |  0.0039215    0.480
+   delta2005      |  0.0033582    0.684
+
+Panel Joint Test:
+             |    t stat    p-value
+        2001 |  0.0004426    0.064
+        2002 |  0.0011319    0.130
+        2004 |  0.0039215    0.484
+        2005 |  0.0033582    0.660
+Joint Stute test: 0.0089 (0.5500)</code></pre>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> stute_test_cvm(Y, D, df, order<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">1</span>, nboot<span class="op">=</span><span class="dv">999</span>):</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[Y].values.astype(<span class="bu">float</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> df[D].values.astype(<span class="bu">float</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(y)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.column_stack([d<span class="op">**</span>k <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(order<span class="op">+</span><span class="dv">1</span>)])</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> np.linalg.lstsq(X, y, rcond<span class="op">=</span><span class="va">None</span>)[<span class="dv">0</span>]</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    resid <span class="op">=</span> y <span class="op">-</span> X <span class="op">@</span> beta</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> np.argsort(d)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    resid_sorted <span class="op">=</span> resid[idx]</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    cum_resid <span class="op">=</span> np.cumsum(resid_sorted) <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    cvm_stat <span class="op">=</span> np.<span class="bu">sum</span>(cum_resid<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> n</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.RandomState(seed)</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(nboot):</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>        wild <span class="op">=</span> resid <span class="op">*</span> rng.choice([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>], size<span class="op">=</span>n)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>        wild_sorted <span class="op">=</span> wild[idx]</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>        cum_wild <span class="op">=</span> np.cumsum(wild_sorted) <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>        boot_stat <span class="op">=</span> np.<span class="bu">sum</span>(cum_wild<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> n</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> boot_stat <span class="op">&gt;=</span> cvm_stat:</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>            count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>    pval <span class="op">=</span> (count <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> (nboot <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cvm_stat, pval</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> [<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>]:</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>    stat, pv <span class="op">=</span> stute_test_cvm(<span class="ss">f'delta</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span>, <span class="st">'ntrgap'</span>, df, order<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"delta</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">: CvM = </span><span class="sc">{</span>stat<span class="sc">:.7f}</span><span class="ss">, p = </span><span class="sc">{</span>pv<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable        |   CvM stat    p-value
+   delta2001        |  0.0004426      0.695
+   delta2002        |  0.0011319      0.740
+   delta2004        |  0.0039215      0.925
+   delta2005        |  0.0033582      0.972
+
+Panel Joint Test:
+        2001 |  0.0004426      0.695
+        2002 |  0.0011319      0.740
+        2004 |  0.0039215      0.925
+        2005 |  0.0033582      0.972
+   Joint        |  0.0088542</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Linearity is not rejected at conventional levels for 2002–2005 (all <span class="math inline">\(p &gt; 0.10\)</span>). For 2001, the p-value is borderline (<span class="math inline">\(\approx 0.04\)</span>–<span class="math inline">\(0.08\)</span> depending on bootstrap draw). The joint test (<span class="math inline">\(p \approx 0.54\)</span>) does not reject linearity.</p>
+<hr>
+</section>
+<section id="gq5-7.3.4.5-pre-trend-tests-without-linear-trends" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="gq5-7.3.4.5-pre-trend-tests-without-linear-trends"><span class="header-section-number">5.7</span> GQ5 (§7.3.4.5): Pre-Trend Tests (Without Linear Trends)</h2>
+<blockquote class="blockquote">
+<p>Test for pre-trends by regressing <span class="math inline">\(\Delta_{2000}^t Y_g\)</span> on <span class="math inline">\(D_g\)</span> for <span class="math inline">\(t \in \{1999, 1998, 1997\}\)</span>.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> delta1999 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> delta1998 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> delta1997 ntrgap, <span class="kw">vce</span>(hc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- delta1999 ---  N = 103, R² = 0.0325
+      ntrgap |   .0580708   .0279591     2.08   0.040     .0026074    .1135341
+       _cons |  -.0051607   .0086782    -0.59   0.553    -.0223759    .0120544
+
+--- delta1998 ---  N = 103, R² = 0.0616
+      ntrgap |   .1407052   .0547983     2.57   0.012     .0320002    .2494102
+       _cons |  -.0107783   .0162652    -0.66   0.509    -.0430442    .0214875
+
+--- delta1997 ---  N = 103, R² = 0.0307
+      ntrgap |   .1625066   .0712845     2.28   0.025     .0210973    .3039160
+       _cons |  -.0353406   .0211379    -1.67   0.098    -.0772726    .0065913</code></pre>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (yr <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">1999</span>, <span class="dv">1998</span>, <span class="dv">1997</span>)) {</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"delta"</span>, yr, <span class="st">" ~ ntrgap"</span>)), <span class="at">data =</span> df)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">coeftest</span>(fit, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(fit, <span class="at">type =</span> <span class="st">"HC2"</span>)))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- delta1999 ---  N = 103, R² = 0.03251
+(Intercept) -0.0051607  0.0086782 -0.5947   0.5534
+ntrgap       0.0580708  0.0279591  2.0770   0.0403
+
+--- delta1998 ---  N = 103, R² = 0.06156
+(Intercept) -0.0107783  0.0162652 -0.6627   0.5091
+ntrgap       0.1407052  0.0547983  2.5677   0.0117
+
+--- delta1997 ---  N = 103, R² = 0.03068
+(Intercept) -0.0353406  0.0211379 -1.6719   0.0976
+ntrgap       0.1625066  0.0712845  2.2797   0.0247</code></pre>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> [<span class="dv">1999</span>, <span class="dv">1998</span>, <span class="dv">1997</span>]:</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[<span class="ss">f'delta</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span>]</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> sm.add_constant(df[<span class="st">'ntrgap'</span>])</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> sm.OLS(y, X).fit(cov_type<span class="op">=</span><span class="st">'HC2'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- delta1999 ---  N = 103, R² = 0.03251
+  const                  -0.0051607    0.0086782     -0.595     0.5521
+  ntrgap                  0.0580708    0.0279591      2.077     0.0378
+
+--- delta1998 ---  N = 103, R² = 0.06156
+  const                  -0.0107783    0.0162652     -0.663     0.5075
+  ntrgap                  0.1407052    0.0547983      2.568     0.0102
+
+--- delta1997 ---  N = 103, R² = 0.03068
+  const                  -0.0353406    0.0211379     -1.672     0.0945
+  ntrgap                  0.1625066    0.0712845      2.280     0.0226</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> All three pre-treatment coefficients are <strong>significant and positive</strong>, indicating pre-trends: industries with higher NTR gaps had faster employment growth before PNTR. This motivates adding industry-specific linear trends (GQ6–GQ9).</p>
+<hr>
+</section>
+<section id="gq6-7.3.4.5-pre-trend-tests-with-linear-trends" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="gq6-7.3.4.5-pre-trend-tests-with-linear-trends"><span class="header-section-number">5.8</span> GQ6 (§7.3.4.5): Pre-Trend Tests WITH Linear Trends</h2>
+<blockquote class="blockquote">
+<p>Repeat GQ5 using the detrended outcome <span class="math inline">\(\tilde{\Delta}_{2000}^t Y_g\)</span> (netting out industry-specific linear trends).</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> deltalintrend1998 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> deltalintrend1997 ntrgap, <span class="kw">vce</span>(hc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- deltalintrend1998 ---  N = 103, R² = 0.0046
+      ntrgap |  -.0245637   .0339253    -0.72   0.471    -.0918623    .0427349
+       _cons |   .0004569   .0119279     0.04   0.970    -.0232047    .0241186
+
+--- deltalintrend1997 ---  N = 103, R² = 0.0050
+      ntrgap |  -.0463651   .0444009    -1.04   0.299    -.1344446    .0417144
+       _cons |   .0250192   .0153636     1.63   0.107    -.0054579    .0554964</code></pre>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (yr <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">1998</span>, <span class="dv">1997</span>)) {</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"deltalintrend"</span>, yr, <span class="st">" ~ ntrgap"</span>)), <span class="at">data =</span> df)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">coeftest</span>(fit, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(fit, <span class="at">type =</span> <span class="st">"HC2"</span>)))</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- deltalintrend1998 ---  N = 103, R² = 0.00455
+(Intercept)  0.0004569  0.0119279  0.0383   0.9695
+ntrgap      -0.0245637  0.0339253 -0.7241   0.4707
+
+--- deltalintrend1997 ---  N = 103, R² = 0.00503
+(Intercept)  0.0250192  0.0153636  1.6285   0.1065
+ntrgap      -0.0463651  0.0444009 -1.0442   0.2989</code></pre>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> [<span class="dv">1998</span>, <span class="dv">1997</span>]:</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[<span class="ss">f'deltalintrend</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span>]</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> sm.add_constant(df[<span class="st">'ntrgap'</span>])</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> sm.OLS(y, X).fit(cov_type<span class="op">=</span><span class="st">'HC2'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- deltalintrend1998 ---  N = 103, R² = 0.00455
+  const                   0.0004569    0.0119279      0.038     0.9694
+  ntrgap                 -0.0245637    0.0339253     -0.724     0.4690
+
+--- deltalintrend1997 ---  N = 103, R² = 0.00503
+  const                   0.0250192    0.0153636      1.628     0.1034
+  ntrgap                 -0.0463651    0.0444009     -1.044     0.2964</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> After including industry-specific linear trends, all pre-trend coefficients become <strong>small and insignificant</strong> (<span class="math inline">\(p &gt; 0.29\)</span>). The trends successfully absorb the pre-existing differential growth.</p>
+<hr>
+</section>
+<section id="gq7-7.3.4.5-stute-tests-of-mean-independence-with-linear-trends" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="gq7-7.3.4.5-stute-tests-of-mean-independence-with-linear-trends"><span class="header-section-number">5.9</span> GQ7 (§7.3.4.5): Stute Tests of Mean Independence (With Linear Trends)</h2>
+<blockquote class="blockquote">
+<p>Test whether <span class="math inline">\(E[\tilde{\Delta} Y | D] = \text{const}\)</span> (mean independence, order 0) for the detrended pre-period outcomes.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-3" role="tab" aria-controls="tabset-8-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>stute_test deltalintrend1998 ntrgap, <span class="kw">order</span>(0) <span class="dv">seed</span>(1)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>stute_test deltalintrend1997 ntrgap, <span class="kw">order</span>(0) <span class="dv">seed</span>(1)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="kw">reshape</span> <span class="kw">long</span> delta deltalintrend, i(indusid) j(<span class="fu">year</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>stute_test deltalintrend ntrgap indusid <span class="fu">year</span> <span class="kw">if</span> <span class="fu">inlist</span>(<span class="fu">year</span>, 1997, 1998), <span class="kw">order</span>(0) <span class="dv">seed</span>(1)</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable            |   t stat    p-value
+   deltalintrend1998   |  .0004249      .302
+   deltalintrend1997   |  .0007520      .508
+
+Panel Joint Test:
+        1997 |   .0007520      .508
+        1998 |  .0004249       .302
+Joint Stute test: 0.0012 (0.4720)</code></pre>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stute_test</span>(<span class="at">df =</span> df, <span class="at">Y =</span> <span class="st">"deltalintrend1998"</span>, <span class="at">D =</span> <span class="st">"ntrgap"</span>, <span class="at">order =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stute_test</span>(<span class="at">df =</span> df, <span class="at">Y =</span> <span class="st">"deltalintrend1997"</span>, <span class="at">D =</span> <span class="st">"ntrgap"</span>, <span class="at">order =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Panel joint test</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stute_test</span>(<span class="at">df =</span> df_pre_lt, <span class="at">Y =</span> <span class="st">"deltalintrend"</span>, <span class="at">D =</span> <span class="st">"ntrgap"</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">group =</span> <span class="st">"indusid"</span>, <span class="at">time =</span> <span class="st">"year"</span>, <span class="at">order =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable            |   t stat    p-value
+   deltalintrend1998   |  0.0004249    0.284
+   deltalintrend1997   |  0.0007520    0.506
+
+Panel Joint Test:
+        1997 |  0.0007520    0.514
+        1998 |  0.0004249    0.294
+Joint Stute test: 0.0012 (0.4660)</code></pre>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> stute_test_cvm(Y, D, df, order<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">1</span>, nboot<span class="op">=</span><span class="dv">999</span>):</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[Y].values.astype(<span class="bu">float</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> df[D].values.astype(<span class="bu">float</span>)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(y)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.column_stack([d<span class="op">**</span>k <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(order<span class="op">+</span><span class="dv">1</span>)])</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> np.linalg.lstsq(X, y, rcond<span class="op">=</span><span class="va">None</span>)[<span class="dv">0</span>]</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    resid <span class="op">=</span> y <span class="op">-</span> X <span class="op">@</span> beta</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> np.argsort(d)</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>    cum_resid <span class="op">=</span> np.cumsum(resid[idx]) <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    cvm_stat <span class="op">=</span> np.<span class="bu">sum</span>(cum_resid<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> n</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.RandomState(seed)</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(nboot):</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>        wild <span class="op">=</span> resid <span class="op">*</span> rng.choice([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>], size<span class="op">=</span>n)</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>        cum_wild <span class="op">=</span> np.cumsum(wild[idx]) <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>        boot_stat <span class="op">=</span> np.<span class="bu">sum</span>(cum_wild<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> n</span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> boot_stat <span class="op">&gt;=</span> cvm_stat:</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>            count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cvm_stat, (count <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> (nboot <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> [<span class="dv">1998</span>, <span class="dv">1997</span>]:</span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a>    stat, pv <span class="op">=</span> stute_test_cvm(<span class="ss">f'deltalintrend</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span>, <span class="st">'ntrgap'</span>, df, order<span class="op">=</span><span class="dv">0</span>, seed<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"deltalintrend</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">: CvM = </span><span class="sc">{</span>stat<span class="sc">:.7f}</span><span class="ss">, p = </span><span class="sc">{</span>pv<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable            |   CvM stat    p-value
+   deltalintrend1998   |  0.0004249      0.334
+   deltalintrend1997   |  0.0007520      0.566
+
+Panel Joint Test:
+        1997 |  0.0007520      0.566
+        1998 |  0.0004249      0.334
+Joint        |  0.0011769      0.530</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Mean independence is not rejected for either year (<span class="math inline">\(p &gt; 0.28\)</span>) or jointly (<span class="math inline">\(p \approx 0.47\)</span>). The detrended pre-period outcomes are uncorrelated with the treatment dose, supporting the identifying assumptions.</p>
+<hr>
+</section>
+<section id="gq8-7.3.4.5-twfe-with-industry-specific-linear-trends" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="gq8-7.3.4.5-twfe-with-industry-specific-linear-trends"><span class="header-section-number">5.10</span> GQ8 (§7.3.4.5): TWFE With Industry-Specific Linear Trends</h2>
+<blockquote class="blockquote">
+<p>Regress the detrended outcome <span class="math inline">\(\tilde{\Delta}_{2000}^t Y_g\)</span> on <span class="math inline">\(D_g\)</span> for post-treatment years.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-3" role="tab" aria-controls="tabset-9-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> deltalintrend2001 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> deltalintrend2002 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> deltalintrend2004 ntrgap, <span class="kw">vce</span>(hc2)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> deltalintrend2005 ntrgap, <span class="kw">vce</span>(hc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- deltalintrend2001 ---  N = 103, R² = 0.0000
+      ntrgap |  -.0031404   .0390586    -0.08   0.936    -.0806222    .0743413
+       _cons |  -.0193030   .0139040    -1.39   0.168    -.0468848    .0082788
+
+--- deltalintrend2002 ---  N = 103, R² = 0.0335
+      ntrgap |  -.1437332   .0754461    -1.91   0.060    -.2933979    .0059315
+       _cons |  -.0654203   .0242514    -2.70   0.008    -.1135286   -.0173120
+
+--- deltalintrend2004 ---  N = 103, R² = 0.0262
+      ntrgap |  -.3074995   .1518755    -2.02   0.046    -.6087796   -.0062194
+       _cons |  -.1074437   .0551099    -1.95   0.054    -.2167668    .0018795
+
+--- deltalintrend2005 ---  N = 103, R² = 0.0133
+      ntrgap |  -.2414053   .1675180    -1.44   0.153    -.5737160    .0909053
+       _cons |  -.1314196   .0581374    -2.26   0.026    -.2467485   -.0160907</code></pre>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (yr <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>)) {</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"deltalintrend"</span>, yr, <span class="st">" ~ ntrgap"</span>)), <span class="at">data =</span> df)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">coeftest</span>(fit, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(fit, <span class="at">type =</span> <span class="st">"HC2"</span>)))</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- deltalintrend2001 ---  N = 103, R² = 0.00005
+(Intercept) -0.0193030  0.0139040 -1.3883   0.1681
+ntrgap      -0.0031404  0.0390586 -0.0804   0.9361
+
+--- deltalintrend2002 ---  N = 103, R² = 0.03349
+(Intercept) -0.0654203  0.0242514 -2.6976   0.0082
+ntrgap      -0.1437332  0.0754461 -1.9051   0.0596
+
+--- deltalintrend2004 ---  N = 103, R² = 0.02615
+(Intercept) -0.1074437  0.0551099 -1.9496   0.0540
+ntrgap      -0.3074995  0.1518755 -2.0247   0.0455
+
+--- deltalintrend2005 ---  N = 103, R² = 0.01326
+(Intercept) -0.1314196  0.0581374 -2.2605   0.0259
+ntrgap      -0.2414053  0.1675180 -1.4411   0.1527</code></pre>
+</div>
+<div id="tabset-9-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> [<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>]:</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[<span class="ss">f'deltalintrend</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span>]</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> sm.add_constant(df[<span class="st">'ntrgap'</span>])</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> sm.OLS(y, X).fit(cov_type<span class="op">=</span><span class="st">'HC2'</span>)</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"--- deltalintrend</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss"> ---  N = </span><span class="sc">{</span><span class="bu">int</span>(res.nobs)<span class="sc">}</span><span class="ss">, R² = </span><span class="sc">{</span>res<span class="sc">.</span>rsquared<span class="sc">:.5f}</span><span class="ss">"</span>)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name <span class="kw">in</span> res.params.index:</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>name<span class="sc">:&lt;20s}</span><span class="ss"> </span><span class="sc">{</span>res<span class="sc">.</span>params[name]<span class="sc">:&gt;12.7f}</span><span class="ss">  </span><span class="sc">{</span>res<span class="sc">.</span>bse[name]<span class="sc">:&gt;12.7f}</span><span class="ss">  </span><span class="sc">{</span>res<span class="sc">.</span>tvalues[name]<span class="sc">:&gt;8.3f}</span><span class="ss">   </span><span class="sc">{</span>res<span class="sc">.</span>pvalues[name]<span class="sc">:&gt;8.4f}</span><span class="ss">"</span>)</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--- deltalintrend2001 ---  N = 103, R² = 0.00005
+  const                  -0.0193030    0.0139040     -1.388     0.1650
+  ntrgap                 -0.0031404    0.0390586     -0.080     0.9359
+
+--- deltalintrend2002 ---  N = 103, R² = 0.03349
+  const                  -0.0654203    0.0242514     -2.698     0.0070
+  ntrgap                 -0.1437332    0.0754461     -1.905     0.0568
+
+--- deltalintrend2004 ---  N = 103, R² = 0.02615
+  const                  -0.1074437    0.0551099     -1.950     0.0512
+  ntrgap                 -0.3074995    0.1518755     -2.025     0.0429
+
+--- deltalintrend2005 ---  N = 103, R² = 0.01326
+  const                  -0.1314196    0.0581374     -2.261     0.0238
+  ntrgap                 -0.2414053    0.1675180     -1.441     0.1496</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> After including linear trends, the effects are <strong>substantially attenuated</strong> compared to GQ1. Only 2004 is significant at 5% (<span class="math inline">\(\hat{\beta} = -0.3075\)</span>, <span class="math inline">\(p = 0.046\)</span>). The 2005 effect is no longer significant (<span class="math inline">\(p = 0.153\)</span>). The linear trends absorb part of the treatment effect, consistent with the treatment effect being partially confounded by pre-existing differential trends.</p>
+<hr>
+</section>
+<section id="gq9-7.3.4.5-stute-tests-of-linearity-with-linear-trends" class="level2" data-number="5.11">
+<h2 data-number="5.11" class="anchored" data-anchor-id="gq9-7.3.4.5-stute-tests-of-linearity-with-linear-trends"><span class="header-section-number">5.11</span> GQ9 (§7.3.4.5): Stute Tests of Linearity (With Linear Trends)</h2>
+<blockquote class="blockquote">
+<p>Test linearity of <span class="math inline">\(E[\tilde{\Delta} Y | D]\)</span> for the detrended post-treatment outcomes.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-3" role="tab" aria-controls="tabset-10-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>stute_test deltalintrend2001 ntrgap, <span class="dv">seed</span>(1)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>stute_test deltalintrend2002 ntrgap, <span class="dv">seed</span>(1)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>stute_test deltalintrend2004 ntrgap, <span class="dv">seed</span>(1)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>stute_test deltalintrend2005 ntrgap, <span class="dv">seed</span>(1)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="kw">reshape</span> <span class="kw">long</span> delta deltalintrend, i(indusid) j(<span class="fu">year</span>)</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>stute_test deltalintrend ntrgap indusid <span class="fu">year</span> <span class="kw">if</span> <span class="fu">year</span>&gt;=2001, <span class="dv">seed</span>(1)</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable            |   t stat    p-value
+   deltalintrend2001   |  .0002961      .378
+   deltalintrend2002   |  .0018016      .062
+   deltalintrend2004   |  .0050583      .384
+   deltalintrend2005   |  .0047902      .530
+
+Panel Joint Test:
+        2001 |  .0002961       .378
+        2002 |  .0018016       .062
+        2004 |  .0050583       .384
+        2005 |  .0047902       .530
+Joint Stute test: 0.0119 (0.4020)</code></pre>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (yr <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>))</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stute_test</span>(<span class="at">df =</span> df, <span class="at">Y =</span> <span class="fu">paste0</span>(<span class="st">"deltalintrend"</span>, yr), <span class="at">D =</span> <span class="st">"ntrgap"</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Panel joint test</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stute_test</span>(<span class="at">df =</span> df_post_lt, <span class="at">Y =</span> <span class="st">"deltalintrend"</span>, <span class="at">D =</span> <span class="st">"ntrgap"</span>,</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">group =</span> <span class="st">"indusid"</span>, <span class="at">time =</span> <span class="st">"year"</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable            |   t stat    p-value
+   deltalintrend2001   |  0.0002961    0.388
+   deltalintrend2002   |  0.0018016    0.050
+   deltalintrend2004   |  0.0050583    0.318
+   deltalintrend2005   |  0.0047902    0.580
+
+Panel Joint Test:
+        2001 |  0.0002961    0.386
+        2002 |  0.0018016    0.050
+        2004 |  0.0050583    0.330
+        2005 |  0.0047902    0.496
+Joint Stute test: 0.0119 (0.3640)</code></pre>
+</div>
+<div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> stute_test_cvm(Y, D, df, order<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">1</span>, nboot<span class="op">=</span><span class="dv">999</span>):</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[Y].values.astype(<span class="bu">float</span>)</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> df[D].values.astype(<span class="bu">float</span>)</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(y)</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.column_stack([d<span class="op">**</span>k <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(order<span class="op">+</span><span class="dv">1</span>)])</span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> np.linalg.lstsq(X, y, rcond<span class="op">=</span><span class="va">None</span>)[<span class="dv">0</span>]</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    resid <span class="op">=</span> y <span class="op">-</span> X <span class="op">@</span> beta</span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> np.argsort(d)</span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>    cum_resid <span class="op">=</span> np.cumsum(resid[idx]) <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>    cvm_stat <span class="op">=</span> np.<span class="bu">sum</span>(cum_resid<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> n</span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.RandomState(seed)</span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(nboot):</span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>        wild <span class="op">=</span> resid <span class="op">*</span> rng.choice([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>], size<span class="op">=</span>n)</span>
+<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>        cum_wild <span class="op">=</span> np.cumsum(wild[idx]) <span class="op">/</span> np.sqrt(n)</span>
+<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>        boot_stat <span class="op">=</span> np.<span class="bu">sum</span>(cum_wild<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> n</span>
+<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> boot_stat <span class="op">&gt;=</span> cvm_stat:</span>
+<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a>            count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cvm_stat, (count <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> (nboot <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb56-23"><a href="#cb56-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-24"><a href="#cb56-24" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb56-25"><a href="#cb56-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> [<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>]:</span>
+<span id="cb56-26"><a href="#cb56-26" aria-hidden="true" tabindex="-1"></a>    stat, pv <span class="op">=</span> stute_test_cvm(<span class="ss">f'deltalintrend</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span>, <span class="st">'ntrgap'</span>, df, order<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb56-27"><a href="#cb56-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"deltalintrend</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">: CvM = </span><span class="sc">{</span>stat<span class="sc">:.7f}</span><span class="ss">, p = </span><span class="sc">{</span>pv<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Cross-sectional:
+   Variable            |   CvM stat    p-value
+   deltalintrend2001   |  0.0002961      0.409
+   deltalintrend2002   |  0.0018016      0.055
+   deltalintrend2004   |  0.0050583      0.373
+   deltalintrend2005   |  0.0047902      0.559
+
+Panel Joint Test:
+        2001 |  0.0002961      0.409
+        2002 |  0.0018016      0.055
+        2004 |  0.0050583      0.373
+        2005 |  0.0047902      0.559
+Joint        |  0.0119463      0.431</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Linearity is generally not rejected. The 2002 result is borderline (<span class="math inline">\(p \approx 0.05\)</span>–<span class="math inline">\(0.06\)</span>), but the joint test does not reject (<span class="math inline">\(p \approx 0.40\)</span>). Overall, the linear specification is adequate for the detrended outcomes.</p>
+<hr>
+</section>
+<section id="quasi-stayer-test" class="level2" data-number="5.12">
+<h2 data-number="5.12" class="anchored" data-anchor-id="quasi-stayer-test"><span class="header-section-number">5.12</span> Quasi-Stayer Test</h2>
+<blockquote class="blockquote">
+<p>Test whether quasi-stayers exist: compute <span class="math inline">\(QS = D_{(1)} / (D_{(2)} - D_{(1)})\)</span> where <span class="math inline">\(D_{(1)}\)</span> and <span class="math inline">\(D_{(2)}\)</span> are the two smallest NTR gap values.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-3" role="tab" aria-controls="tabset-11-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb58"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> ntrgap</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="kw">display</span> <span class="st">"D(1) = "</span> ntrgap[1]</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="kw">display</span> <span class="st">"D(2) = "</span> ntrgap[2]</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="kw">display</span> <span class="st">"QS = "</span> ntrgap[1]/(ntrgap[2]-ntrgap[1])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>D(1) = 0.0202847
+D(2) = 0.0235831
+QS = D(1)/(D(2)-D(1)) = 6.1498877</code></pre>
+</div>
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>ntrgap_sorted <span class="ot">&lt;-</span> <span class="fu">sort</span>(df<span class="sc">$</span>ntrgap)</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> ntrgap_sorted[<span class="dv">1</span>]; d2 <span class="ot">&lt;-</span> ntrgap_sorted[<span class="dv">2</span>]</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>QS <span class="ot">&lt;-</span> d1 <span class="sc">/</span> (d2 <span class="sc">-</span> d1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>D(1) = 0.02028472
+D(2) = 0.02358311
+QS = D(1)/(D(2)-D(1)) = 6.1498877</code></pre>
+</div>
+<div id="tabset-11-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>ntrgap_sorted <span class="op">=</span> np.sort(df[<span class="st">'ntrgap'</span>].values)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>d1, d2 <span class="op">=</span> ntrgap_sorted[<span class="dv">0</span>], ntrgap_sorted[<span class="dv">1</span>]</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>qs <span class="op">=</span> d1 <span class="op">/</span> (d2 <span class="op">-</span> d1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>D(1) = 0.02028472
+D(2) = 0.02358311
+QS = D(1)/(D(2)-D(1)) = 6.1498877</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> <span class="math inline">\(QS = 6.15 &lt; 19 = 1/\alpha - 1\)</span> at <span class="math inline">\(\alpha = 0.05\)</span>, so we <strong>fail to reject</strong> the null that quasi-stayers exist. This supports the use of the HAD framework: the industry with the smallest NTR gap (0.020) can plausibly serve as a quasi-control group.</p>
+<hr>
+</section>
+<section id="computing-commands-7.3.2.2-contdid-and-did_multiplegt_stat-syntax" class="level2" data-number="5.13">
+<h2 data-number="5.13" class="anchored" data-anchor-id="computing-commands-7.3.2.2-contdid-and-did_multiplegt_stat-syntax"><span class="header-section-number">5.13</span> Computing Commands (§7.3.2.2): <code>contdid</code> and <code>did_multiplegt_stat</code> Syntax</h2>
+<blockquote class="blockquote">
+<p>This section documents the syntax of the commands for estimating <span class="math inline">\(CAS(d_2)\)</span>, <span class="math inline">\(ATT\)</span>, and <span class="math inline">\(WATT\)</span> in heterogeneous adoption designs <strong>with stayers</strong>. These commands are not applied to the Pierce &amp; Schott data (which has no stayers), but their syntax is provided here for reference as shown in the textbook.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" role="tab" aria-controls="tabset-12-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" role="tab" aria-controls="tabset-12-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-3" role="tab" aria-controls="tabset-12-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
+<p><strong><code>did_multiplegt_stat</code></strong> estimates the ATT (via the Average Slope, AS) and WATT (via the Weighted Average Slope, WAS) in designs with a continuous treatment and stayers. The syntax from the textbook (p.&nbsp;342) is:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb64"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install did_multiplegt_stat, <span class="kw">replace</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>did_multiplegt_stat outcome groupid timeid treatment, estimator(<span class="kw">as</span> was) exact_match</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Key options: <code>estimator(as was)</code> estimates both AS and WAS; <code>exact_match</code> compares switchers and stayers with the same baseline treatment; <code>estimation_method(dr)</code> for doubly-robust estimation; <code>order(#)</code> for polynomial order; <code>placebo</code> for placebo estimates; <code>noextrapolation</code> to restrict to the support of stayers’ treatment.</p>
+</div>
+<div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
+<p><strong><code>contdid</code></strong> (Callaway, Goodman-Bacon &amp; Sant’Anna, 2025) estimates the dose-response function <span class="math inline">\(d_2 \mapsto CAS(d_2)\)</span>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(contdid)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>cd_res <span class="ot">&lt;-</span> <span class="fu">cont_did</span>(</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">yname =</span> <span class="st">"outcome"</span>, <span class="at">tname =</span> <span class="st">"timeid"</span>, <span class="at">idname =</span> <span class="st">"groupid"</span>,</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">dname =</span> <span class="st">"treatment"</span>, <span class="at">gname =</span> <span class="st">"cohort"</span>, <span class="at">data =</span> df,</span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">target_parameter =</span> <span class="st">"slope"</span>, <span class="at">aggregation =</span> <span class="st">"dose"</span></span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cd_res)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong><code>did_multiplegt_stat</code></strong> (de Chaisemartin, Ciccia, D’Haultfœuille, Knau &amp; Sow, 2024) estimates ATT and WATT:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(DIDmultiplegtSTAT)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">did_multiplegt_stat</span>(</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> df, <span class="at">Y =</span> <span class="st">"outcome"</span>, <span class="at">ID =</span> <span class="st">"groupid"</span>, <span class="at">Time =</span> <span class="st">"timeid"</span>,</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">D =</span> <span class="st">"treatment"</span>, <span class="at">estimator =</span> <span class="fu">c</span>(<span class="st">"aoss"</span>, <span class="st">"waoss"</span>),</span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimation_method =</span> <span class="st">"dr"</span>, <span class="at">exact_match =</span> <span class="cn">TRUE</span></span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-12-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-3-tab">
+<p><strong><code>did_multiplegt_stat</code></strong> is available as a Python translation (<code>did_multiplegt_stat.py</code>):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_multiplegt_stat <span class="im">import</span> did_multiplegt_stat, summary_did_multiplegt_stat</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> did_multiplegt_stat(</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df, Y <span class="op">=</span> <span class="st">"outcome"</span>, ID <span class="op">=</span> <span class="st">"groupid"</span>, Time <span class="op">=</span> <span class="st">"timeid"</span>,</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>    D <span class="op">=</span> <span class="st">"treatment"</span>, estimator <span class="op">=</span> [<span class="st">"aoss"</span>, <span class="st">"waoss"</span>],</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>    estimation_method <span class="op">=</span> <span class="st">"dr"</span>, exact_match <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>summary_did_multiplegt_stat(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>contdid</code> is not available in Python.</p>
+</div>
+</div>
+</div>
+<p><strong>Note:</strong> These commands require <strong>stayers</strong> (groups with <span class="math inline">\(D_{g,2} = 0\)</span>). The Pierce &amp; Schott (2016) dataset has no stayers, so these commands cannot be applied here.</p>
+<hr>
+</section>
+<section id="gq10-7.3.5-did_had-event-study-estimates" class="level2" data-number="5.14">
+<h2 data-number="5.14" class="anchored" data-anchor-id="gq10-7.3.5-did_had-event-study-estimates"><span class="header-section-number">5.14</span> GQ10 (§7.3.5): <code>did_had</code> Event-Study Estimates</h2>
+<blockquote class="blockquote">
+<p>Using the <code>pierce_schott_didtextbook</code> dataset, transform the data into a panel at the industry <span class="math inline">\(\times\)</span> year level, with industries’ log-employment and NTR gap treatment from 1997 to 2005. Then, use <code>did_had</code> to compute four event-study estimates and three pre-trend estimates.</p>
+</blockquote>
+<p><strong>Stata <code>nprobust</code> note:</strong> The current <code>nprobust</code> <code>.mo</code> files on GitHub are compiled with Stata 18. If you are using Stata 17 or earlier, <code>did_had</code> will fail with the error <code>nprobust_lp_mse_dpi() not found</code>. To fix this, run once per session:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb68"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="kw">do</span> <span class="st">"https://raw.githubusercontent.com/nppackages/nprobust/master/stata/nprobust_functions.do"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Cross-platform note:</strong> The Stata output below uses Stata 18+ with the latest <code>did_had</code> and <code>nprobust</code>, which computes a single global bandwidth (<span class="math inline">\(h^*_G = 0.147\)</span>, <span class="math inline">\(N = 21\)</span>) matching the R output. Stata 17 users may get different bandwidths per effect due to an older <code>nprobust</code> version. All implementations give the same quasi-stayer test statistic (<span class="math inline">\(T = 6.1499\)</span>, <span class="math inline">\(p = 0.1399\)</span>).</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-3" role="tab" aria-controls="tabset-13-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-13-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-13-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb69"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>* --- Load <span class="kw">data</span> ----------------------------------------------------------------</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta"</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"pierce_schott_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>* --- Construct lemp <span class="kw">for</span> <span class="kw">post</span>-treatment years ----------------------------------</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>* The dataset has lemp1997-lemp2000 and delta2001, delta2002, delta2004, delta2005.</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>* delta20XX = lemp20XX - lemp2000, so lemp20XX = lemp2000 + delta20XX.</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> lemp2001 = lemp2000 + delta2001</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> lemp2002 = lemp2000 + delta2002</span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> lemp2004 = lemp2000 + delta2004</span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> lemp2005 = lemp2000 + delta2005</span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>* --- Reshape to panel (industry × <span class="fu">year</span>) ---------------------------------------</span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a><span class="kw">reshape</span> <span class="kw">long</span> lemp, i(indusid) j(<span class="fu">year</span>)</span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> ntrgap = 0 <span class="kw">if</span> <span class="fu">year</span> &lt;= 2000</span>
+<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>* --- If <span class="kw">using</span> Stata 17 <span class="kw">or</span> earlier, compile nprobust from source (once) --------</span>
+<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a>* <span class="kw">do</span> <span class="st">"https://raw.githubusercontent.com/nppackages/nprobust/master/stata/nprobust_functions.do"</span></span>
+<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a>* --- Run did_had with triangular kernel ---------------------------------------</span>
+<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a>did_had lemp indusid <span class="fu">year</span> ntrgap, <span class="kw">effects</span>(4) placebo(3) kernel(triangular)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Effect Estimates:</strong></p>
+<pre><code>----------------------------------------------------------------------------------------------------------------
+                                    Effect Estimates                                              QUG* Test
+------------------------------------------------------------------------------------------ ---------------------
+
+             |  Estimate         SE      LB CI      UB CI          N         BW    N in BW          T      p-val 
+-------------+---------------------------------------------------------------------------------------------------
+    Effect_1 |  .007268    .078676  -.2385522   .0698521        103   .1465417         21   6.149888   .1398623 
+    Effect_2 | -.133609   .1249707  -.5802821  -.0904061        103   .1465417         21   6.149888   .1398623 
+    Effect_3 |  .0350698   .593448  -1.603513   .7227608        103   .1465417         21   6.149888   .1398623 
+    Effect_4 | -.0217339   .6140438  -1.898538   .5084691        103   .1465417         21   6.149888   .1398623 
+----------------------------------------------------------------------------------------------------------------
+                                                                                          *Quasi-untreated group</code></pre>
+<p><strong>Placebo Estimates:</strong></p>
+<pre><code>------------------------------------------------------------------------------------------
+                                    Placebo Estimates
+------------------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N         BW    N in BW 
+-------------+-----------------------------------------------------------------------------
+   Placebo_1 | -.0266300   .1328800  -.3772700   .1436200        103   .1506800         21 
+   Placebo_2 | -.0474400   .2568500  -.4426400   .5641900        103   .1465400         21 
+   Placebo_3 | -.1147700   .1851600  -.3988900   .3269400        103   .1465400         21 
+------------------------------------------------------------------------------------------</code></pre>
+</div>
+<div id="tabset-13-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DIDHAD)    <span class="co"># devtools::install_github("chaisemartinPackages/did_had/R")</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nprobust)  <span class="co"># install.packages("nprobust")</span></span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Construct lemp for post-treatment years ----------------------------------</span></span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>lemp2001 <span class="ot">&lt;-</span> df<span class="sc">$</span>lemp2000 <span class="sc">+</span> df<span class="sc">$</span>delta2001</span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>lemp2002 <span class="ot">&lt;-</span> df<span class="sc">$</span>lemp2000 <span class="sc">+</span> df<span class="sc">$</span>delta2002</span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>lemp2004 <span class="ot">&lt;-</span> df<span class="sc">$</span>lemp2000 <span class="sc">+</span> df<span class="sc">$</span>delta2004</span>
+<span id="cb72-13"><a href="#cb72-13" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>lemp2005 <span class="ot">&lt;-</span> df<span class="sc">$</span>lemp2000 <span class="sc">+</span> df<span class="sc">$</span>delta2005</span>
+<span id="cb72-14"><a href="#cb72-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-15"><a href="#cb72-15" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Reshape to panel (industry × year) ---------------------------------------</span></span>
+<span id="cb72-16"><a href="#cb72-16" aria-hidden="true" tabindex="-1"></a>lemp_cols <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"^lemp[0-9]+$"</span>, <span class="fu">names</span>(df), <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb72-17"><a href="#cb72-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-18"><a href="#cb72-18" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb72-19"><a href="#cb72-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(indusid, ntrgap, <span class="fu">all_of</span>(lemp_cols)) <span class="sc">%&gt;%</span></span>
+<span id="cb72-20"><a href="#cb72-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb72-21"><a href="#cb72-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">all_of</span>(lemp_cols),</span>
+<span id="cb72-22"><a href="#cb72-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"year"</span>, <span class="at">names_prefix =</span> <span class="st">"lemp"</span>,</span>
+<span id="cb72-23"><a href="#cb72-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"lemp"</span></span>
+<span id="cb72-24"><a href="#cb72-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb72-25"><a href="#cb72-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb72-26"><a href="#cb72-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="fu">as.integer</span>(year),</span>
+<span id="cb72-27"><a href="#cb72-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntrgap =</span> <span class="fu">ifelse</span>(year <span class="sc">&lt;=</span> <span class="dv">2000</span>, <span class="dv">0</span>, ntrgap)</span>
+<span id="cb72-28"><a href="#cb72-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb72-29"><a href="#cb72-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb72-30"><a href="#cb72-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-31"><a href="#cb72-31" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Run did_had with triangular kernel ---------------------------------------</span></span>
+<span id="cb72-32"><a href="#cb72-32" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">7</span>)</span>
+<span id="cb72-33"><a href="#cb72-33" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">did_had</span>(</span>
+<span id="cb72-34"><a href="#cb72-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">df         =</span> df_long,</span>
+<span id="cb72-35"><a href="#cb72-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome    =</span> <span class="st">"lemp"</span>,</span>
+<span id="cb72-36"><a href="#cb72-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">group      =</span> <span class="st">"indusid"</span>,</span>
+<span id="cb72-37"><a href="#cb72-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">time       =</span> <span class="st">"year"</span>,</span>
+<span id="cb72-38"><a href="#cb72-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">treatment  =</span> <span class="st">"ntrgap"</span>,</span>
+<span id="cb72-39"><a href="#cb72-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">effects    =</span> <span class="dv">4</span>,</span>
+<span id="cb72-40"><a href="#cb72-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">placebo    =</span> <span class="dv">3</span>,</span>
+<span id="cb72-41"><a href="#cb72-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel     =</span> <span class="st">"tri"</span>,</span>
+<span id="cb72-42"><a href="#cb72-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">graph_off  =</span> <span class="cn">TRUE</span></span>
+<span id="cb72-43"><a href="#cb72-43" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb72-44"><a href="#cb72-44" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Effect Estimates:</strong></p>
+<pre><code>-----------------------------------------------------------------------------
+                           Effect Estimates                       QUG* Test
+         ---------------------------------------------------- ---------------
+         Estimate SE       LB.CI    UB.CI    N   BW      N.BW T       p.val  
+Effect_1  0.0072700  0.0787500 -0.2387000  0.0700000 103 0.1465400 21   6.1498900 0.1398600
+Effect_2 -0.1336100  0.1250000 -0.5803500 -0.0903400 103 0.1465400 21   6.1498900 0.1398600
+Effect_3  0.0350700  0.5934600 -1.6035300  0.7227800 103 0.1465400 21   6.1498900 0.1398600
+Effect_4 -0.0217300  0.6140600 -1.8985800  0.5085100 103 0.1465400 21   6.1498900 0.1398600
+*Quasi-Untreated Group</code></pre>
+<p><strong>Placebo Estimates:</strong></p>
+<pre><code>------------------------------------------------------------
+                          Placebo Estimates
+          --------------------------------------------------
+          Estimate    SE        LB.CI      UB.CI     N   BW        N.BW
+Placebo_1 -0.0266300  0.1328800 -0.3772700  0.1436200 103 0.1506800 21  
+Placebo_2 -0.0474400  0.2568500 -0.4426400  0.5641900 103 0.1465400 21  
+Placebo_3 -0.1147700  0.1851600 -0.3988900  0.3269400 103 0.1465400 21  </code></pre>
+</div>
+<div id="tabset-13-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install did-had</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_had <span class="im">import</span> DidHad</span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet"</span>)</span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Build panel from wide to long</span></span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, r <span class="kw">in</span> df.iterrows():</span>
+<span id="cb75-10"><a href="#cb75-10" aria-hidden="true" tabindex="-1"></a>    base <span class="op">=</span> r[<span class="st">'lemp2000'</span>]</span>
+<span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a>    ind <span class="op">=</span> r[<span class="st">'indusid'</span>]</span>
+<span id="cb75-12"><a href="#cb75-12" aria-hidden="true" tabindex="-1"></a>    ntr <span class="op">=</span> r[<span class="st">'ntrgap'</span>]</span>
+<span id="cb75-13"><a href="#cb75-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> yr <span class="kw">in</span> [<span class="dv">1997</span>, <span class="dv">1998</span>, <span class="dv">1999</span>]:</span>
+<span id="cb75-14"><a href="#cb75-14" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">'indusid'</span>: ind, <span class="st">'year'</span>: yr, <span class="st">'lemp'</span>: base <span class="op">+</span> r[<span class="ss">f'delta</span><span class="sc">{</span>yr<span class="sc">}</span><span class="ss">'</span>], <span class="st">'ntrgap'</span>: <span class="fl">0.0</span>})</span>
+<span id="cb75-15"><a href="#cb75-15" aria-hidden="true" tabindex="-1"></a>    rows.append({<span class="st">'indusid'</span>: ind, <span class="st">'year'</span>: <span class="dv">2000</span>, <span class="st">'lemp'</span>: base, <span class="st">'ntrgap'</span>: <span class="fl">0.0</span>})</span>
+<span id="cb75-16"><a href="#cb75-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> yr <span class="kw">in</span> [<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>]:</span>
+<span id="cb75-17"><a href="#cb75-17" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">'indusid'</span>: ind, <span class="st">'year'</span>: yr, <span class="st">'lemp'</span>: base <span class="op">+</span> r[<span class="ss">f'delta</span><span class="sc">{</span>yr<span class="sc">}</span><span class="ss">'</span>], <span class="st">'ntrgap'</span>: ntr})</span>
+<span id="cb75-18"><a href="#cb75-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-19"><a href="#cb75-19" aria-hidden="true" tabindex="-1"></a>panel <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb75-20"><a href="#cb75-20" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> DidHad(kernel<span class="op">=</span><span class="st">'tri'</span>)</span>
+<span id="cb75-21"><a href="#cb75-21" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> model.fit(</span>
+<span id="cb75-22"><a href="#cb75-22" aria-hidden="true" tabindex="-1"></a>    df<span class="op">=</span>panel, outcome<span class="op">=</span><span class="st">'lemp'</span>, group<span class="op">=</span><span class="st">'indusid'</span>,</span>
+<span id="cb75-23"><a href="#cb75-23" aria-hidden="true" tabindex="-1"></a>    time<span class="op">=</span><span class="st">'year'</span>, treatment<span class="op">=</span><span class="st">'ntrgap'</span>, effects<span class="op">=</span><span class="dv">4</span>, placebo<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb75-24"><a href="#cb75-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>===========================================================================
+DID-HAD Estimation Results
+===========================================================================
+Number of groups: 103
+Number of periods: 8
+Adoption period (F): 2001
+Kernel: tri
+Confidence level: 95%
+
+---------------------------------------------------------------------------
+                          Effect Estimates                      QUG* Test
+         --------------------------------------------------- ---------------
+          Estimate       SE     LB.CI     UB.CI     N      BW    N.BW        T    p.val
+Effect_1   0.00727  0.07875  -0.23870   0.07000   103 0.14654     20  6.14989  0.13986
+Effect_2  -0.13361  0.12500  -0.58035  -0.09034   103 0.14654     20  6.14989  0.13986
+Effect_4   0.03507  0.59346  -1.60353   0.72278   103 0.14654     20  6.14989  0.13986
+*Quasi-Untreated Group
+
+--------------------------------------------------------------
+                           Placebo Estimates
+          ----------------------------------------------------
+           Estimate       SE     LB.CI     UB.CI     N      BW    N.BW
+Placebo_1 -0.02663  0.13288  -0.37727   0.14362   103 0.15068     21
+Placebo_2 -0.04744  0.25685  -0.44264   0.56419   103 0.14654     20
+===========================================================================</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> The quasi-stayer test is not rejected (<span class="math inline">\(T = 6.15\)</span>, <span class="math inline">\(p = 0.140\)</span>): 21 industries with an NTR gap below 14.7 percentage points serve as quasi-controls. The R output shows the optimal bandwidth <span class="math inline">\(h^*_G = 0.147\)</span>, matching the PDF textbook. The estimated event-study effect at 2002 (Effect_2) is negative and significant in both platforms, while the remaining effects and all three pre-trends are insignificant. Confidence intervals are wide: with only 103 industries, the non-parametric estimator <span class="math inline">\(\widehat{WATT}^{qs}_{h^*_G}\)</span> is imprecise. Pre-trends are not significant, but they are also imprecise — by extrapolating a linear trend from the upper bound of the 1999 pre-trend CI to the origin, differential trends could account for the estimated effects.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/ch06.html" class="pagination-link" aria-label="Chapter 6: Designs with Variation in Treatment Timing">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter 6: Designs with Variation in Treatment Timing</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/ch08.html" class="pagination-link" aria-label="Chapter 8: General Designs">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Chapter 8: General Designs</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

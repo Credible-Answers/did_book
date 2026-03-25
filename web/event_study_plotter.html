@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Study Plotter</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #be4bdb; --accent-light: #e599f7; --bg: #fff;
+  --text: #212529; --text-muted: #6c757d; --border: #dee2e6;
+  --green: #22c55e; --red: #ef4444;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--bg); }
+#input-page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px 20px;
+}
+.form-card {
+  width: 100%; max-width: 660px; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+  padding: 48px 44px; backdrop-filter: blur(12px);
+}
+.form-card h1 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 900; color: #f0ead6; margin-bottom: 4px; }
+.form-card .subtitle { font-size: 15px; color: #888; margin-bottom: 32px; line-height: 1.5; }
+.form-label { display: block; font-size: 14px; color: #e0d6c8; font-weight: 400; margin-bottom: 8px; line-height: 1.5; }
+.form-input, .form-textarea {
+  width: 100%; padding: 10px 14px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
+  color: #eee; font-family: 'Source Sans 3', sans-serif; font-size: 15px;
+  margin-bottom: 20px; outline: none; transition: border 0.2s;
+}
+.form-input:focus, .form-textarea:focus { border-color: #be9b7b; }
+.form-textarea { resize: vertical; min-height: 70px; }
+.form-input::placeholder, .form-textarea::placeholder { color: #555; }
+.upload-zone {
+  border: 2px dashed rgba(255,255,255,0.12); border-radius: 10px; padding: 28px 20px;
+  text-align: center; cursor: pointer; margin-bottom: 8px; transition: all 0.2s;
+}
+.upload-zone:hover { border-color: #be9b7b; }
+.upload-zone.loaded { border-color: rgba(34,197,94,0.3); background: rgba(34,197,94,0.06); }
+.upload-zone p { font-size: 14px; color: #888; }
+.upload-zone.loaded p { color: #22c55e; }
+.error-msg { color: #ef4444; font-size: 13px; margin-bottom: 16px; }
+.demo-btn { background: none; border: none; color: #be9b7b; font-size: 13px; cursor: pointer; padding: 4px 0; margin-bottom: 28px; text-decoration: underline; text-underline-offset: 3px; font-family: 'Source Sans 3', sans-serif; }
+.submit-btn { width: 100%; padding: 14px 0; border-radius: 8px; border: none; background: rgba(255,255,255,0.06); color: #555; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; cursor: not-allowed; letter-spacing: 0.5px; transition: all 0.3s; }
+.submit-btn.ready { background: linear-gradient(135deg, #be9b7b, #a07a5a); color: #fff; cursor: pointer; box-shadow: 0 4px 20px rgba(190,155,123,0.3); }
+.submit-btn.ready:hover { transform: translateY(-1px); }
+.saving-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+.saving-overlay.active { display: flex; }
+.saving-spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.saving-text { color: #fff; font-size: 18px; font-weight: 600; }
+.toast { position: fixed; bottom: 90px; right: 32px; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; z-index: 300; opacity: 0; transform: translateY(12px); transition: all 0.3s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.toast.error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.btn-accept { padding: 10px 28px; border-radius: 8px; border: none; cursor: pointer; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; font-family: 'Source Sans 3', sans-serif; font-size: 15px; font-weight: 700; transition: all 0.2s; box-shadow: 0 2px 12px rgba(34,197,94,0.3); }
+.btn-accept:hover { transform: translateY(-1px); }
+.btn-accept:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-reject { padding: 10px 28px; border-radius: 8px; border: 1px solid #fca5a5; cursor: pointer; background: #fff; color: #ef4444; font-family: 'Source Sans 3', sans-serif; font-size: 15px; font-weight: 700; }
+.btn-reject:hover { background: #fee2e2; }
+.gdrive-status { margin-top: 16px; padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
+.gdrive-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 4px 12px; border-radius: 20px; font-weight: 600; }
+.gdrive-badge.pending { background: #fff3cd; color: #856404; }
+.gdrive-badge.saved { background: #d1fae5; color: #065f46; }
+.gdrive-badge.error { background: #fee2e2; color: #991b1b; }
+.gdrive-link { color: #be9b7b; font-size: 12px; word-break: break-all; display: block; margin-top: 6px; text-decoration: underline; }
+.word-counter { font-size: 12px; color: #666; margin: -14px 0 18px 0; text-align: right; }
+.word-counter.over { color: #ef4444; font-weight: 600; }
+.radio-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.radio-option {
+  display: flex; align-items: center; gap: 10px; font-size: 14px; color: #ccc;
+  cursor: pointer; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.2s; line-height: 1.4;
+}
+.radio-option:hover { border-color: rgba(190,155,123,0.3); background: rgba(255,255,255,0.02); }
+.radio-option input[type="radio"] {
+  appearance: none; -webkit-appearance: none; width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; cursor: pointer;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.radio-option input[type="radio"]:checked {
+  border-color: #be9b7b; background: #be9b7b; box-shadow: inset 0 0 0 3px #1a1a2e;
+}
+.divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 28px 0; }
+</style>
+</head>
+<body>
+
+<div id="input-page">
+  <div class="form-card">
+    <h1>Event-study</h1>
+    <p class="subtitle">graphs generated with the <strong style="color:#be9b7b;">did_multiplegt_dyn</strong> Stata, R, or Python package</p>
+
+    <label class="form-label">Paper title</label>
+    <input id="f-title" class="form-input" placeholder="Your answer">
+
+    <label class="form-label">Authors</label>
+    <input id="f-authors" class="form-input" placeholder="Your answer">
+
+    <label class="form-label">Link to the paper</label>
+    <input id="f-link" class="form-input" placeholder="Your answer">
+
+    <label class="form-label">Number of the figure where the event-study graph you are submitting can be found in the paper.</label>
+    <input id="f-fignum" class="form-input" placeholder="Your answer">
+
+    <label class="form-label">The main take away from your event-study graph in one sentence (less than 20 words): will be the title of the page on which your graph appears. E.g.: X has a positive effect on Y</label>
+    <input id="f-takeaway" class="form-input" placeholder="Your answer" oninput="updateWordCount(this,'wc-takeaway',20)">
+    <p class="word-counter" id="wc-takeaway">0 / 20 words</p>
+
+    <label class="form-label">Slightly longer description of your event-study graph: what's the treatment? in which country? who is affected? what's the design of your study and what is the identifying variation you leverage (binary treatment with staggered adoption, continuous treatment, etc)? what data have you used? what are the results and how you interpret them? do you have pre-trends? (no more than 150 words)</label>
+    <textarea id="f-desc" class="form-textarea" rows="5" placeholder="Your answer" oninput="updateWordCount(this,'wc-desc',150)"></textarea>
+    <p class="word-counter" id="wc-desc">0 / 150 words</p>
+
+    <hr class="divider">
+
+    <label class="form-label">Is your treatment binary, discrete, or continuous (each unit has a different value of the treatment)?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="treatType" value="binary"> Binary</label>
+      <label class="radio-option"><input type="radio" name="treatType" value="discrete"> Discrete</label>
+      <label class="radio-option"><input type="radio" name="treatType" value="continuous"> Continuous</label>
+    </div>
+
+    <label class="form-label">Can units' treatment change at most once over the study period or can units experience multiple treatment changes?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="treatChange" value="one_increase"> At most one change, and that change can only be an increase (e.g. from a treatment of zero to a treatment of one)</label>
+      <label class="radio-option"><input type="radio" name="treatChange" value="one_either"> At most one change, and for some units that change is an increase, while for other units it is a decrease</label>
+      <label class="radio-option"><input type="radio" name="treatChange" value="multi_increase"> Units can experience multiple treatment changes, but those changes can only be increases</label>
+      <label class="radio-option"><input type="radio" name="treatChange" value="multi_either"> Units can experience multiple treatment changes, and those changes can be increases or decreases</label>
+    </div>
+
+    <label class="form-label">How many values does the treatment take at the first time period in your data?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="treatValues" value="one"> One value: all units have the same treatment at period one</label>
+      <label class="radio-option"><input type="radio" name="treatValues" value="two"> Two values</label>
+      <label class="radio-option"><input type="radio" name="treatValues" value="three_plus"> Three or more values</label>
+    </div>
+
+    <hr class="divider">
+
+    <label class="form-label">Copy-paste the line of code running did_multiplegt_dyn that you ran to generate the event-study graph you submit.</label>
+    <textarea id="f-code" class="form-textarea" rows="4" placeholder="Your answer"></textarea>
+
+    <label class="form-label">Code language</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="codeLang" value="stata" checked> Stata</label>
+      <label class="radio-option"><input type="radio" name="codeLang" value="r"> R</label>
+      <label class="radio-option"><input type="radio" name="codeLang" value="python"> Python</label>
+    </div>
+
+    <label class="form-label">Number of switchers for effect 1</label>
+    <input id="f-switchers" class="form-input" type="number" placeholder="Your answer">
+
+    <label class="form-label">N for effect 1</label>
+    <input id="f-neffect" class="form-input" type="number" placeholder="Your answer">
+
+    <hr class="divider">
+
+    <label class="form-label" style="font-size:16px; font-weight:600; color:#f0ead6;">CSV Data</label>
+    <p style="color:#999; font-size:14px; margin: -12px 0 14px 0; line-height:1.5;">Required columns: <strong style="color:#be9b7b;">time_to_treatment</strong>, <strong style="color:#be9b7b;">coefficient</strong>, <strong style="color:#be9b7b;">standard_error</strong></p>
+    <div id="upload-zone" class="upload-zone" onclick="document.getElementById('file-input').click()">
+      <input type="file" id="file-input" accept=".csv,.tsv,.txt" style="display:none" onchange="handleFile(event)">
+      <p id="upload-text">Click to upload CSV or TSV file</p>
+    </div>
+    <p id="error-msg" class="error-msg" style="display:none"></p>
+
+    <button class="demo-btn" onclick="loadDemo()">Load demo data (Gentzkow et al., 2011)</button><br>
+
+    <button id="submit-btn" class="submit-btn" onclick="generate()">Generate Event Study →</button>
+  </div>
+
+  <div id="inline-plot-section" style="display:none; width:100%; max-width:660px; margin-top:24px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:32px 44px; box-sizing:border-box;">
+    <h2 style="font-family:'Playfair Display',serif; color:#f0ead6; font-size:26px; margin-bottom:6px;" id="inline-title"></h2>
+    <p style="color:#be9b7b; font-weight:600; margin-bottom:24px;" id="inline-authors"></p>
+
+    <div style="background:#fff; border-radius:8px; padding:16px; margin-bottom:16px; overflow:hidden; width:100%; box-sizing:border-box;">
+      <canvas id="es-canvas" style="width:100%; height:auto; display:block;"></canvas>
+      <p style="text-align:center; font-size:13px; color:#6c757d; font-style:italic; margin-top:10px;" id="plot-caption"></p>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:28px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1);">
+      <p style="color:#aaa; font-size:15px;">Accept to save to Google Drive — Reject to go back and modify.</p>
+      <div style="display:flex; gap:12px;">
+        <button class="btn-reject" onclick="rejectStudy()">✕ Reject</button>
+        <button class="btn-accept" id="btn-accept" onclick="acceptStudy()">✓ Accept & Save to Drive</button>
+      </div>
+    </div>
+
+    <div class="gdrive-status" id="gdrive-status" style="display:none;">
+      <span id="gdrive-badge" class="gdrive-badge pending">⏳ Saving...</span>
+      <a id="gdrive-link" class="gdrive-link" href="#" target="_blank" style="display:none;"></a>
+    </div>
+  </div>
+</div>
+
+<div class="saving-overlay" id="saving-overlay">
+  <div class="saving-spinner"></div>
+  <div class="saving-text" id="saving-text">Saving to Google Drive...</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ CONFIG ============
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNCgx4TNbJiU-JO2la476oy8Nlaji1adSyFngbbKb_fg-nzhy_LfidC_1bOloqK6pi/exec';
+
+// ============ STATE ============
+let parsedData = null, csvRawText = '', currentId = null;
+const ciLevel = 95;
+const zMap = {90:1.645, 95:1.96, 99:2.576};
+
+function updateWordCount(el, counterId, max) {
+  const words = el.value.trim() ? el.value.trim().split(/\s+/).length : 0;
+  const counter = document.getElementById(counterId);
+  counter.textContent = words + ' / ' + max + ' words';
+  counter.classList.toggle('over', words > max);
+}
+function getRadio(name) {
+  const el = document.querySelector('input[name="'+name+'"]:checked');
+  return el ? el.value : '';
+}
+function showToast(msg,type='success') { const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show '+type; setTimeout(()=>{t.className='toast';},4000); }
+
+const demoData = [
+  {time:-4,coef:0.00022,se:0.00496},{time:-3,coef:-0.00079,se:0.00412},
+  {time:-2,coef:0.00142,se:0.00459},{time:-1,coef:-0.00060,se:0.00563},
+  {time:1,coef:0.01436,se:0.00530},{time:2,coef:0.01910,se:0.00598},
+  {time:3,coef:0.02073,se:0.00689},{time:4,coef:0.02729,se:0.00834},
+];
+const demoCSV = `time_to_treatment,coefficient,standard_error
+-4,0.00022,0.00496\n-3,-0.00079,0.00412\n-2,0.00142,0.00459\n-1,-0.00060,0.00563
+1,0.01436,0.00530\n2,0.01910,0.00598\n3,0.02073,0.00689\n4,0.02729,0.00834`;
+
+function handleFile(e) {
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader(); r.onload=ev=>parseCSV(ev.target.result,file.name); r.readAsText(file);
+}
+function loadDemo() {
+  parsedData=demoData; csvRawText=demoCSV;
+  document.getElementById('f-title').value='Newspapers and Voter Turnout';
+  document.getElementById('f-authors').value='Gentzkow, Shapiro & Sinkinson (2011)';
+  document.getElementById('f-link').value='https://doi.org/10.1257/aer.101.7.2980';
+  document.getElementById('f-fignum').value='Figure 4';
+  document.getElementById('f-takeaway').value='Newspaper entry increases voter turnout in US counties';
+  updateWordCount(document.getElementById('f-takeaway'),'wc-takeaway',20);
+  document.getElementById('f-desc').value='The treatment is the number of daily newspapers in a US county. Uses difference-in-differences with staggered and on-and-off treatment adoption. Data covers US counties from 1868 to 2004. Results show newspaper entry increases presidential voter turnout. Pre-trends are not significant.';
+  updateWordCount(document.getElementById('f-desc'),'wc-desc',150);
+  document.querySelector('input[name="treatType"][value="discrete"]').checked=true;
+  document.querySelector('input[name="treatChange"][value="multi_either"]').checked=true;
+  document.querySelector('input[name="treatValues"][value="three_plus"]').checked=true;
+  document.getElementById('f-code').value='did_multiplegt_dyn prestout cnty90 year numdailies, effects(4) placebo(4) effects_equal("all")';
+  document.querySelector('input[name="codeLang"][value="stata"]').checked=true;
+  document.getElementById('f-switchers').value='1847';
+  document.getElementById('f-neffect').value='39741';
+  document.getElementById('upload-zone').classList.add('loaded');
+  document.getElementById('upload-text').textContent='✓ Demo data loaded (8 observations)';
+  document.getElementById('submit-btn').classList.add('ready');
+}
+function parseCSV(text,filename) {
+  try {
+    const lines=text.trim().split(/\r?\n/), sep=lines[0].includes('\t')?'\t':',';
+    const header=lines[0].toLowerCase().split(sep).map(h=>h.trim().replace(/"/g,''));
+    const tIdx=header.findIndex(h=>h.includes('time')||h==='t'||h==='period');
+    const cIdx=header.findIndex(h=>h.includes('coef')||h.includes('estimate')||h==='b');
+    const sIdx=header.findIndex(h=>h.includes('se')||h.includes('std')||h.includes('error'));
+    if(tIdx<0||cIdx<0||sIdx<0) throw new Error('Could not detect columns. Need: time, coefficient, standard_error');
+    const rows=[];
+    for(let i=1;i<lines.length;i++){
+      const c=lines[i].split(sep).map(x=>x.trim().replace(/"/g,''));
+      if(c.length<3) continue;
+      const t=parseFloat(c[tIdx]),co=parseFloat(c[cIdx]),se=parseFloat(c[sIdx]);
+      if(isNaN(t)||isNaN(co)||isNaN(se)) continue;
+      rows.push({time:t,coef:co,se});
+    }
+    if(rows.length<2) throw new Error('Need at least 2 data rows');
+    parsedData=rows; csvRawText=text;
+    document.getElementById('upload-zone').classList.add('loaded');
+    document.getElementById('upload-text').textContent=`✓ ${filename} (${rows.length} observations)`;
+    document.getElementById('error-msg').style.display='none';
+    checkReady();
+  } catch(e) {
+    document.getElementById('upload-zone').classList.add('error');
+    document.getElementById('error-msg').textContent=e.message;
+    document.getElementById('error-msg').style.display='block';
+  }
+}
+function checkReady() {
+  const ok=document.getElementById('f-title').value.trim()&&document.getElementById('f-authors').value.trim()&&parsedData;
+  document.getElementById('submit-btn').classList.toggle('ready',!!ok);
+}
+document.getElementById('f-title').addEventListener('input',checkReady);
+document.getElementById('f-authors').addEventListener('input',checkReady);
+
+function generate() {
+  if(!parsedData||!document.getElementById('f-title').value.trim()) return;
+  currentId='es_'+Date.now();
+  document.getElementById('inline-title').textContent=document.getElementById('f-title').value.trim();
+  document.getElementById('inline-authors').textContent=document.getElementById('f-authors').value.trim();
+  const sorted=[...parsedData].sort((a,b)=>a.time-b.time);
+  const z=zMap[ciLevel];
+  const canvas=document.getElementById('es-canvas');
+  const W=540,H=340,dpr=window.devicePixelRatio||1;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width='100%'; canvas.style.height='auto'; canvas.style.maxWidth=W+'px';
+  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
+  const pad={top:25,right:35,bottom:55,left:72};
+  const pw=W-pad.left-pad.right, ph=H-pad.top-pad.bottom;
+  const allY=sorted.flatMap(d=>[d.coef+z*d.se,d.coef-z*d.se,0]);
+  const yMin=Math.min(...allY),yMax=Math.max(...allY),yPad=(yMax-yMin)*0.15;
+  const xMin=Math.min(...sorted.map(d=>d.time))-0.6,xMax=Math.max(...sorted.map(d=>d.time))+0.6;
+  const sx=t=>pad.left+((t-xMin)/(xMax-xMin))*pw;
+  const sy=v=>pad.top+((yMax+yPad-v)/(yMax-yMin+2*yPad))*ph;
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+  const yRange=yMax-yMin+2*yPad,rawStep=yRange/6,mag=Math.pow(10,Math.floor(Math.log10(rawStep))),step=Math.ceil(rawStep/mag)*mag;
+  ctx.strokeStyle='#e9ecef'; ctx.lineWidth=0.5; ctx.fillStyle='#868e96'; ctx.font='11px Source Sans 3'; ctx.textAlign='right';
+  for(let v=Math.floor((yMin-yPad)/step)*step;v<=yMax+yPad;v+=step){const y=sy(v);ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(W-pad.right,y);ctx.stroke();ctx.fillText(v.toFixed(Math.abs(v)<0.1?4:3),pad.left-8,y+4);}
+  ctx.strokeStyle='#495057'; ctx.lineWidth=1; ctx.setLineDash([6,3]);
+  ctx.beginPath();ctx.moveTo(pad.left,sy(0));ctx.lineTo(W-pad.right,sy(0));ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='#ced4da'; ctx.lineWidth=0.8; ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(sx(0),pad.top);ctx.lineTo(sx(0),H-pad.bottom);ctx.stroke();ctx.setLineDash([]);
+  const sortedWithZero=[...sorted];
+  if(!sortedWithZero.find(d=>d.time===0)) {sortedWithZero.push({time:0,coef:0,se:0});sortedWithZero.sort((a,b)=>a.time-b.time);}
+  ctx.strokeStyle='#adb5bd'; ctx.lineWidth=1.2; ctx.beginPath();
+  sortedWithZero.forEach((d,i)=>{i===0?ctx.moveTo(sx(d.time),sy(d.coef)):ctx.lineTo(sx(d.time),sy(d.coef));});ctx.stroke();
+  sorted.forEach(d=>{
+    const x=sx(d.time),yTop=sy(d.coef+z*d.se),yBot=sy(d.coef-z*d.se),yC=sy(d.coef);
+    const color=d.time>0?'#c0392b':'#2563eb';
+    ctx.strokeStyle=color; ctx.lineWidth=2.2; ctx.beginPath();ctx.moveTo(x,yTop);ctx.lineTo(x,yBot);ctx.stroke();
+    ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-4,yTop);ctx.lineTo(x+4,yTop);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x-4,yBot);ctx.lineTo(x+4,yBot);ctx.stroke();
+    ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,yC,4.5,0,Math.PI*2);ctx.fill();
+  });
+  ctx.fillStyle='#333';ctx.beginPath();ctx.arc(sx(0),sy(0),4.5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#495057';ctx.font='12px Source Sans 3';ctx.textAlign='center';
+  sorted.forEach(d=>ctx.fillText(d.time,sx(d.time),H-pad.bottom+20));
+  ctx.fillText('0',sx(0),H-pad.bottom+20);
+  ctx.font='13px Source Sans 3';ctx.fillText('Periods since treatment',W/2,H-6);
+  ctx.save();ctx.translate(14,H/2);ctx.rotate(-Math.PI/2);ctx.fillText('Estimate and 95% CI',0,0);ctx.restore();
+  const lx=W-pad.right-140;
+  ctx.fillStyle='#2563eb';ctx.beginPath();ctx.arc(lx,pad.top+12,4,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#495057';ctx.font='12px Source Sans 3';ctx.textAlign='left';ctx.fillText('Placebos (pre)',lx+10,pad.top+16);
+  ctx.fillStyle='#c0392b';ctx.beginPath();ctx.arc(lx+96,pad.top+12,4,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#495057';ctx.fillText('Effects (post)',lx+106,pad.top+16);
+  document.getElementById('plot-caption').textContent='Figure 1. Event-study estimates with 95% confidence intervals. Blue = pre-treatment placebos. Red = post-treatment effects.';
+  document.getElementById('inline-plot-section').style.display='block';
+  document.getElementById('gdrive-status').style.display='none';
+  document.getElementById('btn-accept').disabled=false;
+  document.getElementById('inline-plot-section').scrollIntoView({behavior:'smooth'});
+}
+
+// ============ CANVAS TO BASE64 ============
+function canvasToBase64(canvas) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => {
+      if (!blob) { reject(new Error('Canvas toBlob failed')); return; }
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = () => reject(new Error('FileReader failed'));
+      reader.readAsDataURL(blob);
+    }, 'image/png');
+  });
+}
+
+// ============ ACCEPT / REJECT ============
+async function acceptStudy() {
+  document.getElementById('btn-accept').disabled = true;
+  const overlay = document.getElementById('saving-overlay');
+  overlay.classList.add('active');
+
+  try {
+    const id = currentId;
+    const title = document.getElementById('f-title').value.trim();
+    const authors = document.getElementById('f-authors').value.trim();
+    const link = document.getElementById('f-link').value.trim();
+    const fignum = document.getElementById('f-fignum').value.trim();
+    const takeaway = document.getElementById('f-takeaway').value.trim();
+    const desc = document.getElementById('f-desc').value.trim();
+    const code = document.getElementById('f-code').value.trim();
+    const switchers = document.getElementById('f-switchers').value.trim();
+    const neffect = document.getElementById('f-neffect').value.trim();
+    const ts = new Date().toISOString();
+
+    document.getElementById('saving-text').textContent = 'Saving to Google Drive...';
+
+    const canvas = document.getElementById('es-canvas');
+    const pngB64 = await canvasToBase64(canvas);
+
+    const jsonObj = {
+      id, timestamp: ts,
+      paper: { title, authors, link, figure_number: fignum, takeaway, description: desc },
+      treatment: {
+        type: getRadio('treatType'),
+        changes: getRadio('treatChange'),
+        values_at_period1: getRadio('treatValues')
+      },
+      methodology: {
+        code_language: getRadio('codeLang'),
+        code,
+        switchers_effect1: switchers,
+        n_effect1: neffect
+      },
+      results: {
+        confidence_level: ciLevel, observations: parsedData.length,
+        data: [...parsedData].sort((a,b)=>a.time-b.time).map(d => {
+          const z=zMap[ciLevel];
+          return { period:d.time, estimate:d.coef, std_error:d.se, lb:d.coef-z*d.se, ub:d.coef+z*d.se };
+        })
+      },
+      decision: { accepted: true, accepted_at: ts }
+    };
+
+    const payload = {
+      filename: id,
+      csv: csvRawText,
+      png: pngB64,
+      json: JSON.stringify(jsonObj, null, 2)
+    };
+
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
+
+    overlay.classList.remove('active');
+
+    if (result.success) {
+      const statusDiv = document.getElementById('gdrive-status');
+      statusDiv.style.display = 'block';
+      const badge = document.getElementById('gdrive-badge');
+      badge.className = 'gdrive-badge saved';
+      badge.textContent = '✓ Saved to Google Drive';
+      showToast('✓ Saved to Google Drive!', 'success');
+    } else {
+      throw new Error(result.error || 'Unknown error');
+    }
+
+  } catch(err) {
+    overlay.classList.remove('active');
+    document.getElementById('btn-accept').disabled = false;
+    const statusDiv = document.getElementById('gdrive-status');
+    statusDiv.style.display = 'block';
+    const badge = document.getElementById('gdrive-badge');
+    badge.className = 'gdrive-badge error';
+    badge.textContent = '✗ Save failed';
+    showToast('Error: ' + err.message, 'error');
+    console.error(err);
+  }
+}
+
+function rejectStudy() {
+  document.getElementById('inline-plot-section').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+  showToast('Results rejected. Modify your inputs and try again.','error');
+}
+</script>
+</body>
+</html>
