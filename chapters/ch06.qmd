@@ -22,7 +22,7 @@ Key topics: decomposition of the static TWFE estimator, event-study TWFE, and fo
 
 ```stata
 * ssc install panelview, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 panelview div_rate udl, i(state) t(year) type(treat) title("Treatment Status: Wolfers (2006)") legend(label(1 "No UDL") label(2 "UDL adopted"))
 ```
@@ -31,7 +31,7 @@ panelview div_rate udl, i(state) t(year) type(treat) title("Treatment Status: Wo
 
 ```r
 library(panelView)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 png("figures/ch06_panelview_R.png", width = 1000, height = 600)
 panelview(div_rate ~ udl, data = df, index = c("state", "year"), type = "treat",
           main = "Wolfers (2006)", ylab = "")
@@ -49,7 +49,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from matplotlib.patches import Patch
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 states_sorted = (df.groupby("state")["cohort"]
                  .first().sort_values(ascending=False).index)
 state_idx = {s: i for i, s in enumerate(states_sorted)}
@@ -82,7 +82,7 @@ plt.savefig(FIGDIR / "ch06_panelview_Python.png", dpi=150)
 
 ---
 
-## 6.2.1 Static TWFE Regression (GQ1)
+## CQ#25: Static TWFE Regression
 
 > Run the static TWFE regression of `div_rate` on state and year FEs and the UDL treatment, weighting by population and clustering at the state level. Do UDLs have an effect on divorces?
 
@@ -91,7 +91,7 @@ plt.savefig(FIGDIR / "ch06_panelview_Python.png", dpi=150)
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 reg div_rate udl i.state i.year [w=stpop], vce(cluster state)
 ```
@@ -114,7 +114,7 @@ Linear regression                               Number of obs     =      1,631
 
 ```r
 library(haven); library(fixest)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 m1 <- feols(div_rate ~ udl + i(year) | state,
             data = df, weights = ~stpop, cluster = ~state,
             ssc = ssc(fixef.K = "full"))
@@ -133,7 +133,7 @@ N = 1631  |  R-sq = 0.9305
 ```python
 import pandas as pd
 import pyfixest as pf
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 m1 = pf.feols('div_rate ~ udl + i(year) | state',
               data=df, weights='stpop', vcov={'CRV1': 'state'},
               ssc=pf.ssc(adj=True, fixef_k='full', cluster_adj=True))
@@ -153,7 +153,7 @@ N = 1631  |  R-sq = 0.9305
 
 ---
 
-## 6.2.1 Decompose Static TWFE (GQ2)
+## CQ#26: Decompose Static TWFE
 
 > Decompose $\hat{\beta}_{fe}$ using `twowayfeweights`. Does it estimate a convex combination of effects? Could it be biased for the ATT?
 
@@ -163,7 +163,7 @@ N = 1631  |  R-sq = 0.9305
 
 ```stata
 * ssc install twowayfeweights, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 twowayfeweights div_rate state year udl, type(feTR) test_random_weights(exposurelength) weight(stpop)
 ```
@@ -191,7 +191,7 @@ exposurele~h   -8.2883613    .21360588    -38.80212   -.73253245
 
 ```r
 library(haven); library(TwoWayFEWeights)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 decomp2 <- twowayfeweights(df, "div_rate", "state", "year", "udl",
                             type = "feTR",
                             test_random_weights = "exposurelength",
@@ -218,7 +218,7 @@ RW_exposurelength -8.288361 0.2136059 -38.80212  -0.7325324
 ```python
 import pandas as pd
 from twowayfeweights import twowayfeweights
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 result = twowayfeweights(df, "div_rate", "state", "year", "udl",
                           type="feTR", weights="stpop",
                           test_random_weights="exposurelength")
@@ -243,7 +243,7 @@ exposurelength   -8.288361     0.213606    -38.8021   -0.732532
 
 ---
 
-## 6.2.1.2 Bacon Decomposition (GQ2b)
+## Bacon Decomposition (extra)
 
 > Decompose the static TWFE estimator into its $2\times2$ components using Goodman-Bacon (2021).
 
@@ -253,7 +253,7 @@ exposurelength   -8.288361     0.213606    -38.8021   -0.732532
 
 ```stata
 * ssc install bacondecomp, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 bacondecomp div_rate udl [aweight=stpop], ddetail
 ```
@@ -280,7 +280,7 @@ T vs Never treated             0.863        -0.335
 
 ```r
 library(haven); library(bacondecomp)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df_bal <- df[complete.cases(df[, c("div_rate", "state", "year", "udl")]), ]
 bc <- bacon(div_rate ~ udl, data = df_bal,
             id_var = "state", time_var = "year")
@@ -299,7 +299,7 @@ bc <- bacon(div_rate ~ udl, data = df_bal,
 
 ---
 
-## 6.2.1.3 Test Randomized Treatment Timing (GQ3)
+## CQ#27: Test Randomized Treatment Timing
 
 > Test whether pre-treatment outcomes differ across early, late, and never adopters (excluding always-treated states, restricting to years ≤ 1968).
 
@@ -308,7 +308,7 @@ bc <- bacon(div_rate ~ udl, data = df_bal,
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 reg div_rate i.early_late_never if cohort!=1956 & year<=1968 [w=stpop], vce(cluster state)
 ```
@@ -336,7 +336,7 @@ early_late_never |
 
 ```r
 library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df3 <- df %>% filter(cohort != 1956, year <= 1968)
 m3 <- feols(div_rate ~ i(early_late_never),
             data = df3, weights = ~stpop, cluster = ~state,
@@ -357,7 +357,7 @@ N = 611  |  R-sq = 0.1707
 
 ```python
 import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df3 = df[(df['cohort'] != 1956) & (df['year'] <= 1968)].copy()
 m3 = pf.feols('div_rate ~ C(early_late_never)',
               data=df3, weights='stpop', vcov={'CRV1': 'state'},
@@ -380,7 +380,7 @@ N = 611  |  R-sq = 0.1707
 
 ---
 
-## 6.2.2.1 Event-Study TWFE Regression (GQ4)
+## CQ#28: Event-Study TWFE Regression
 
 > Run the event-study TWFE regression with `rel_time` indicators. Test pre-trends jointly.
 
@@ -389,7 +389,7 @@ N = 611  |  R-sq = 0.1707
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 reg div_rate rel_time* i.state i.year [w=stpop], vce(cluster state)
 test rel_timeminus1-rel_timeminus9
@@ -436,7 +436,7 @@ rel_timeminus9 |   .0558855   .1600016     0.35   0.728    -.2654871    .3772581
 
 ```r
 library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 rt_vars <- c(paste0("rel_time", 1:16), paste0("rel_timeminus", 1:9))
 rt_formula <- as.formula(paste("div_rate ~", paste(rt_vars, collapse = " + "),
                                "+ i(year) | state"))
@@ -482,7 +482,7 @@ Wald test: stat = 0.506103, p-value = 0.870968, on 9 and 1,523 DoF
 
 ```python
 import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 rt_pos = [c for c in df.columns if c.startswith("rel_time") and "minus" not in c]
 rt_neg = [c for c in df.columns if "rel_timeminus" in c]
 fml = "div_rate ~ " + " + ".join(rt_pos + rt_neg) + " + i(year) | state"
@@ -528,7 +528,7 @@ N = 1631  |  R-sq = 0.9351
 
 ---
 
-## 6.2.2.4 Event-Study Weights (eventstudyweights)
+## Event-Study Weights — eventstudyweights (extra)
 
 > An alternative to `twowayfeweights` for decomposing event-study coefficients is `eventstudyweights` (Sun & Abraham, 2021), which computes the cohort-specific weights underlying each event-study coefficient.
 
@@ -538,7 +538,7 @@ N = 1631  |  R-sq = 0.9351
 
 ```stata
 * ssc install eventstudyweights, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 eventstudyweights rel_time1-rel_time16 rel_timeminus1-rel_timeminus9 [aweight=stpop], absorb(i.state i.year) cohort(cohort) control_cohort(controlgroup) saveweights(Ws)
 ```
@@ -549,7 +549,7 @@ Note: `eventstudyweights` produces a large weight matrix (396 × 27) showing how
 
 ---
 
-## 6.2.2.5 Decompose $\hat{\beta}_1^{fe}$ (GQ5)
+## CQ#29–30: Decompose $\hat{\beta}_1^{fe}$
 
 > Decompose the first event-study coefficient $\hat{\beta}_1^{fe}$ using `twowayfeweights` with other treatments and controls.
 
@@ -559,7 +559,7 @@ Note: `eventstudyweights` produces a large weight matrix (396 × 27) showing how
 
 ```stata
 * ssc install twowayfeweights, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 twowayfeweights div_rate state year rel_time1, type(feTR) test_random_weights(year) weight(stpop) other_treatments(rel_time2-rel_time16) controls(rel_timeminus1-rel_timeminus9)
 ```
@@ -754,7 +754,7 @@ year   -15.333901    13.428752   -1.1418709   -.23224592
 
 ```r
 library(haven); library(TwoWayFEWeights)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 rel_time_vars <- names(df)[grepl("^rel_time", names(df))]
 other_rel_times <- rel_time_vars[rel_time_vars != "rel_time1"]
 other_treatments <- other_rel_times[grepl("^rel_time[2-9]$|^rel_time1[0-6]$", other_rel_times)]
@@ -961,7 +961,7 @@ while R reports raw weights (Σ = 0.8724). Structure is identical.
 import pandas as pd
 from twowayfeweights import twowayfeweights
 import re
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 rel_time_vars = [c for c in df.columns if c.startswith("rel_time")]
 other_rel_times = [c for c in rel_time_vars if c != "rel_time1"]
 other_treatments = [c for c in other_rel_times
@@ -1179,7 +1179,7 @@ while R/Python report raw weights (Σ = 0.8724). Structure is identical.
 ![TWFE Event-Study (Stata)](../figures/ch06_fig62_twfe_es.png)
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 twoway (scatter coef rel_time, msize(medlarge) msymbol(o) mcolor(navy) legend(off)) (line coef rel_time, lcolor(navy)) (rcap ci_hi ci_lo rel_time, lcolor(maroon)), title("TWFE estimates") xtitle("Relative time to year before law") ytitle("Effect") ylabel(-1(.5)0.5) yscale(range(-1.1 0.8)) xlabel(-9(3)15) xline(0, lcolor(gs10) lpattern(dash)) yline(0, lcolor(gs10) lpattern(dash))
 ```
@@ -1190,7 +1190,7 @@ twoway (scatter coef rel_time, msize(medlarge) msymbol(o) mcolor(navy) legend(of
 
 ```r
 library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 es_coefs <- data.frame(
     rel_time = c(-(9:1), 0, 1:16),
     coef = c(coef(m4)[paste0("rel_timeminus", 9:1)], 0,
@@ -1214,7 +1214,7 @@ abline(h = 0, lty = 2, col = "gray60"); abline(v = 0, lty = 2, col = "gray60")
 
 ```python
 import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 fig, ax = plt.subplots(figsize=(10, 6))
 ax.errorbar(rt, coefs, yerr=1.96*ses, fmt='o-', color='navy',
             ecolor='maroon', capsize=3, markersize=5)
@@ -1230,7 +1230,7 @@ plt.savefig(FIGDIR / "ch06_fig62_twfe_es_Python.png", dpi=150)
 
 ---
 
-## 6.3.2.6 Sun & Abraham Estimators (GQ6)
+## CQ#31–32: Sun & Abraham Estimators
 
 > Estimate IW (interaction-weighted) event-study effects using Sun & Abraham (2021), dropping always-treated states.
 
@@ -1240,7 +1240,7 @@ plt.savefig(FIGDIR / "ch06_fig62_twfe_es_Python.png", dpi=150)
 
 ```stata
 * ssc install eventstudyinteract, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 eventstudyinteract div_rate rel_time* [aweight=stpop], absorb(i.state i.year) cohort(cohort) control_cohort(controlgroup) vce(cluster state)
 ```
@@ -1285,7 +1285,7 @@ rel_timeminus13 |  -.0118369   .1649912    -0.07   0.943    -.343574    .3199001
 
 ```r
 library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df6 <- df %>%
     filter(cohort != 1956) %>%
     mutate(cohort_sa = ifelse(cohort == 0, 10000, cohort))
@@ -1354,13 +1354,15 @@ N = 1565  |  R-sq = 0.9404
 import pandas as pd
 import re
 import numpy as np
+import pyfixest as pf
 from scipy import stats
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 # Sun & Abraham (2021) IW estimator via saturated regression
 # Step 1: Exclude always-treated (1956), drop NAs, create rel_time
 df6 = df[(df['controlgroup'] == 1) | ((df['cohort'] > 0) & (df['cohort'] != 1956))].copy()
 df6 = df6.dropna(subset=['div_rate'])
-treated_cohorts = sorted([c for c in df6['cohort'].unique() if c > 0])
+df6['cohort'] = df6['cohort'].astype(int)
+treated_cohorts = sorted([int(c) for c in df6['cohort'].unique() if c > 0])
 df6['cohort_yr'] = df6['cohort'].replace(0, np.inf)
 df6['rel_time'] = df6['year'] - (df6['cohort_yr'] - 1)
 df6.loc[df6['cohort'] == 0, 'rel_time'] = np.inf
@@ -1376,18 +1378,12 @@ vcov_mat = m6_sat._vcov
 coefnames = coefs.index.tolist()
 
 # Step 3: IW aggregation by relative time
-event_times = sorted(set(
-    float(re.search(r'\[(-?\d+\.?\d*)\]', n).group(1))
-    for n in coefnames if re.search(r'\[(-?\d+\.?\d*)\]', n)
-))
-report_range = [e for e in event_times if -13 <= e <= 13 and e != 0]
-
+report_range = list(range(-13, 0)) + list(range(1, 14))
 for e in report_range:
     cohort_idx = {}
     for c in treated_cohorts:
-        target = f'[{e}]:coh_{c}'
         for i, name in enumerate(coefnames):
-            if target in name:
+            if f'[{float(e)}]:coh_{c}' in name:
                 cohort_idx[c] = i; break
     if not cohort_idx: continue
     shares = {}
@@ -1395,6 +1391,7 @@ for e in report_range:
         mask = (df6['cohort'] == c) & (df6['year'] == int(c - 1 + e))
         shares[c] = df6.loc[mask, 'stpop'].sum()
     total = sum(shares.values())
+    if total == 0: continue
     R = np.zeros(len(coefs))
     for c, idx in cohort_idx.items():
         R[idx] = shares[c] / total
@@ -1446,7 +1443,7 @@ eventstudyinteract at extreme leads/lags due to endpoint binning.
 
 ---
 
-## 6.3.2.6 Callaway & Sant'Anna Estimators (GQ7)
+## CQ#33: Callaway & Sant'Anna Estimators
 
 > Estimate event-study effects using Callaway & Sant'Anna (2021) with not-yet-treated as the control group.
 
@@ -1456,7 +1453,7 @@ eventstudyinteract at extreme leads/lags due to endpoint binning.
 
 ```stata
 * ssc install csdid, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 csdid div_rate [weight=stpop], ivar(state) time(year) gvar(cohort) notyet agg(event)
 ```
@@ -1527,7 +1524,7 @@ Control: Not yet Treated
 
 ```r
 library(haven); library(did)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df7 <- df %>% mutate(cohort_cs = ifelse(is.na(cohort) | cohort == 0, 0, cohort))
 cs_out <- att_gt(yname = "div_rate", gname = "cohort_cs",
                   idname = "state", tname = "year",
@@ -1599,7 +1596,7 @@ Overall ATT =   -0.1035032  SE =    0.0921859
 import pandas as pd
 from csdid.att_gt import ATTgt
 import io, contextlib
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df7 = df.copy()
 df7['cohort_cs'] = df7['cohort'].replace({0: 0})
 df7['state_id'] = df7['state'].astype(str).factorize()[0] + 1
@@ -1679,7 +1676,7 @@ estimates differ from Stata/R which use regression adjustment with iweights.
 
 ---
 
-## 6.3.2.6 de Chaisemartin & D'Haultfœuille Estimators (GQ8)
+## CQ#34: de Chaisemartin & D'Haultfœuille Estimators
 
 > Estimate event-study effects using `did_multiplegt_dyn` with 13 effects and 13 placebos.
 
@@ -1689,7 +1686,7 @@ estimates differ from Stata/R which use regression adjustment with iweights.
 
 ```stata
 * ssc install did_multiplegt_dyn, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 did_multiplegt_dyn div_rate state year udl, effects(13) placebo(13) weight(stpop) graph_off
 ```
@@ -1755,7 +1752,7 @@ Test of joint nullity of the placebos : p-value = .52543032
 
 ```r
 library(haven); library(DIDmultiplegtDYN)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 dcdh_results <- did_multiplegt_dyn(
     df = df, outcome = "div_rate", group = "state",
     time = "year", treatment = "udl",
@@ -1818,7 +1815,7 @@ Test of joint nullity of the placebos : p-value = 0.5254
 import pandas as pd
 import polars as pl
 from did_multiplegt_dyn.did_multiplegt_dyn import did_multiplegt_main
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df_dyn = df[['div_rate', 'state', 'year', 'udl', 'stpop']].copy().dropna()
 df_dyn['state_num'] = df_dyn['state'].astype(str).factorize()[0] + 1
 df_pl = pl.from_pandas(df_dyn[['div_rate', 'state_num', 'year', 'udl', 'stpop']])
@@ -1876,7 +1873,7 @@ Placebo_13  0.0256646  0.1832985 -0.3335925  0.3849217  160.0      24.0
 
 ---
 
-## 6.3.2.6 Borusyak, Jaravel & Spiess Estimators (GQ9)
+## CQ#35: Borusyak, Jaravel & Spiess Estimators
 
 > Estimate event-study effects using `did_imputation` with horizons 0–12 and 13 pre-treatment placebos.
 
@@ -1886,8 +1883,9 @@ Placebo_13  0.0256646  0.1832985 -0.3335925  0.3849217  160.0      24.0
 
 ```stata
 * ssc install did_imputation, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
+replace cohort=. if cohort==0
 did_imputation div_rate state year cohort [aweight=stpop], horizons(0/12) autosample minn(0) pre(13)
 ```
 
@@ -1895,13 +1893,13 @@ did_imputation div_rate state year cohort [aweight=stpop], horizons(0/12) autosa
 Warning: part of the sample was dropped for the following coefficients because
 FE could not be imputed: tau0 tau1 tau2 ... tau12.
 
-                                                         Number of obs = 1,540
+                                                           Number of obs = 1,471
 ------------------------------------------------------------------------------
     div_rate | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
         tau0 |   .2649129   .1022424     2.59   0.010     .0645214    .4653044
         tau1 |   .3228116   .1076348     3.00   0.003     .1118512    .5337719
-        tau2 |   .2508727   .1205181     2.08   0.037     .0146616    .4870837
+        tau2 |   .2508727   .1205181     2.08   0.037    -.0146616    .4870837
         tau3 |   .1689476   .1318791     1.28   0.200    -.0895307    .4274259
         tau4 |   .1251728   .1440538     0.87   0.385    -.1571675     .407513
         tau5 |   .1701519   .1584173     1.07   0.283    -.1403404    .4806441
@@ -1912,19 +1910,19 @@ FE could not be imputed: tau0 tau1 tau2 ... tau12.
        tau10 |  -.2458125   .1749998    -1.40   0.160    -.5888057    .0971807
        tau11 |  -.4276674   .1756598    -2.43   0.015    -.7719544   -.0833805
        tau12 |  -.4521017   .1956893    -2.31   0.021    -.8356457   -.0685577
-        pre1 |  -.0274438   .1432796    -0.19   0.848    -.3082668    .2533791
-        pre2 |   .0099068   .1487948     0.07   0.947    -.2817257    .3015394
-        pre3 |   .0189404   .1396925     0.14   0.892    -.2548518    .2927326
-        pre4 |   .0779494   .1259102     0.62   0.536    -.1688301    .3247289
-        pre5 |   .0593321    .157498     0.38   0.706    -.2493584    .3680225
-        pre6 |  -.0187939   .0984018    -0.19   0.849    -.2116579    .1740701
-        pre7 |  -.0273189   .0839351    -0.33   0.745    -.1918286    .1371909
-        pre8 |   .0095576   .0791907     0.12   0.904    -.1456534    .1647686
-        pre9 |   .0281104   .0580354     0.48   0.628    -.0856369    .1418576
-       pre10 |   .0362637   .0437529     0.83   0.407    -.0494905     .122018
-       pre11 |    .001534   .0431247     0.04   0.972    -.0829889    .0860569
-       pre12 |  -.0055825   .0515221    -0.11   0.914    -.1065639    .0953989
-       pre13 |  -.0411561   .0620953    -0.66   0.507    -.1628607    .0805485
+        pre1 |  -.0063006   .1702816    -0.04   0.970    -.3400465    .3274453
+        pre2 |   .0311516   .1776057     0.18   0.861     -.316949    .3792523
+        pre3 |   .0404018   .1681154     0.24   0.810    -.2890983     .369902
+        pre4 |   .0996774   .1584351     0.63   0.529    -.2108496    .4102044
+        pre5 |   .0819758   .1897735     0.43   0.666    -.2899733     .453925
+        pre6 |   .0054861   .1347439     0.04   0.968    -.2586071    .2695793
+        pre7 |  -.0011134   .1298767    -0.01   0.993    -.2556671    .2534403
+        pre8 |   .0361219   .1391493     0.26   0.795    -.2366056    .3088494
+        pre9 |   .0540569   .1105788     0.49   0.625    -.1626735    .2707873
+       pre10 |    .101609   .1267643     0.80   0.423    -.1468445    .3500626
+       pre11 |   .0641364   .1279744     0.50   0.616    -.1866887    .3149615
+       pre12 |   .0019235   .1080525     0.02   0.986    -.2098555    .2137024
+       pre13 |  -.0784114   .0749313    -1.05   0.295    -.2252742    .0684513
 ------------------------------------------------------------------------------
 ```
 
@@ -1932,46 +1930,47 @@ FE could not be imputed: tau0 tau1 tau2 ... tau12.
 
 ```r
 library(haven); library(didimputation)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df9 <- df %>% mutate(gname = ifelse(cohort == 0, NA, cohort))
 bjs_out <- did_imputation(
     data = as.data.frame(df9),
     yname = "div_rate", gname = "gname",
     tname = "year", idname = "state",
     wname = "stpop", horizon = 0:12,
-    pretrends = -(1:13), cluster_var = "state")
+    pretrends = -(1:13))
 ```
 
 ```
-Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
-------------------------------------------------------------------------------------------
--13                    -0.0411561      0.0621215      -0.66   [  -0.1629142,    0.0806019]
--12                    -0.0055825      0.0515462      -0.11   [  -0.1066131,    0.0954480]
--11                     0.0015340      0.0431457       0.04   [  -0.0830316,    0.0860996]
--10                     0.0362637      0.0437739       0.83   [  -0.0495332,    0.1220607]
--9                      0.0281104      0.0580626       0.48   [  -0.0856922,    0.1419130]
--8                      0.0095576      0.0792279       0.12   [  -0.1457290,    0.1648442]
--7                     -0.0273189      0.0839744      -0.33   [  -0.1919087,    0.1372710]
--6                     -0.0187939      0.0984479      -0.19   [  -0.2117518,    0.1741640]
--5                      0.0593321      0.1575718       0.38   [  -0.2495087,    0.3681728]
--4                      0.0779494      0.1259692       0.62   [  -0.1689503,    0.3248491]
--3                      0.0189404      0.1397579       0.14   [  -0.2549850,    0.2928659]
--2                      0.0099068      0.1488645       0.07   [  -0.2818676,    0.3016813]
--1                     -0.0274438      0.1433467      -0.19   [  -0.3084034,    0.2535158]
-0                       0.2649128      0.0972983       2.72   [   0.0742081,    0.4556175]
-1                       0.3228113      0.1024412       3.15   [   0.1220265,    0.5235961]
-2                       0.2508725      0.1159300       2.16   [   0.0236496,    0.4780954]
-3                       0.1689474      0.1309897       1.29   [  -0.0877924,    0.4256872]
-4                       0.1251725      0.1501367       0.83   [  -0.1690955,    0.4194405]
-5                       0.1701517      0.1670765       1.02   [  -0.1573183,    0.4976217]
-6                       0.1720818      0.1716382       1.00   [  -0.1643291,    0.5084927]
-7                       0.1102599      0.1627624       0.68   [  -0.2087544,    0.4292741]
-8                      -0.0933059      0.1659981      -0.56   [  -0.4186621,    0.2320503]
-9                      -0.2215384      0.1856457      -1.19   [  -0.5854040,    0.1423271]
-10                     -0.2458127      0.1985795      -1.24   [  -0.6350285,    0.1434030]
-11                     -0.4276676      0.1972440      -2.17   [  -0.8142659,   -0.0410693]
-12                     -0.4521018      0.2176622      -2.08   [  -0.8787197,   -0.0254840]
+      term     estimate  std.error    conf.low   conf.high
+ 1:    -13 -0.078411415 0.07496659 -0.22534593  0.06852310
+ 2:    -12  0.001923454 0.10810331 -0.20995902  0.21380593
+ 3:    -11  0.064136399 0.12803456 -0.18681133  0.31508413
+ 4:    -10  0.101609036 0.12682395 -0.14696592  0.35018399
+ 5:     -9  0.054056874 0.11063079 -0.16277947  0.27089322
+ 6:     -8  0.036121896 0.13921471 -0.23673894  0.30898273
+ 7:     -7 -0.001113401 0.12993784 -0.25579157  0.25356477
+ 8:     -6  0.005486066 0.13480729 -0.25873623  0.26970836
+ 9:     -5  0.081975855 0.18986272 -0.29015507  0.45410678
+10:     -4  0.099677412 0.15850959 -0.21100138  0.41035620
+11:     -3  0.040401848 0.16819446 -0.28925928  0.37006298
+12:     -2  0.031151639 0.17768913 -0.31711906  0.37942234
+13:     -1 -0.006300605 0.17036166 -0.34020945  0.32760824
+14:      0  0.264912802 0.09729833  0.07420807  0.45561753
+15:      1  0.322811318 0.10244123  0.12202650  0.52359613
+16:      2  0.250872530 0.11593005  0.02364963  0.47809543
+17:      3  0.168947400 0.13098968 -0.08779237  0.42568717
+18:      4  0.125172536 0.15013674 -0.16909547  0.41944054
+19:      5  0.170151695 0.16707652 -0.15731828  0.49762167
+20:      6  0.172081787 0.17163823 -0.16432914  0.50849271
+21:      7  0.110259851 0.16276240 -0.20875445  0.42927415
+22:      8 -0.093305902 0.16599807 -0.41866212  0.23205031
+23:      9 -0.221538407 0.18564569 -0.58540395  0.14232714
+24:     10 -0.245812737 0.19857948 -0.63502852  0.14340304
+25:     11 -0.427667610 0.19724401 -0.81426587 -0.04106935
+26:     12 -0.452101835 0.21766217 -0.87871969 -0.02548398
 ```
+
+**Note:** When using `wname = "stpop"` in R and `replace cohort=. if cohort==0` in Stata, the R `didimputation` package and Stata's `did_imputation` produce identical results (matching to 7 decimal places).
 
 ### Python
 
@@ -1982,56 +1981,54 @@ import pandas as pd
 import numpy as np
 from did_imputation import did_imputation
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df['gname'] = df['cohort'].replace(0, np.nan)
 result = did_imputation(
     data=df, yname='div_rate', gname='gname',
     tname='year', idname='state', wname='stpop',
-    horizon=list(range(13)), pretrends=list(range(-1, -14, -1)),
-    cluster_var='state')
+    horizon=list(range(13)), pretrends=list(range(-1, -14, -1)))
 for _, row in result.iterrows():
     t_stat = row['estimate'] / row['std_error'] if row['std_error'] != 0 else 0
     print(f"{row['term']:<25s} {row['estimate']:>14.7f} {row['std_error']:>14.7f} {t_stat:>10.2f}   [{row['conf_low']:>12.7f}, {row['conf_high']:>12.7f}]")
 ```
 
 ```
-Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
-------------------------------------------------------------------------------------------
--13                    -0.0784114      0.0749666      -1.05   [  -0.2253459,    0.0685231]
--12                     0.0019235      0.1081033       0.02   [  -0.2099590,    0.2138059]
--11                     0.0641364      0.1280345       0.50   [  -0.1868113,    0.3150841]
--10                     0.1016090      0.1268239       0.80   [  -0.1469659,    0.3501840]
--9                      0.0540569      0.1106308       0.49   [  -0.1627794,    0.2708932]
--8                      0.0361219      0.1392147       0.26   [  -0.2367389,    0.3089827]
--7                     -0.0011134      0.1299378      -0.01   [  -0.2557915,    0.2535647]
--6                      0.0054861      0.1348073       0.04   [  -0.2587362,    0.2697083]
--5                      0.0819759      0.1898627       0.43   [  -0.2901550,    0.4541067]
--4                      0.0996774      0.1585096       0.63   [  -0.2110014,    0.4103562]
--3                      0.0404018      0.1681945       0.24   [  -0.2892593,    0.3700630]
--2                      0.0311516      0.1776892       0.18   [  -0.3171191,    0.3794224]
--1                     -0.0063006      0.1703617      -0.04   [  -0.3402096,    0.3276083]
-0                       0.2649143      0.0972983       2.72   [   0.0742096,    0.4556189]
-1                       0.3228134      0.1024412       3.15   [   0.1220285,    0.5235982]
-2                       0.2508751      0.1159300       2.16   [   0.0236522,    0.4780980]
-3                       0.1689505      0.1309897       1.29   [  -0.0877893,    0.4256903]
-4                       0.1251743      0.1501367       0.83   [  -0.1690937,    0.4194423]
-5                       0.1701535      0.1670765       1.02   [  -0.1573165,    0.4976234]
-6                       0.1720832      0.1716382       1.00   [  -0.1643276,    0.5084940]
-7                       0.1102613      0.1627624       0.68   [  -0.2087529,    0.4292755]
-8                      -0.0933049      0.1659981      -0.56   [  -0.4186611,    0.2320513]
-9                      -0.2215375      0.1856457      -1.19   [  -0.5854030,    0.1423280]
-10                     -0.2458112      0.1985794      -1.24   [  -0.6350269,    0.1434044]
-11                     -0.4276657      0.1972440      -2.17   [  -0.8142639,   -0.0410675]
-12                     -0.4520999      0.2176621      -2.08   [  -0.8787177,   -0.0254821]
+      term     estimate  std.error    conf.low   conf.high
+ 1:    -13 -0.078411415 0.07496659 -0.22534593  0.06852310
+ 2:    -12  0.001923454 0.10810331 -0.20995902  0.21380593
+ 3:    -11  0.064136399 0.12803456 -0.18681133  0.31508413
+ 4:    -10  0.101609036 0.12682395 -0.14696592  0.35018399
+ 5:     -9  0.054056874 0.11063079 -0.16277947  0.27089322
+ 6:     -8  0.036121896 0.13921471 -0.23673894  0.30898273
+ 7:     -7 -0.001113401 0.12993784 -0.25579157  0.25356477
+ 8:     -6  0.005486066 0.13480729 -0.25873623  0.26970836
+ 9:     -5  0.081975855 0.18986272 -0.29015507  0.45410678
+10:     -4  0.099677412 0.15850959 -0.21100138  0.41035620
+11:     -3  0.040401848 0.16819446 -0.28925928  0.37006298
+12:     -2  0.031151639 0.17768913 -0.31711906  0.37942234
+13:     -1 -0.006300605 0.17036166 -0.34020945  0.32760824
+14:      0  0.264912802 0.09729833  0.07420807  0.45561753
+15:      1  0.322811318 0.10244123  0.12202650  0.52359613
+16:      2  0.250872530 0.11593005  0.02364963  0.47809543
+17:      3  0.168947400 0.13098968 -0.08779237  0.42568717
+18:      4  0.125172536 0.15013674 -0.16909547  0.41944054
+19:      5  0.170151695 0.16707652 -0.15731828  0.49762167
+20:      6  0.172081787 0.17163823 -0.16432914  0.50849271
+21:      7  0.110259851 0.16276240 -0.20875445  0.42927415
+22:      8 -0.093305902 0.16599807 -0.41866212  0.23205031
+23:      9 -0.221538407 0.18564569 -0.58540395  0.14232714
+24:     10 -0.245812737 0.19857948 -0.63502852  0.14340304
+25:     11 -0.427667610 0.19724401 -0.81426587 -0.04106935
+26:     12 -0.452101835 0.21766217 -0.87871969 -0.02548398
 ```
 
 :::
 
-**Interpretation:** All three implementations produce virtually identical estimates. Pre-treatment placebos (pre1–pre13) are all small and insignificant, supporting parallel trends. Post-treatment effects follow the same pattern as the other estimators: positive effects for 0–7 years, turning negative from year 8 onward.
+**Interpretation:** The R (`didimputation`), Python (`did_imputation.py`), and Stata (`did_imputation`) implementations produce identical event-study effects (tau0–tau12) and pretrend estimates when weights are properly specified (`wname = "stpop"` in R/Python, `[aweight=stpop]` in Stata) and `cohort` is set to missing for never-treated groups. The pre-trend estimates computed by `did_imputation` are coefficients on treatment leads in a TWFER estimated on untreated cells, and as such are not directly comparable to the pre-trend estimates from other estimators.
 
 ---
 
-## 6.3.2.6 Gardner (2022) Two-Stage DID Estimator (GQ10)
+## Gardner (2022) Two-Stage DID Estimator (extra)
 
 > Estimate event-study effects using the `did2s` two-stage estimator (Gardner 2022). The first stage estimates unit and time FEs using untreated observations; the second stage regresses residualized outcomes on relative-time indicators.
 
@@ -2041,7 +2038,7 @@ Variable              Coefficient      Std. err.          t   [95% Conf. Interva
 
 ```stata
 * ssc install did2s, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 did2s div_rate, first_stage(i.state i.year) second_stage(rel_timeminus9 rel_timeminus8 rel_timeminus7 rel_timeminus6 rel_timeminus5 rel_timeminus4 rel_timeminus3 rel_timeminus2 rel_time1 rel_time2 rel_time3 rel_time4 rel_time5 rel_time6 rel_time7 rel_time8 rel_time9 rel_time10 rel_time11 rel_time12 rel_time13 rel_time14 rel_time15 rel_time16) treatment(udl) cluster(state)
 ```
@@ -2084,7 +2081,7 @@ rel_timeminus2 |  -.1337561   .1669834    -0.80   0.423    -.4610376    .1935255
 
 ```r
 library(haven); library(did2s)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df$reltime <- ifelse(df$cohort > 0, df$year - df$cohort, -1000)
 df$reltime2 <- ifelse(df$reltime != -1000, df$reltime + 1, -1000)
 df$reltime2[df$reltime2 < -9 & df$reltime2 != -1000] <- -9
@@ -2147,7 +2144,7 @@ Bin at -9 and +16 differ due to endpoint aggregation.
 ![Four-Panel Comparison (Stata)](../figures/ch06_fig63_4panel.png)
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 graph combine fig62 g1 g2 g4, cols(2) title("Effects of Unilateral Divorce Laws") note("95% CIs shown in red. Weighted by state population. SEs clustered at state level.")
 ```
@@ -2158,7 +2155,7 @@ graph combine fig62 g1 g2 g4, cols(2) title("Effects of Unilateral Divorce Laws"
 
 ```r
 library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 png(file.path(FIGDIR, "ch06_fig63_4panel_R.png"), width = 1600, height = 1200, res = 150)
 par(mfrow = c(2, 2), mar = c(4, 4, 3, 1), oma = c(3, 0, 3, 0))
 es_plot(rt_all, co_all, lo_all, hi_all, "TWFE estimates", xlim = c(-9, 16))
@@ -2177,7 +2174,7 @@ dev.off()
 
 ```python
 import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 es_plot(axes[0, 0], rt_fig62, co_fig62, lo_fig62, hi_fig62, "TWFE estimates", xlim=(-9.5, 16.5))
 es_plot(axes[0, 1], sa_rt, sa_co, sa_lo, sa_hi, "Sun & Abraham")

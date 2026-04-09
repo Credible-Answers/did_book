@@ -18,7 +18,7 @@ The Trading with the Enemy Act (TWEA) allowed US firms to use German-owned paten
 
 ```stata
 * ssc install panelview, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 panelview patents twea, i(subclass) t(year) type(treat) title("Treatment Status: Moser & Voena (2012)") ylabel(none) ytitle("")
 graph export "figures/ch03_panelview_stata.png", replace width(1200)
@@ -30,7 +30,7 @@ graph export "figures/ch03_panelview_stata.png", replace width(1200)
 
 ```r
 library(panelView)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 png("figures/ch03_panelview_R.png", width = 1000, height = 600)
 panelview(patents ~ twea, data = df, index = c("subclass", "year"), type = "treat",
           main = "Moser & Voena (2012)", ylab = "")
@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from matplotlib.patches import Patch
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 pv = df.pivot_table(index="subclass", columns="year", values="twea", aggfunc="first")
 pv_sorted = pv.loc[pv.mean(axis=1).sort_values(ascending=False).index]
 cmap = mcolors.ListedColormap(["#D4E6F1", "#00AAAA"])
@@ -74,7 +74,7 @@ plt.show()
 
 ---
 
-## Green Question 1: Static TWFE Regression
+## CQ#1: Static TWFE Regression
 
 > Using the `moser_voena_didtextbook` dataset, run the TWFE regression of the number of patents in subclass $g$ and year $t$ on subclass and year FEs and the `twea` treatment, clustering standard errors at the subclass level.
 
@@ -84,7 +84,7 @@ plt.show()
 
 ```stata
 * ssc install reghdfe, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 
 * Ejemplo 1: xtreg
@@ -110,7 +110,7 @@ Both commands yield the same coefficient:
 ```r
 library(fixest); library(haven)
 options(digits=7)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 
 # Ejemplo 1
 summary(feols(patents ~ twea + i(year) | subclass, data = df, cluster = ~subclass))
@@ -135,7 +135,7 @@ twea 0.288262   0.038887 7.41278 1.377e-13 ***
 import pandas as pd
 import pyfixest as pf
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 
 # Ejemplo 1
 m1 = pf.feols('patents ~ twea + i(year) | subclass', data=df, vcov={'CRV1': 'subclass'})
@@ -167,7 +167,7 @@ Ejemplo 2:
 
 ---
 
-## Green Question 2: Equivalence between Static TWFE and DID
+## CQ#2: Equivalence between Static TWFE and DID
 
 > Verify that $\hat{\beta}_{fe}$ equals the coefficient on `twea` in a regression on the treatment group indicator, the post indicator, and `twea`.
 
@@ -176,7 +176,7 @@ Ejemplo 2:
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 reg patents treatmentgroup post twea, cluster(subclass)
 ```
@@ -198,7 +198,7 @@ treatmentgroup |  -.1780874   .0338152    -5.27   0.000    -.2443751   -.1117996
 
 ```r
 library(haven); library(fixest)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 model2 <- feols(patents ~ treatmentgroup + post + twea,
                 data = df, cluster = ~subclass)
 summary(model2)
@@ -221,7 +221,7 @@ twea            0.288262   0.038885  7.41326 1.3721e-13 ***
 import pandas as pd
 import pyfixest as pf
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 m2 = pf.feols("patents ~ treatmentgroup + post + twea",
               data=df, vcov={"CRV1": "subclass"})
 print(m2.summary())
@@ -242,7 +242,7 @@ print(m2.summary())
 
 ---
 
-## Green Question 3: Testing Randomized Treatment
+## CQ#3: Testing Randomized Treatment
 
 > Regress patents on the treatment group indicator, restricting the sample to years before 1919.
 
@@ -251,7 +251,7 @@ print(m2.summary())
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 reg patents treatmentgroup if year<=1918, cluster(subclass)
 ```
@@ -271,7 +271,7 @@ treatmentgroup |  -.1780874   .0338152    -5.27   0.000     -.244375   -.1117997
 
 ```r
 library(haven); library(fixest); library(dplyr)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 model3 <- feols(patents ~ treatmentgroup,
                 data = df %>% filter(year <= 1918), cluster = ~subclass)
 summary(model3)
@@ -292,7 +292,7 @@ treatmentgroup -0.178087   0.033815 -5.26649 1.4306e-07 ***
 import pandas as pd
 import pyfixest as pf
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 df_pre = df[df["year"] <= 1918].copy()
 m3 = pf.feols("patents ~ treatmentgroup",
               data=df_pre, vcov={"CRV1": "subclass"})
@@ -312,7 +312,7 @@ print(m3.summary())
 
 ---
 
-## Green Question 4: Event-Study TWFE Regression
+## CQ#4–7: Event-Study TWFE Regression
 
 > Estimate the event-study TWFE regression. Test whether pre-trend coefficients are jointly significant. Verify that $\hat{\beta}_1^{fe}$ equals the DID from equation (3.7).
 
@@ -327,7 +327,7 @@ Now estimate the event-study TWFE regression:
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 forvalues l = 1/18 {
     gen reltimeminus`l' = treatmentgroup * (year == 1918 - `l')
@@ -367,7 +367,7 @@ DID manual (eq 3.7, l=1) = .02352017
 
 ```r
 library(haven); library(fixest); library(car)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 for (l in 1:18) df[[paste0("reltimeminus", l)]] <- as.numeric(df$treatmentgroup == 1 & df$year == 1918 - l)
 for (l in 1:21) df[[paste0("reltimeplus", l)]] <- as.numeric(df$treatmentgroup == 1 & df$year == 1918 + l)
 
@@ -404,7 +404,7 @@ import pyfixest as pf
 import numpy as np
 from scipy import stats
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 for l in range(1, 19):
     df[f"reltimeminus{l}"] = (df["treatmentgroup"] * (df["year"] == 1918 - l)).astype(float)
 for l in range(1, 22):
@@ -454,7 +454,7 @@ reltimeplus1 coef:        0.02352017
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 reg patents i.year treatmentgroup reltimeminus* reltimeplus*, cluster(subclass)
 coefplot, keep(reltimeminus* reltimeplus*) vertical yline(0) xline(18.5, lpattern(dash)) xtitle("Relative time to year before TWEA") ytitle("Effect") title("TWFE Event-study estimates") ciopts(recast(rcap) color(cranberry))
@@ -468,7 +468,7 @@ graph export "figures/ch03_fig32_es_twfe.png", replace width(1200)
 ```r
 library(fixest); library(haven)
 options(digits=7)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 reltimeminus_vars <- paste0("reltimeminus", 1:18)
 reltimeplus_vars <- paste0("reltimeplus", 1:21)
 formula_str <- paste("patents ~", paste(reltimeminus_vars, collapse = " + "), "+",
@@ -500,7 +500,7 @@ import pyfixest as pf
 import matplotlib.pyplot as plt
 import numpy as np
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 minus_vars = [f"reltimeminus{i}" for i in range(1, 19)]
 plus_vars = [f"reltimeplus{i}" for i in range(1, 22)]
 fml = "patents ~ " + " + ".join(minus_vars + plus_vars) + " + treatmentgroup | year"
@@ -531,7 +531,7 @@ plt.savefig("figures/ch03_fig32_es_twfe_Python.png", dpi=150, bbox_inches="tight
 
 ---
 
-## Green Question 5: Event-Study without Pre-Trends
+## CQ#9: Event-Study without Pre-Trends
 
 > Re-estimate the event-study using only post-treatment dummies. This is numerically equivalent to Borusyak, Jaravel, and Spiess (2024).
 
@@ -540,7 +540,7 @@ plt.savefig("figures/ch03_fig32_es_twfe_Python.png", dpi=150, bbox_inches="tight
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 forvalues l = 1/21 {
     gen reltimeplus`l' = treatmentgroup * (year == 1918 + `l')
@@ -584,7 +584,7 @@ treatmentgroup |  -.1780874   .0338176    -5.27   0.000    -.2443797   -.1117951
 
 ```r
 library(haven); library(fixest)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 for (l in 1:21) df[[paste0("reltimeplus", l)]] <- as.numeric(df$treatmentgroup == 1 & df$year == 1918 + l)
 
 post_formula <- as.formula(paste(
@@ -628,7 +628,7 @@ RMSE: 1.33696   Adj. R2: 0.025481
 import pandas as pd
 import pyfixest as pf
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 for l in range(1, 22):
     df[f"reltimeplus{l}"] = (df["treatmentgroup"] * (df["year"] == 1918 + l)).astype(float)
 
@@ -671,7 +671,7 @@ RMSE: 1.337 R2: 0.026 R2 Within: 0.001
 
 ---
 
-## Green Question 6: Linear Pre-Trends We Could Fail to Detect
+## CQ#8: Linear Pre-Trends We Could Fail to Detect
 
 > Use the `pretrends` package (Roth, 2022) to compute the slope detectable with 50% power using 6 pre-periods.
 
@@ -681,7 +681,7 @@ RMSE: 1.337 R2: 0.026 R2 Within: 0.001
 
 ```stata
 * ssc install pretrends, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 forvalues l = 1/18 {
     gen reltimeminus`l' = treatmentgroup * (year == 1918 - `l')
@@ -701,7 +701,7 @@ Slope for 50% power =  .0098235
 
 ```r
 library(haven); library(fixest); library(pretrends)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 for (l in 1:18) df[[paste0("reltimeminus", l)]] <- as.numeric(df$treatmentgroup == 1 & df$year == 1918 - l)
 for (l in 1:21) df[[paste0("reltimeplus", l)]] <- as.numeric(df$treatmentgroup == 1 & df$year == 1918 + l)
 
@@ -730,7 +730,7 @@ import pandas as pd
 import pyfixest as pf
 from pretrends import slope_for_power
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 for l in range(1, 19):
     df[f"reltimeminus{l}"] = (df["treatmentgroup"] * (df["year"] == 1918 - l)).astype(float)
 for l in range(1, 22):
@@ -763,7 +763,7 @@ Slope for 50% power (numpre=6): 0.0098252
 
 ---
 
-## Green Question 7: Variance of Treatment Effects
+## CQ#10: Variance of Treatment Effects
 
 > Compare the variance of `diffpatentswrt1918` in treatment and control groups in 1932.
 
@@ -772,7 +772,7 @@ Slope for 50% power (numpre=6): 0.0098252
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 sdtest diffpatentswrt1918 if year==1932, by(treatmentgroup)
 
@@ -801,7 +801,7 @@ CI: [.17358476, 1.1108481]
 
 ```r
 library(haven); library(dplyr)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 df_1932 <- df %>% filter(year == 1932)
 var_test <- var.test(diffpatentswrt1918 ~ treatmentgroup, data = df_1932)
 print(var_test)
@@ -830,7 +830,7 @@ import pandas as pd
 import pyfixest as pf
 from scipy import stats
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 df_1932 = df[df["year"] == 1932]
 g0 = df_1932.loc[df_1932["treatmentgroup"] == 0, "diffpatentswrt1918"].dropna()
 g1 = df_1932.loc[df_1932["treatmentgroup"] == 1, "diffpatentswrt1918"].dropna()
@@ -862,7 +862,7 @@ CI: [0.173812, 1.110620]
 
 ---
 
-## Green Question 8: Placebo Test
+## CQ#10 (cont.): Placebo Test
 
 > Perform a placebo test by comparing the variances of `diffpatentswrt1918` across all years.
 
@@ -871,7 +871,7 @@ CI: [0.173812, 1.110620]
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 forvalues i = 1900/1939 {
     quietly sdtest diffpatentswrt1918 if year==`i', by(treatmentgroup)
@@ -926,7 +926,7 @@ Year 1939: F = 0.7569  p = 0.0002
 
 ```r
 library(haven); library(dplyr)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 for (yr in 1900:1939) {
   df_yr <- df %>% filter(year == yr)
   test <- var.test(diffpatentswrt1918 ~ treatmentgroup, data = df_yr)
@@ -983,7 +983,7 @@ Year 1939: F = 0.7569, p = 0.0002
 import pandas as pd
 from scipy import stats
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 for yr in range(1900, 1940):
     dfy = df[df["year"] == yr]
     g0y = dfy.loc[dfy["treatmentgroup"] == 0, "diffpatentswrt1918"].dropna()

@@ -1,11 +1,10 @@
 project:
   type: book
-  output-dir: _book
+  output-dir: docs
 
 book:
   title: "Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions"
   author: "Anzony Quispe Rojas"
-  date: last-modified
   chapters:
     - index.qmd
     - chapters/ch03.qmd
@@ -16,7 +15,6 @@ book:
     - chapters/ch08.qmd
   repo-url: https://github.com/Credible-Answers/did_book
   repo-actions: [edit, issue]
-
 format:
   html:
     theme: cosmo
