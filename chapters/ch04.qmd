@@ -18,7 +18,7 @@ This chapter explores alternatives to the parallel trends assumption. We conside
 
 ```stata
 * ssc install panelview, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 panelview patents twea, i(subclass) t(year) type(treat) title("Treatment Status: Moser & Voena (2012)") ylabel(none) ytitle("")
 graph export "figures/ch03_panelview_stata.png", replace width(1200)
@@ -30,7 +30,7 @@ graph export "figures/ch03_panelview_stata.png", replace width(1200)
 
 ```r
 library(panelView)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 png("figures/ch03_panelview_R.png", width = 1000, height = 600)
 panelview(patents ~ twea, data = df, index = c("subclass", "year"), type = "treat",
           main = "Moser & Voena (2012)", ylab = "")
@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from matplotlib.patches import Patch
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 pv = df.pivot_table(index="subclass", columns="year", values="twea", aggfunc="first")
 pv_sorted = pv.loc[pv.mean(axis=1).sort_values(ascending=False).index]
 cmap = mcolors.ListedColormap(["#D4E6F1", "#00AAAA"])
@@ -74,7 +74,7 @@ plt.show()
 
 ---
 
-## 4.1 TWFE with Controls (controlling for patents in 1900)
+## CQ#11: TWFE with Controls (controlling for patents in 1900)
 
 > Estimate the event-study TWFE regression controlling for `year#patents1900` interactions. Are the estimated event-study effects with controls very different from those without controls?
 
@@ -84,7 +84,7 @@ plt.show()
 
 ```stata
 * ssc install reghdfe, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 reghdfe patents reltimeminus* reltimeplus*, absorb(year#patents1900 treatmentgroup) cluster(subclass)
 ```
@@ -148,7 +148,7 @@ reltimeminus18 |   .0573644   .0437614     1.31   0.190    -.0284207    .1431494
 ```
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 * F-test on pre-trends
 test reltimeminus1 reltimeminus2 reltimeminus3 reltimeminus4 reltimeminus5 reltimeminus6 reltimeminus7 reltimeminus8 reltimeminus9 reltimeminus10 reltimeminus11 reltimeminus12 reltimeminus13 reltimeminus14 reltimeminus15 reltimeminus16 reltimeminus17 reltimeminus18
@@ -160,7 +160,7 @@ test reltimeminus1 reltimeminus2 reltimeminus3 reltimeminus4 reltimeminus5 relti
 ```
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 * Testing correlation between treatment and covariate
 reg patents1900 treatmentgroup if year==1900
@@ -186,7 +186,7 @@ treatmentgroup |   -.156312   .0432625    -3.61   0.000     -.241119    -.071505
 
 ```r
 library(fixest); library(haven); library(car); library(dplyr)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 
 formula_str <- paste("patents ~",
     paste(paste0("reltimeminus", 1:18), collapse = " + "), "+",
@@ -268,7 +268,7 @@ import pyfixest as pf
 import numpy as np
 from scipy import stats
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 
 minus_vars = [f"reltimeminus{i}" for i in range(1, 19)]
 plus_vars = [f"reltimeplus{i}" for i in range(1, 22)]
@@ -365,7 +365,7 @@ Correlation test: patents1900 ~ treatmentgroup (year==1900)
 
 ---
 
-## 4.1.2 DID with Nonparametric Trends (`did_multiplegt_dyn`)
+## CQ#12: DID with Nonparametric Trends (`did_multiplegt_dyn`)
 
 > Use the `did_multiplegt_dyn` command to perform the same estimation with `trends_nonparam(patents1900)`. Are results very different from those you obtained with the TWFE ES regression with controls?
 
@@ -375,7 +375,7 @@ Correlation test: patents1900 ~ treatmentgroup (year==1900)
 
 ```stata
 * ssc install did_multiplegt_dyn, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 did_multiplegt_dyn patents subclass year twea, effects(21) placebo(18) trends_nonparam(patents1900)
 ```
@@ -452,7 +452,7 @@ Test of joint nullity of the placebos : p-value = 1.685e-12
 
 ```r
 library(haven); library(DIDmultiplegtDYN); library(polars)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 result_dyn <- did_multiplegt_dyn(
     df = as.data.frame(df),
     outcome = "patents",
@@ -535,7 +535,7 @@ import polars as pl
 import pandas as pd
 from did_multiplegt_dyn import DidMultiplegtDyn
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 model = DidMultiplegtDyn(
     df=pl.from_pandas(df),
     outcome='patents',
@@ -601,7 +601,7 @@ Test of joint nullity of the placebos : p-value = 1.685e-12
 
 ---
 
-## 4.2 Interactive Fixed Effects (IFE)
+## CQ#13–14: Interactive Fixed Effects (IFE)
 
 > Use `fect` to determine by cross-validation the optimal number of factors. Then estimate the TWFE-IFE model with bootstrap standard errors.
 
@@ -611,7 +611,7 @@ Test of joint nullity of the placebos : p-value = 1.685e-12
 
 ```stata
 * ssc install fect, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 * Cross-validation
 fect patents, treat(twea) unit(subclass) time(year) method("ife") r(4) tol(1e-4) cv
@@ -629,7 +629,7 @@ optimal r=2 in fe/ife model
 
 ```stata
 * ssc install fect, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 * Estimation with r=2 and bootstrap SEs
 set seed 1
@@ -647,7 +647,7 @@ r1     .2966552         7056    .04932318    .17481898    .37326233       0
 
 ```r
 library(haven); library(fect)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 # Cross-validation
 out_cv <- fect(patents ~ twea, data = as.data.frame(df),
     index = c("subclass","year"),
@@ -679,7 +679,7 @@ IFE ATT = 0.296834
 
 ---
 
-## 4.2.2 Synthetic Control (SC)
+## CQ#15: Synthetic Control (SC)
 
 > Install the `sdid_event` package and compute event-study SC estimators with 200 bootstrap replications.
 
@@ -688,7 +688,7 @@ IFE ATT = 0.296834
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 * Standard SC
 set seed 1
@@ -724,7 +724,7 @@ Synthetic Control
 ```
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 * Demeaned SC
 bys subclass: egen pre_mean_temp=mean(patents) if year<=1918
@@ -767,7 +767,7 @@ Synthetic Control (Demeaned)
 
 ```r
 library(haven); library(synthdid)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 panel <- panel.matrices(as.data.frame(df),
     unit = "subclass", time = "year",
     outcome = "patents", treatment = "twea")
@@ -806,7 +806,7 @@ Demeaned SC ATT = 0.474263
 
 ---
 
-## 4.2.3 Synthetic Difference-in-Differences (SDID)
+## CQ#16: Synthetic Difference-in-Differences (SDID)
 
 > Compute event-study SD estimators with 200 bootstrap replications.
 
@@ -815,7 +815,7 @@ Demeaned SC ATT = 0.474263
 ### Stata
 
 ```stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 set seed 1
 sdid_event patents subclass year twea, brep(200)
@@ -855,7 +855,7 @@ Synthetic Difference-in-differences
 
 ---
 
-## 4.3 Sensitivity Analysis (Rambachan & Roth / HonestDiD)
+## CQ#17: Sensitivity Analysis (Rambachan & Roth / HonestDiD)
 
 > Run the ES-TWFER with pre-trend variables ordered from last to first, including a reference period variable `reltimeminus0`, then run `honestdid` with 18 pre-periods and 21 post-periods. Is the 95% CI for ATT1 produced by the command much wider than that produced by the ES-TWFER?
 
@@ -865,7 +865,7 @@ Synthetic Difference-in-differences
 
 ```stata
 * ssc install honestdid, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 gen reltimeminus0 = 0
 reghdfe patents reltimeminus18 reltimeminus17 reltimeminus16 reltimeminus15 reltimeminus14 reltimeminus13 reltimeminus12 reltimeminus11 reltimeminus10 reltimeminus9 reltimeminus8 reltimeminus7 reltimeminus6 reltimeminus5 reltimeminus4 reltimeminus3 reltimeminus2 reltimeminus1 reltimeminus0 reltimeplus*, absorb(year treatmentgroup) cluster(subclass)
@@ -933,7 +933,7 @@ reltimeminus10 |   .0481978   .0482599     1.00   0.318    -.0464057    .1428012
 ```r
 library(haven); library(fixest); library(HonestDiD)
 options(digits=7)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 reltimeminus_vars <- paste0("reltimeminus", 18:1)
 reltimeplus_vars <- paste0("I(reltimeplus", 1:21, ")")
 sens_model <- feols(as.formula(paste("patents ~",
@@ -1013,7 +1013,7 @@ import torch
 import pyfixest as pf
 import honestdid as hd
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 minus_vars = [f"reltimeminus{i}" for i in range(18, 0, -1)]
 plus_vars = [f"reltimeplus{i}" for i in range(1, 22)]
 fml = "patents ~ " + " + ".join(minus_vars + plus_vars) + " | year + treatmentgroup"
