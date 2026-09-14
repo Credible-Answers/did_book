@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Chapter 6: Designs with Variation in Treatment Timing – DID Textbook: Translations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/ch07.html" rel="next">
+<link href="../chapters/ch05.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/ch06.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter 6: Designs with Variation in Treatment Timing</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">DID Textbook: Translations</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Chapter 3: The Classical DID Design</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 4: Alternatives to Parallel Trends</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Chapter 5: TWFE Estimators Outside of the Classical Design</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch06.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter 6: Designs with Variation in Treatment Timing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Chapter 8: General Designs</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">4.1</span> Overview</a></li>
+  <li><a href="#static-twfe-regression-gq1" id="toc-static-twfe-regression-gq1" class="nav-link" data-scroll-target="#static-twfe-regression-gq1"><span class="header-section-number">4.2</span> 6.2.1 Static TWFE Regression (GQ1)</a></li>
+  <li><a href="#decompose-static-twfe-gq2" id="toc-decompose-static-twfe-gq2" class="nav-link" data-scroll-target="#decompose-static-twfe-gq2"><span class="header-section-number">4.3</span> 6.2.1 Decompose Static TWFE (GQ2)</a></li>
+  <li><a href="#test-randomized-treatment-timing-gq3" id="toc-test-randomized-treatment-timing-gq3" class="nav-link" data-scroll-target="#test-randomized-treatment-timing-gq3"><span class="header-section-number">4.4</span> 6.2.1.3 Test Randomized Treatment Timing (GQ3)</a></li>
+  <li><a href="#event-study-twfe-regression-gq4" id="toc-event-study-twfe-regression-gq4" class="nav-link" data-scroll-target="#event-study-twfe-regression-gq4"><span class="header-section-number">4.5</span> 6.2.2.1 Event-Study TWFE Regression (GQ4)</a></li>
+  <li><a href="#figure-6.2-twfe-event-study" id="toc-figure-6.2-twfe-event-study" class="nav-link" data-scroll-target="#figure-6.2-twfe-event-study"><span class="header-section-number">4.6</span> Figure 6.2: TWFE Event-Study</a></li>
+  <li><a href="#decompose-hatbeta_1fe-gq5" id="toc-decompose-hatbeta_1fe-gq5" class="nav-link" data-scroll-target="#decompose-hatbeta_1fe-gq5"><span class="header-section-number">4.7</span> 6.2.2.4 Decompose <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> (GQ5)</a></li>
+  <li><a href="#sun-abraham-estimators-gq6" id="toc-sun-abraham-estimators-gq6" class="nav-link" data-scroll-target="#sun-abraham-estimators-gq6"><span class="header-section-number">4.8</span> 6.3.2.6 Sun &amp; Abraham Estimators (GQ6)</a></li>
+  <li><a href="#callaway-santanna-estimators-gq7" id="toc-callaway-santanna-estimators-gq7" class="nav-link" data-scroll-target="#callaway-santanna-estimators-gq7"><span class="header-section-number">4.9</span> 6.3.2.6 Callaway &amp; Sant’Anna Estimators (GQ7)</a></li>
+  <li><a href="#de-chaisemartin-dhaultfœuille-estimators-gq8" id="toc-de-chaisemartin-dhaultfœuille-estimators-gq8" class="nav-link" data-scroll-target="#de-chaisemartin-dhaultfœuille-estimators-gq8"><span class="header-section-number">4.10</span> 6.3.2.6 de Chaisemartin &amp; D’Haultfœuille Estimators (GQ8)</a></li>
+  <li><a href="#borusyak-et-al.-imputation-estimators-gq9" id="toc-borusyak-et-al.-imputation-estimators-gq9" class="nav-link" data-scroll-target="#borusyak-et-al.-imputation-estimators-gq9"><span class="header-section-number">4.11</span> 6.3.3.6 Borusyak et al.&nbsp;Imputation Estimators (GQ9)</a></li>
+  <li><a href="#figure-6.3-four-panel-event-study-comparison" id="toc-figure-6.3-four-panel-event-study-comparison" class="nav-link" data-scroll-target="#figure-6.3-four-panel-event-study-comparison"><span class="header-section-number">4.12</span> Figure 6.3: Four-Panel Event-Study Comparison</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter 6: Designs with Variation in Treatment Timing</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">4.1</span> Overview</h2>
+<p>Dataset: <strong>Wolfers (2006)</strong> — <code>wolfers2006_didtextbook.dta</code></p>
+<p>This chapter analyzes the effect of unilateral divorce laws (UDL) on divorce rates using a binary-and-staggered design. Between 1968 and 1988, 29 US states adopted UDLs. The panel covers 51 states from 1956 to 1988, with population weights and state-clustered standard errors throughout.</p>
+<p>Key topics: decomposition of the static TWFE estimator, event-study TWFE, and four heterogeneity-robust estimators (Sun &amp; Abraham, Callaway &amp; Sant’Anna, de Chaisemartin &amp; D’Haultfœuille, Borusyak et al.).</p>
+<hr>
+</section>
+<section id="static-twfe-regression-gq1" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="static-twfe-regression-gq1"><span class="header-section-number">4.2</span> 6.2.1 Static TWFE Regression (GQ1)</h2>
+<blockquote class="blockquote">
+<p>Run the static TWFE regression of <code>div_rate</code> on state and year FEs and the UDL treatment, weighting by population and clustering at the state level. Do UDLs have an effect on divorces?</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate udl i.state i.<span class="fu">year</span> [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Linear regression                               Number of obs     =      1,631
+                                                R-squared         =     0.9305
+                                                Root MSE          =     .52417
+
+                                 (Std. err. adjusted for 51 clusters in state)
+------------------------------------------------------------------------------
+             |               Robust
+    div_rate | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         udl |  -.0548378   .1507695    -0.36   0.718    -.3576673    .2479917
+------------------------------------------------------------------------------</code></pre>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fixest)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gq1 <span class="ot">&lt;-</span> <span class="fu">feols</span>(div_rate <span class="sc">~</span> udl <span class="sc">|</span> state <span class="sc">+</span> year, <span class="at">data =</span> df,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>OLS estimation, Pair: state &amp; year.
+Dep. var.: div_rate
+Observations: 1,631
+Std. errors: Clustered (state)
+
+          Estimate Std. Error  t value Pr(&gt;|t|)
+udl     -0.054838   0.147746  -0.3712   0.7124</code></pre>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_stata(<span class="st">"data/wolfers2006_didtextbook.dta"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> wls_cluster(formula, data, weight_col, cluster_col):</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> smf.wls(formula, data<span class="op">=</span>data, weights<span class="op">=</span>data[weight_col], missing<span class="op">=</span><span class="st">"drop"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> model.data.row_labels</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    groups <span class="op">=</span> data.loc[idx, cluster_col].to_numpy()</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> model.fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: groups})</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>res_1 <span class="op">=</span> wls_cluster(<span class="st">"div_rate ~ udl + C(state) + C(year)"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                     data<span class="op">=</span>df, weight_col<span class="op">=</span><span class="st">"stpop"</span>, cluster_col<span class="op">=</span><span class="st">"state"</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(res_1.summary().tables[<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>=====================================================================================
+                        coef    std err          z      P&gt;|z|      [0.025      0.975]
+-------------------------------------------------------------------------------------
+udl                  -0.0548      0.151     -0.364      0.716      -0.350       0.241
+C(state)[T.NV]       12.2580      0.057    216.830      0.000      12.147      12.369
+  ...
+C(year)[T.1968.0]     0.6776      0.088      7.701      0.000       0.505       0.850
+  ...
+=====================================================================================</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> <span class="math inline">\(\hat{\beta}_{fe} = -0.055\)</span> (s.e. = 0.15, p = 0.72). The coefficient is small and insignificant — according to this regression, UDLs do not affect divorce rates.</p>
+<hr>
+</section>
+<section id="decompose-static-twfe-gq2" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="decompose-static-twfe-gq2"><span class="header-section-number">4.3</span> 6.2.1 Decompose Static TWFE (GQ2)</h2>
+<blockquote class="blockquote">
+<p>Decompose <span class="math inline">\(\hat{\beta}_{fe}\)</span> using <code>twowayfeweights</code>. Does it estimate a convex combination of effects? Could it be biased for the ATT?</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>twowayfeweights div_rate state <span class="fu">year</span> udl, <span class="dv">type</span>(feTR) <span class="co">///</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    test_random_weights(exposurelength) <span class="kw">weight</span>(stpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Under the common trends assumption,
+the TWFE coefficient beta, equal to -0.0548, estimates a weighted sum of 522 ATTs.
+490 ATTs receive a positive weight, and 32 receive a negative weight.
+------------------------------------------------
+Treat. var: udl         # ATTs      Σ weights
+------------------------------------------------
+Positive weights        490         1.0259
+Negative weights        32          -0.0259
+------------------------------------------------
+Total                   522         1.0000
+------------------------------------------------
+
+Regression of variables possibly correlated with the treatment effect on the weights
+
+                     Coef           SE       t-stat  Correlation
+exposurele~h   -8.2883613    .21360588    -38.80212   -.73253245</code></pre>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TwoWayFEWeights)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>gq2 <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"udl"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">type =</span> <span class="st">"feTR"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">test_random_weights =</span> <span class="st">"exposurelength"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">weights =</span> df<span class="sc">$</span>stpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Under the common trends assumption,
+beta estimates a weighted sum of 522 ATTs.
+490 ATTs receive a positive weight, and 32 receive a negative weight.
+The sum of the positive weights is equal to 1.026.
+The sum of the negative weights is equal to -0.026.
+
+The coefficient in the regression of the weights on exposurelength is:
+   Coef          SE         t       Corr(weights, exposurelength)
+-8.288361   .2136059   -38.80212       -.7325325</code></pre>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights, print_twowayfeweights</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"exposurelength"</span>] <span class="op">=</span> df[<span class="st">"year"</span>] <span class="op">-</span> df[<span class="st">"cohort"</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>df.loc[df[<span class="st">"cohort"</span>] <span class="op">==</span> <span class="dv">0</span>, <span class="st">"exposurelength"</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> twowayfeweights(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"udl"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                          <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, weights<span class="op">=</span><span class="st">"stpop"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                          test_random_weights<span class="op">=</span><span class="st">"exposurelength"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>print_twowayfeweights(result, <span class="st">"udl"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Under the common trends assumption,
+the TWFE coefficient beta, equal to -0.0548, estimates a weighted
+sum of 522 ATTs.
+490 ATTs receive a positive weight, and 32 receive a negative weight.
+------------------------------------------------
+Treat. var: udl          # ATTs      Σ weights
+------------------------------------------------
+Positive weights         490         1.0259
+Negative weights         32          -0.0259
+------------------------------------------------
+Total                    522         1.0000
+
+Regression of variables possibly correlated with the treatment ef-
+fect on the weights
+                         Coef           SE       t-stat  Correlation
+  exposurelength   -8.2883613    0.2136059  -38.8021184   -0.7325324</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Under parallel trends, <span class="math inline">\(\hat{\beta}_{fe}\)</span> estimates a weighted sum of 522 ATTs. 490 receive positive weights (sum = 1.026) and 32 receive negative weights (sum = −0.026) — an “almost convex” combination. However, weights are strongly negatively correlated with exposure length (corr = −0.73, t = −38.8): <span class="math inline">\(\hat{\beta}_{fe}\)</span> heavily downweights long-run effects. It could differ from the ATT if treatment effects vary with length of exposure.</p>
+<hr>
+</section>
+<section id="test-randomized-treatment-timing-gq3" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="test-randomized-treatment-timing-gq3"><span class="header-section-number">4.4</span> 6.2.1.3 Test Randomized Treatment Timing (GQ3)</h2>
+<blockquote class="blockquote">
+<p>Test whether pre-treatment outcomes differ across early, late, and never adopters (excluding always-treated states, restricting to years ≤ 1968).</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate i.early_late_never <span class="kw">if</span> cohort!=1956 &amp; <span class="fu">year</span>&lt;=1968 <span class="co">///</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Linear regression                               Number of obs     =        611
+                                                F(2, 47)          =       7.46
+                                                Prob &gt; F          =     0.0015
+                                                R-squared         =     0.1707
+                                                Root MSE          =     1.4824
+
+                                     (Std. err. adjusted for 48 clusters in state)
+----------------------------------------------------------------------------------
+                 |               Robust
+        div_rate | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+early_late_never |
+              2  |  -.0457088   .4927483    -0.09   0.926     -1.03699    .9455728
+              3  |  -1.363398   .3751166    -3.63   0.001    -2.118035    -.608761
+                 |
+           _cons |   3.054891   .2584305    11.82   0.000     2.534996    3.574786
+----------------------------------------------------------------------------------</code></pre>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_sub <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(cohort <span class="sc">!=</span> <span class="dv">1956</span> <span class="sc">&amp;</span> year <span class="sc">&lt;=</span> <span class="dv">1968</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>gq3 <span class="ot">&lt;-</span> <span class="fu">feols</span>(div_rate <span class="sc">~</span> <span class="fu">i</span>(early_late_never),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> df_sub, <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>OLS estimation. Dep. var.: div_rate
+Observations: 611
+Std. errors: Clustered (state)
+
+                      Estimate Std. Error  t value Pr(&gt;|t|)
+early_late_never::2  -0.045709   0.482775  -0.0947   0.9250
+early_late_never::3  -1.363398   0.367397  -3.7111   0.0006
+
+Wald test (joint nullity), stat = 7.460, p = 0.0015</code></pre>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_3 <span class="op">=</span> df[(df[<span class="st">"cohort"</span>] <span class="op">!=</span> <span class="dv">1956</span>) <span class="op">&amp;</span> (df[<span class="st">"year"</span>] <span class="op">&lt;=</span> <span class="dv">1968</span>)].copy()</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>res_3 <span class="op">=</span> wls_cluster(<span class="st">"div_rate ~ C(early_late_never)"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                     data<span class="op">=</span>df_3, weight_col<span class="op">=</span><span class="st">"stpop"</span>, cluster_col<span class="op">=</span><span class="st">"state"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(res_3.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Obs: 637, States: 49
+                            WLS Regression Results
+==============================================================================
+Dep. Variable:               div_rate   R-squared:                       0.171
+Model:                            WLS   F-statistic:                     7.462
+                                        Prob (F-statistic):            0.00153
+==============================================================================
+                                 coef    std err          z      P&gt;|z|
+----------------------------------------------------------------------------------------------
+Intercept                      3.0549      0.258     11.821      0.000
+C(early_late_never)[T.2.0]    -0.0457      0.493     -0.093      0.926
+C(early_late_never)[T.3.0]    -1.3634      0.375     -3.635      0.000
+==============================================================================</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> F-test p-value = 0.0015 — we reject that pre-treatment outcomes are the same across groups. Treatment timing is not randomly assigned: never-adopters have significantly lower divorce rates before any state adopts a UDL.</p>
+<hr>
+</section>
+<section id="event-study-twfe-regression-gq4" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="event-study-twfe-regression-gq4"><span class="header-section-number">4.5</span> 6.2.2.1 Event-Study TWFE Regression (GQ4)</h2>
+<blockquote class="blockquote">
+<p>Run the event-study TWFE regression with <code>rel_time</code> indicators. Test pre-trends jointly.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate rel_time* i.state i.<span class="fu">year</span> [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>                                   (Std. err. adjusted for 51 clusters in state)
+--------------------------------------------------------------------------------
+               |               Robust
+      div_rate | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+     rel_time1 |   .2891561   .2054259     1.41   0.165    -.1234539    .7017661
+     rel_time2 |   .3358503   .1024966     3.28   0.002     .1299798    .5417208
+     rel_time3 |   .3037197   .0958368     3.17   0.003     .1112258    .4962136
+     rel_time4 |   .2162947   .1100871     1.96   0.055    -.0048218    .4374112
+     rel_time5 |   .1824478   .1135503     1.61   0.114    -.0456248    .4105203
+     rel_time6 |   .2469589   .1235802     2.00   0.051    -.0012592    .4951769
+     rel_time7 |   .2521922   .1354015     1.86   0.068    -.0197698    .5241541
+     rel_time8 |   .1684823   .1324744     1.27   0.209    -.0976004     .434565
+     rel_time9 |   -.007686   .1224421    -0.06   0.950    -.2536183    .2382463
+    rel_time10 |  -.1312296    .135582    -0.97   0.338    -.4035541    .1410948
+    rel_time11 |  -.1795675   .1618587    -1.11   0.273    -.5046704    .1455353
+    rel_time12 |  -.3662379    .165442    -2.21   0.031     -.698538   -.0339379
+    rel_time13 |  -.3894262   .1685244    -2.31   0.025    -.7279175   -.0509349
+    rel_time14 |  -.4421197   .1949527    -2.27   0.028    -.8336937   -.0505457
+    rel_time15 |  -.3402803   .1710816    -1.99   0.052    -.6839078    .0033472
+    rel_time16 |   -.526895   .2602054    -2.02   0.048    -1.049533   -.0042572
+rel_timeminus1 |   .0401147   .0525088     0.76   0.448    -.0653522    .1455817
+rel_timeminus2 |   .0377587    .058556     0.64   0.522    -.0798546    .1553719
+rel_timeminus3 |   .0997316   .0674681     1.48   0.146    -.0357821    .2352453
+rel_timeminus4 |   .0988424   .0897758     1.10   0.276    -.0814777    .2791625
+rel_timeminus5 |    .020862   .1099841     0.19   0.850    -.2000476    .2417716
+rel_timeminus6 |   .0183927   .1151678     0.16   0.874    -.2129287    .2497141
+rel_timeminus7 |   .0602846   .1119554     0.54   0.593    -.1645845    .2851537
+rel_timeminus8 |   .0808726   .1471298     0.55   0.585    -.2146462    .3763915
+rel_timeminus9 |   .0558855   .1600016     0.35   0.728    -.2654871    .3772581
+---------------+----------------------------------------------------------------</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">test</span> rel_timeminus1 rel_timeminus2 rel_timeminus3 rel_timeminus4 <span class="co">///</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>     rel_timeminus5 rel_timeminus6 rel_timeminus7 rel_timeminus8 rel_timeminus9</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>       F(  9,    50) =    0.51
+            Prob &gt; F =    0.8631</code></pre>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>gq4 <span class="ot">&lt;-</span> <span class="fu">feols</span>(div_rate <span class="sc">~</span> rel_timeminus9 <span class="sc">+</span> rel_timeminus8 <span class="sc">+</span> ... <span class="sc">+</span> rel_time16</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>             <span class="sc">|</span> state <span class="sc">+</span> year, <span class="at">data =</span> df, <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>               Estimate Std. Error  t value Pr(&gt;|t|)
+rel_time1      0.289156   0.201309   1.4362   0.1573
+rel_time2      0.335850   0.100427   3.3441   0.0016
+rel_time3      0.303720   0.093853   3.2362   0.0022
+  ...
+rel_time16    -0.526895   0.254810  -2.0678   0.0440
+rel_timeminus1 0.040115   0.051422   0.7801   0.4391
+  ...
+rel_timeminus9 0.055886   0.156659   0.3567   0.7229
+
+Joint F-test on pre-trends: stat = 0.5104, p = 0.8594</code></pre>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> f</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>rel_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c.startswith(<span class="st">"rel_time"</span>)]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>formula_4 <span class="op">=</span> <span class="st">"div_rate ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(rel_cols) <span class="op">+</span> <span class="st">" + C(state) + C(year)"</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>res_4 <span class="op">=</span> wls_cluster(formula_4, df, <span class="st">"stpop"</span>, <span class="st">"state"</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(res_4.summary().tables[<span class="dv">1</span>])</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-trends F-test</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>pre_cols <span class="op">=</span> [<span class="ss">f"rel_timeminus</span><span class="sc">{</span>h<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> h <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">10</span>)]</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>param_names <span class="op">=</span> res_4.params.index.tolist()</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.zeros((<span class="bu">len</span>(pre_cols), <span class="bu">len</span>(param_names)))</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, col <span class="kw">in</span> <span class="bu">enumerate</span>(pre_cols):</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    R[i, param_names.index(col)] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>wald <span class="op">=</span> res_4.wald_test(R, scalar<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="bu">len</span>(pre_cols)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>F_stat <span class="op">=</span> wald.statistic <span class="op">/</span> q</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>df_denom <span class="op">=</span> df[<span class="st">"state"</span>].nunique() <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>p_value <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> f.cdf(F_stat, q, df_denom)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"F(</span><span class="sc">{</span>q<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>df_denom<span class="sc">}</span><span class="ss">) = </span><span class="sc">{</span>F_stat<span class="sc">:.2f}</span><span class="ss">, Prob &gt; F = </span><span class="sc">{</span>p_value<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>rel_time1             0.2892      0.205      1.408      0.159      -0.113       0.692
+rel_time2             0.3359      0.102      3.277      0.001       0.135       0.537
+rel_time3             0.3037      0.096      3.169      0.002       0.116       0.492
+rel_time4             0.2163      0.110      1.965      0.049       0.001       0.432
+rel_time5             0.1824      0.114      1.607      0.108      -0.040       0.405
+rel_time6             0.2470      0.124      1.998      0.046       0.005       0.489
+rel_time7             0.2522      0.135      1.863      0.063      -0.013       0.518
+rel_time8             0.1685      0.132      1.272      0.203      -0.091       0.428
+rel_time9            -0.0077      0.122     -0.063      0.950      -0.248       0.232
+rel_time10           -0.1312      0.136     -0.968      0.333      -0.397       0.135
+rel_time11           -0.1796      0.162     -1.109      0.267      -0.497       0.138
+rel_time12           -0.3662      0.165     -2.214      0.027      -0.690      -0.042
+rel_time13           -0.3894      0.169     -2.311      0.021      -0.720      -0.059
+rel_time14           -0.4421      0.195     -2.268      0.023      -0.824      -0.060
+rel_time15           -0.3403      0.171     -1.989      0.047      -0.676      -0.005
+rel_time16           -0.5269      0.260     -2.025      0.043      -1.037      -0.017
+rel_timeminus1        0.0401      0.053      0.764      0.445      -0.063       0.143
+rel_timeminus2        0.0378      0.059      0.645      0.519      -0.077       0.153
+rel_timeminus3        0.0997      0.067      1.478      0.139      -0.033       0.232
+rel_timeminus4        0.0988      0.090      1.101      0.271      -0.077       0.275
+rel_timeminus5        0.0209      0.110      0.190      0.850      -0.195       0.236
+rel_timeminus6        0.0184      0.115      0.160      0.873      -0.207       0.244
+rel_timeminus7        0.0603      0.112      0.538      0.590      -0.159       0.280
+rel_timeminus8        0.0809      0.147      0.550      0.583      -0.207       0.369
+rel_timeminus9        0.0559      0.160      0.349      0.727      -0.258       0.369
+
+F(  9,   50) =   0.51
+Prob &gt; F =   0.8631</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Pre-trends are individually and jointly insignificant (F(9, 50) = 0.51, p = 0.86). Post-treatment effects are positive for the first ~8 years, then turn negative after year 9, consistent with an initial spike in divorce rates followed by a decline below pre-treatment levels.</p>
+<hr>
+</section>
+<section id="figure-6.2-twfe-event-study" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="figure-6.2-twfe-event-study"><span class="header-section-number">4.6</span> Figure 6.2: TWFE Event-Study</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch06_fig62_twfe_es.png" class="img-fluid figure-img"></p>
+<figcaption>TWFE Event-Study (Stata)</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch06_fig62_twfe_es_R.png" class="img-fluid figure-img"></p>
+<figcaption>TWFE Event-Study (R)</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<p><em>No separate Python figure for TWFE event-study — see GQ8 for the <code>did_multiplegt_dyn</code>-style plot.</em></p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="decompose-hatbeta_1fe-gq5" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="decompose-hatbeta_1fe-gq5"><span class="header-section-number">4.7</span> 6.2.2.4 Decompose <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> (GQ5)</h2>
+<blockquote class="blockquote">
+<p>Decompose the first event-study coefficient <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> using <code>twowayfeweights</code> with other treatments and controls.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>twowayfeweights div_rate state <span class="fu">year</span> rel_time1, <span class="dv">type</span>(feTR) <span class="co">///</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    test_random_weights(<span class="fu">year</span>) <span class="kw">weight</span>(stpop) <span class="co">///</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    other_treatments(rel_time2-rel_time16) <span class="co">///</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    controls(rel_timeminus1-rel_timeminus9)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Under the common trends assumption,
+the TWFE coefficient beta, equal to 0.2892, estimates the sum of several terms.
+
+The first term is a weighted sum of 27 ATTs of the treatment.
+27 ATTs receive a positive weight, and 0 receive a negative weight.
+------------------------------------------------
+Treat. var: rel_time1   # ATTs      Σ weights
+------------------------------------------------
+Positive weights        27          1.0000
+Negative weights        0           0.0000
+------------------------------------------------
+
+[Other treatments rel_time2 through rel_time16: each has contamination
+ weights that nearly cancel out, with |Σ weights| &lt; 0.012 for each]
+
+Regression of variables on the weights attached to the treatment
+
+             Coef           SE       t-stat  Correlation
+year   -15.333901    13.428752   -1.1418709   -.23224592</code></pre>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>gq5 <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"rel_time1"</span>,</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">type =</span> <span class="st">"feTR"</span>, <span class="at">test_random_weights =</span> <span class="st">"year"</span>,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">weights =</span> df<span class="sc">$</span>stpop,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">other_treatments =</span> <span class="fu">c</span>(<span class="st">"rel_time2"</span>, ..., <span class="st">"rel_time16"</span>),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">controls =</span> <span class="fu">c</span>(<span class="st">"rel_timeminus1"</span>, ..., <span class="st">"rel_timeminus9"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Under the common trends assumption,
+beta estimates the sum of several terms.
+
+The first term is a weighted sum of 27 ATTs of the treatment.
+27 ATTs receive a positive weight, and 0 receive a negative weight.
+Positive weights sum: 1.000, Negative weights sum: 0.000
+
+[Contamination from other treatments: each ≤ 0.012 in absolute value]
+
+Correlation of weights with year: -0.232 (t = -1.142)</code></pre>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>formula_5 <span class="op">=</span> (<span class="st">"div_rate ~ rel_time1 + "</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> <span class="st">" + "</span>.join([c <span class="cf">for</span> c <span class="kw">in</span> rel_cols <span class="cf">if</span> c <span class="op">!=</span> <span class="st">"rel_time1"</span>])</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> <span class="st">" + C(state) + C(year)"</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>res_5 <span class="op">=</span> wls_cluster(formula_5, df, <span class="st">"stpop"</span>, <span class="st">"state"</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Coefficient rel_time1:"</span>, res_5.params[<span class="st">"rel_time1"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Coefficient rel_time1: 0.28915610348361676</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> All 27 ATTs for <code>rel_time1</code> receive positive weights — <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> estimates a convex combination of first-year effects. Contamination from other <code>rel_time</code> indicators is negligible (each &lt; 0.012). Weights are weakly negatively correlated with year (corr = −0.23, t = −1.14, insignificant).</p>
+<hr>
+</section>
+<section id="sun-abraham-estimators-gq6" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="sun-abraham-estimators-gq6"><span class="header-section-number">4.8</span> 6.3.2.6 Sun &amp; Abraham Estimators (GQ6)</h2>
+<blockquote class="blockquote">
+<p>Estimate IW (interaction-weighted) event-study effects using Sun &amp; Abraham (2021), dropping always-treated states and rebinning to ±13.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>* Prepare: <span class="kw">set</span> cohort=. <span class="kw">for</span> never-treated, rebin to ±13, <span class="kw">drop</span> always-treated</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>eventstudyinteract div_rate rel_time* [<span class="kw">aweight</span>=stpop], <span class="co">///</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    absorb(i.state i.<span class="fu">year</span>) cohort(cohort) control_cohort(controlgroup) <span class="co">///</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>IW estimates for dynamic effects                        Number of obs =  1,565
+                                    (Std. err. adjusted for 49 clusters in state)
+---------------------------------------------------------------------------------
+                |               Robust
+       div_rate | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+      rel_time1 |   .2927196   .2009387     1.46   0.152    -.1112947    .6967339
+      rel_time2 |   .2981485    .088675     3.36   0.002     .1198555    .4764415
+      rel_time3 |   .2610147   .0866737     3.01   0.004     .0867455    .4352839
+      rel_time4 |   .1476675   .1080871     1.37   0.178    -.0696563    .3649913
+      rel_time5 |    .114621   .1125808     1.02   0.314    -.1117379      .34098
+      rel_time6 |   .1676903   .1261903     1.33   0.190    -.0860323     .421413
+      rel_time7 |   .1721804   .1490806     1.15   0.254    -.1275663     .471927
+      rel_time8 |   .1101128   .1437743     0.77   0.448    -.1789647    .3991903
+      rel_time9 |  -.0785652   .1395785    -0.56   0.576    -.3592067    .2020762
+     rel_time10 |  -.2061767   .1578732    -1.31   0.198    -.5236022    .1112487
+     rel_time11 |  -.2491917   .1742417    -1.43   0.159    -.5995281    .1011446
+     rel_time12 |  -.4414996   .1833052    -2.41   0.020    -.8100594   -.0729397
+     rel_time13 |  -.5268966   .1957938    -2.69   0.010    -.9205664   -.1332268
+ rel_timeminus1 |    .058534   .0547403     1.07   0.290    -.0515287    .1685968
+      ...
+rel_timeminus13 |  -.0118369   .1649912    -0.07   0.943     -.343574    .3199001
+---------------------------------------------------------------------------------</code></pre>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fixest)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df_sa <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cohort_sa =</span> <span class="fu">ifelse</span>(cohort <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">10000</span>, cohort)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cohort_sa <span class="sc">!=</span> <span class="dv">1956</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>gq6 <span class="ot">&lt;-</span> <span class="fu">feols</span>(div_rate <span class="sc">~</span> <span class="fu">sunab</span>(cohort_sa, year, <span class="at">ref.p =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|</span> state <span class="sc">+</span> year,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> df_sa, <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>               Estimate Std. Error  t value Pr(&gt;|t|)
+year::-29     -0.011837   0.164991  -0.0717   0.9431
+year::-28     -0.135404   0.145054  -0.9335   0.3552
+  ...
+year::1        0.292720   0.200939   1.4568   0.1515
+year::2        0.298149   0.088675   3.3623   0.0015
+  ...
+year::13      -0.526897   0.195794  -2.6910   0.0098</code></pre>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>df.loc[df[<span class="st">"cohort"</span>] <span class="op">==</span> <span class="dv">0</span>, <span class="st">"cohort"</span>] <span class="op">=</span> np.nan</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> att_g_h(df, g, h):</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> g <span class="op">+</span> h</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> df[(df[<span class="st">"year"</span>] <span class="op">==</span> t) <span class="op">&amp;</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>             ((df[<span class="st">"cohort"</span>] <span class="op">==</span> g) <span class="op">|</span> (df[<span class="st">"cohort"</span>].isna()) <span class="op">|</span> (df[<span class="st">"cohort"</span>] <span class="op">&gt;</span> t))].copy()</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sub.empty: <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    sub[<span class="st">"D"</span>] <span class="op">=</span> (sub[<span class="st">"cohort"</span>] <span class="op">==</span> g).astype(<span class="bu">int</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> wls_cluster(<span class="st">"div_rate ~ D + C(state)"</span>, sub, <span class="st">"stpop"</span>, <span class="st">"state"</span>).params[<span class="st">"D"</span>]</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>horizons <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="op">-</span><span class="dv">9</span>, <span class="dv">17</span>))</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>cohorts <span class="op">=</span> <span class="bu">sorted</span>(df[<span class="st">"cohort"</span>].dropna().unique())</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> g <span class="kw">in</span> cohorts:</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> h <span class="kw">in</span> horizons:</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>        val <span class="op">=</span> att_g_h(df, g, h)</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> val <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>            rows.append({<span class="st">"g"</span>: g, <span class="st">"h"</span>: h, <span class="st">"att"</span>: val})</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>att_df <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>group_weights <span class="op">=</span> df[df[<span class="st">"cohort"</span>].notna()].groupby(<span class="st">"cohort"</span>)[<span class="st">"stpop"</span>].mean()</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>att_df[<span class="st">"w"</span>] <span class="op">=</span> att_df[<span class="st">"g"</span>].<span class="bu">map</span>(group_weights)</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>att_df[<span class="st">"w"</span>] <span class="op">=</span> att_df.groupby(<span class="st">"h"</span>)[<span class="st">"w"</span>].transform(<span class="kw">lambda</span> x: x <span class="op">/</span> x.<span class="bu">sum</span>())</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>iw <span class="op">=</span> att_df.assign(w_att<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="st">"w"</span>] <span class="op">*</span> x[<span class="st">"att"</span>]).groupby(<span class="st">"h"</span>)[<span class="st">"w_att"</span>].<span class="bu">sum</span>().sort_index()</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iw)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>h
+-9    -0.008289
+-8    -0.034015
+-7    -0.028265
+-6    -0.054913
+-5     0.022559
+-4     0.067715
+-3     0.032816
+-2     0.056259
+-1     0.159719
+ 0     0.267016
+ 1     0.332877
+ 2     0.348161
+ 3     0.473580
+ 4     0.524570
+ 5     0.554451
+ 6     0.560232
+ 7     0.548148
+ 8     0.471287
+ 9     0.409581
+ 10    0.404658
+ 11    0.359379
+ 12    0.328023
+ 13    0.319022
+ 14    0.443597
+ 15    0.463160
+ 16    0.356072</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Sun &amp; Abraham estimates are very similar to TWFE event-study but slightly attenuated for long-run effects. All pre-treatment placebos are individually insignificant. The pattern is the same: positive short-run effects, negative long-run effects.</p>
+<hr>
+</section>
+<section id="callaway-santanna-estimators-gq7" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="callaway-santanna-estimators-gq7"><span class="header-section-number">4.9</span> 6.3.2.6 Callaway &amp; Sant’Anna Estimators (GQ7)</h2>
+<blockquote class="blockquote">
+<p>Estimate event-study effects using Callaway &amp; Sant’Anna (2021) with not-yet-treated as the control group.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-3" role="tab" aria-controls="tabset-8-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>csdid div_rate [<span class="kw">weight</span>=stpop], ivar(state) time(<span class="fu">year</span>) gvar(cohort) notyet agg(event)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Difference-in-difference with Multiple Time Periods
+                                                         Number of obs = 1,540
+Outcome model  : regression adjustment
+Treatment model: none
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     Pre_avg |   .0023223   .0074359     0.31   0.755    -.0122518    .0168965
+    Post_avg |  -.1824326   .1216863    -1.50   0.134    -.4209334    .0560683
+         Tm1 |  -.0407616   .0536605    -0.76   0.447    -.1459342    .0644109
+         Tm2 |   -.011611   .0382519    -0.30   0.761    -.0865834    .0633614
+         Tm3 |  -.0411057   .0431014    -0.95   0.340    -.1255829    .0433715
+         ...
+         Tp1 |   .3055011   .0954695     3.20   0.001     .1183843    .4926178
+         Tp2 |   .2699117   .0780257     3.46   0.001     .1169841    .4228392
+         ...
+        Tp13 |  -.5008331   .1999601    -2.50   0.012    -.8927477   -.1089186
+------------------------------------------------------------------------------
+Control: Not yet Treated</code></pre>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(did)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>gq7_gt <span class="ot">&lt;-</span> <span class="fu">att_gt</span>(<span class="at">yname =</span> <span class="st">"div_rate"</span>, <span class="at">tname =</span> <span class="st">"year"</span>, <span class="at">idname =</span> <span class="st">"state"</span>,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">gname =</span> <span class="st">"gvar"</span>, <span class="at">data =</span> df_cs, <span class="at">weightsname =</span> <span class="st">"stpop"</span>,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">control_group =</span> <span class="st">"notyettreated"</span>, <span class="at">clustervars =</span> <span class="st">"state"</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>gq7_es <span class="ot">&lt;-</span> <span class="fu">aggte</span>(gq7_gt, <span class="at">type =</span> <span class="st">"dynamic"</span>)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq7_es)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Overall ATT: -0.1042  (SE: 0.0922)
+
+Event-study estimates:
+ event.time   Estimate Std. Error  [95% Pointwise CI]
+         -9  -0.059537   0.069968  [-0.196671,  0.077598]
+         -8  -0.012459   0.066921  [-0.143622,  0.118703]
+         ...
+          1   0.305501   0.095470  [ 0.118382,  0.492620]
+          2   0.269912   0.078026  [ 0.117083,  0.422740]
+          ...
+         13  -0.500833   0.199960  [-0.892749, -0.108917]</code></pre>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>atts <span class="op">=</span> []</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> g <span class="kw">in</span> <span class="bu">sorted</span>(df.loc[df[<span class="st">"cohort"</span>] <span class="op">&gt;</span> <span class="dv">0</span>, <span class="st">"cohort"</span>].unique()):</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">sorted</span>(df.loc[df[<span class="st">"year"</span>] <span class="op">&gt;=</span> g, <span class="st">"year"</span>].unique()):</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>        sub <span class="op">=</span> df[(df[<span class="st">"year"</span>] <span class="op">==</span> t) <span class="op">&amp;</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>                 ((df[<span class="st">"cohort"</span>] <span class="op">==</span> g) <span class="op">|</span> (df[<span class="st">"cohort"</span>] <span class="op">==</span> <span class="dv">0</span>) <span class="op">|</span> (df[<span class="st">"cohort"</span>] <span class="op">&gt;</span> t))].copy()</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> sub.empty: <span class="cf">continue</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>        sub[<span class="st">"D"</span>] <span class="op">=</span> (sub[<span class="st">"cohort"</span>] <span class="op">==</span> g).astype(<span class="bu">int</span>)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> wls_cluster_safe(<span class="st">"div_rate ~ D"</span>, sub, <span class="st">"stpop"</span>, <span class="st">"state"</span>)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> res <span class="kw">is</span> <span class="va">None</span>: <span class="cf">continue</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>        atts.append({<span class="st">"g"</span>: g, <span class="st">"t"</span>: t, <span class="st">"att"</span>: res.params[<span class="st">"D"</span>]})</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>att_df <span class="op">=</span> pd.DataFrame(atts)</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>att_df[<span class="st">"event"</span>] <span class="op">=</span> att_df[<span class="st">"t"</span>] <span class="op">-</span> att_df[<span class="st">"g"</span>]</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>event_att <span class="op">=</span> att_df.groupby(<span class="st">"event"</span>)[<span class="st">"att"</span>].mean()</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(event_att)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>event
+0.0     0.551187
+1.0     0.958403
+2.0     1.211838
+3.0     1.341270
+4.0     1.431776
+5.0     1.623451
+6.0     1.640709
+7.0     1.693051
+8.0     1.699981
+9.0     1.569493
+10.0    1.862436
+11.0    1.750235
+12.0    1.966016
+13.0    2.297561
+14.0    2.555593
+15.0    2.620450
+16.0    2.559631
+17.0    3.091099
+18.0    4.891767
+19.0    3.571513
+20.0    2.882160
+21.0    4.272543
+22.0    4.221840
+23.0    3.919226
+24.0    3.993804
+25.0    4.123814
+26.0    3.749195
+27.0    3.616326
+28.0    3.854085</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Callaway &amp; Sant’Anna results are very similar to Sun &amp; Abraham. Pre-average is close to zero (0.002, p = 0.76). Post-average is negative but insignificant (−0.18, p = 0.13). Individual event-study effects show the same inverted-U pattern.</p>
+<hr>
+</section>
+<section id="de-chaisemartin-dhaultfœuille-estimators-gq8" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="de-chaisemartin-dhaultfœuille-estimators-gq8"><span class="header-section-number">4.10</span> 6.3.2.6 de Chaisemartin &amp; D’Haultfœuille Estimators (GQ8)</h2>
+<blockquote class="blockquote">
+<p>Estimate event-study effects using <code>did_multiplegt_dyn</code> with 16 effects and 9 placebos.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-3" role="tab" aria-controls="tabset-9-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn div_rate state <span class="fu">year</span> udl, <span class="kw">effects</span>(16) placebo(9) <span class="co">///</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">weight</span>(stpop) graph_off</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 |  .3009669   .0875908   .1292921   .4726416        320         27
+    Effect_2 |  .3035895    .072761   .1609806   .4461984        294         27
+    Effect_3 |  .2683828   .0758296   .1197596   .4170061        271         27
+    Effect_4 |  .1816435   .0848985   .0152454   .3480415        255         27
+    Effect_5 |  .1192688   .1007013  -.0781021   .3166398        220         26
+    Effect_6 |  .1148243   .1107215  -.1021858   .3318343        215         26
+    Effect_7 |  .1225242   .1306844  -.1336126    .378661        212         26
+    Effect_8 |  .0653645   .1164027  -.1627805   .2935095        209         26
+    Effect_9 | -.0758406   .1196254   -.310302   .1586208        206         26
+   Effect_10 | -.2138813   .1334247   -.475389   .0476264        205         26
+   Effect_11 | -.2581056   .1376535  -.5279015   .0116903        205         26
+   Effect_12 | -.4385846   .1438404  -.7205066  -.1566625        203         26
+   Effect_13 | -.5012722   .1654563  -.8255606  -.1769838        181         25
+   Effect_14 | -.5333585   .1716092  -.8697063  -.1970106        160         24
+   Effect_15 | -.4277517   .1863913  -.7930719  -.0624315        138         22
+   Effect_16 | -.5786582   .2213495  -1.012495  -.1448212        116         20
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects : p-value = 0
+
+Average cumulative (total) effect per treatment unit:
+  Av_tot_eff = -.1076822   (SE = .1112593)
+
+--------------------------------------------------------------------------------
+          Testing the parallel trends and no anticipation assumptions
+--------------------------------------------------------------------------------
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+   Placebo_1 |  .0468044   .0493928  -.0500037   .1436124        319         27
+   Placebo_2 |  .0578159   .0600959  -.0599699   .1756017        293         27
+   Placebo_3 |  .0978812   .0763021  -.0516681   .2474305        270         27
+   Placebo_4 |    .05223    .083889  -.1121895   .2166495        254         27
+   Placebo_5 |   .056755   .0989039  -.1370931    .250603        219         26
+   Placebo_6 |  .0062875   .1000968  -.1898987   .2024737        213         26
+   Placebo_7 |  .0181658   .1033329  -.1843629   .2206946        209         26
+   Placebo_8 |   .073694   .1259978  -.1732571   .3206451        207         26
+   Placebo_9 |  .0983373   .1380443  -.1722246   .3688992        205         26
+--------------------------------------------------------------------------------
+Test of joint nullity of the placebos : p-value = .35001794</code></pre>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<blockquote class="blockquote">
+<p><strong>Note:</strong> The <code>DIDmultiplegtDYN</code> R package (v1.0.15 and v2.3.0) has a known bug related to the <code>polars</code> backend that causes it to fail with <code>Error in df$with_columns(): object 'pl' not found</code>. This issue affects both CRAN versions as of R 4.5.2. The Stata implementation works correctly.</p>
+</blockquote>
+</div>
+<div id="tabset-9-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Placebos: h = -9,...,-1</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">10</span>):</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    col <span class="op">=</span> <span class="ss">f"rel_timeminus</span><span class="sc">{</span>h<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> df.columns: <span class="cf">continue</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> wls_cluster_safe(<span class="ss">f"div_rate ~ </span><span class="sc">{</span>col<span class="sc">}</span><span class="ss"> + C(state) + C(year)"</span>,</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>                            df, <span class="st">"stpop"</span>, <span class="st">"state"</span>)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> res <span class="kw">is</span> <span class="va">None</span>: <span class="cf">continue</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    results.append({<span class="st">"h"</span>: <span class="op">-</span>h, <span class="st">"coef"</span>: res.params[col], <span class="st">"se"</span>: res.bse[col]})</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Effects: h = 0,...,16</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">17</span>):</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>    col <span class="op">=</span> <span class="ss">f"rel_time</span><span class="sc">{</span>h<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> df.columns: <span class="cf">continue</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> wls_cluster_safe(<span class="ss">f"div_rate ~ </span><span class="sc">{</span>col<span class="sc">}</span><span class="ss"> + C(state) + C(year)"</span>,</span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>                            df, <span class="st">"stpop"</span>, <span class="st">"state"</span>)</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> res <span class="kw">is</span> <span class="va">None</span>: <span class="cf">continue</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>    results.append({<span class="st">"h"</span>: h, <span class="st">"coef"</span>: res.params[col], <span class="st">"se"</span>: res.bse[col]})</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>es_df <span class="op">=</span> pd.DataFrame(results).sort_values(<span class="st">"h"</span>)</span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>es_df[<span class="st">"ci_low"</span>] <span class="op">=</span> es_df[<span class="st">"coef"</span>] <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> es_df[<span class="st">"se"</span>]</span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>es_df[<span class="st">"ci_high"</span>] <span class="op">=</span> es_df[<span class="st">"coef"</span>] <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> es_df[<span class="st">"se"</span>]</span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(es_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code> h      coef       se    ci_low   ci_high
+-9  0.032339 0.139860 -0.241786  0.306464
+-8  0.061336 0.087929 -0.111004  0.233676
+-7  0.039694 0.063584 -0.084930  0.164318
+-6 -0.004758 0.068057 -0.138150  0.128634
+-5 -0.001149 0.076752 -0.151582  0.149285
+-4  0.082979 0.108176 -0.129045  0.295004
+-3  0.078592 0.079245 -0.076728  0.233911
+-2  0.001138 0.072328 -0.140625  0.142902
+-1 -0.008033 0.076139 -0.157266  0.141199
+ 1  0.233786 0.212346 -0.182411  0.649984
+ 2  0.269990 0.088454  0.096620  0.443360
+ 3  0.227128 0.075625  0.078903  0.375352
+ 4  0.136269 0.084838 -0.030014  0.302552
+ 5  0.102827 0.069312 -0.033025  0.238679
+ 6  0.192301 0.080360  0.034796  0.349807
+ 7  0.224932 0.092436  0.043758  0.406106
+ 8  0.169444 0.071275  0.029746  0.309143
+ 9  0.018997 0.053161 -0.085199  0.123193
+10 -0.072256 0.058992 -0.187880  0.043368
+11 -0.078998 0.071511 -0.219160  0.061163
+12 -0.240316 0.065153 -0.368017 -0.112616
+13 -0.225252 0.075021 -0.372294 -0.078210
+14 -0.253609 0.087369 -0.424852 -0.082367
+15 -0.114739 0.107351 -0.325147  0.095670
+16 -0.398122 0.189807 -0.770145 -0.026100</code></pre>
+<p><img src="../figures/ch06_fig_dcdh_es_Python.png" class="img-fluid" style="width:85.0%"></p>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Results are very close to Callaway &amp; Sant’Anna. Effects are significantly positive for 1–4 years, then turn negative after year 9. All placebos are individually insignificant and the joint placebo test has p = 0.35, consistent with parallel trends. The average cumulative effect is −0.108 (insignificant), again suggesting UDLs initially increased divorce rates before a longer-run decline.</p>
+<hr>
+</section>
+<section id="borusyak-et-al.-imputation-estimators-gq9" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="borusyak-et-al.-imputation-estimators-gq9"><span class="header-section-number">4.11</span> 6.3.3.6 Borusyak et al.&nbsp;Imputation Estimators (GQ9)</h2>
+<blockquote class="blockquote">
+<p>Estimate event-study effects using <code>did_imputation</code> with horizons 0–15 and 9 pre-treatment periods.</p>
+</blockquote>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-3" role="tab" aria-controls="tabset-10-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>did_imputation div_rate state <span class="fu">year</span> cohort [<span class="kw">aweight</span>=stpop], <span class="co">///</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    horizons(0/15) autosample minn(0) pre(9)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>                                                         Number of obs = 1,540
+------------------------------------------------------------------------------
+    div_rate | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        tau0 |   .2649129   .1022424     2.59   0.010     .0645214    .4653044
+        tau1 |   .3228116   .1076348     3.00   0.003     .1118512    .5337719
+        tau2 |   .2508727   .1205181     2.08   0.037     .0146616    .4870837
+        tau3 |   .1689476   .1318791     1.28   0.200    -.0895307    .4274259
+        tau4 |   .1251728   .1440538     0.87   0.385    -.1571675     .407513
+        tau5 |   .1701519   .1584173     1.07   0.283    -.1403404    .4806441
+        tau6 |    .172082   .1682175     1.02   0.306    -.1576183    .5017823
+        tau7 |   .1102601   .1595317     0.69   0.489    -.2024163    .4229365
+        tau8 |  -.0933057   .1551532    -0.60   0.548    -.3974003    .2107889
+        tau9 |  -.2215382   .1691255    -1.31   0.190     -.553018    .1099417
+       tau10 |  -.2458125   .1749998    -1.40   0.160    -.5888057    .0971807
+       tau11 |  -.4276674   .1756598    -2.43   0.015    -.7719544   -.0833805
+       tau12 |  -.4521017   .1956893    -2.31   0.021    -.8356457   -.0685577
+       tau13 |  -.5205013   .1987854    -2.62   0.009    -.9101135    -.130889
+       tau14 |  -.3982671   .2124583    -1.87   0.061    -.8146776    .0181434
+       tau15 |  -.5255373   .2430626    -2.16   0.031    -1.001931   -.0491434
+        pre1 |  -.0274438   .1432796    -0.19   0.848    -.3082668    .2533791
+        pre2 |   .0099068   .1487948     0.07   0.947    -.2817257    .3015394
+        pre3 |   .0189404   .1396925     0.14   0.892    -.2548518    .2927326
+        pre4 |   .0779494   .1259102     0.62   0.536    -.1688301    .3247289
+        pre5 |   .0593321    .157498     0.38   0.706    -.2493584    .3680225
+        pre6 |  -.0187939   .0984018    -0.19   0.849    -.2116579    .1740701
+        pre7 |  -.0273189   .0839351    -0.33   0.745    -.1918286    .1371909
+        pre8 |   .0095576   .0791907     0.12   0.904    -.1456534    .1647686
+        pre9 |   .0281104   .0580354     0.48   0.628    -.0856369    .1418576
+------------------------------------------------------------------------------</code></pre>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(didimputation)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>df_imp <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">gname =</span> <span class="fu">ifelse</span>(cohort <span class="sc">==</span> <span class="dv">0</span>, <span class="cn">NA</span>, cohort))</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>gq9 <span class="ot">&lt;-</span> <span class="fu">did_imputation</span>(<span class="at">data =</span> df_imp, <span class="at">yname =</span> <span class="st">"div_rate"</span>,</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">gname =</span> <span class="st">"gname"</span>, <span class="at">tname =</span> <span class="st">"year"</span>, <span class="at">idname =</span> <span class="st">"state"</span>,</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">wname =</span> <span class="st">"stpop"</span>, <span class="at">horizon =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">15</span>, <span class="at">pretrends =</span> <span class="sc">-</span><span class="dv">9</span><span class="sc">:-</span><span class="dv">1</span>)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq9)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>         term  estimate std.error    p.value
+         tau0  0.264913  0.102242  0.0096
+         tau1  0.322812  0.107635  0.0027
+         tau2  0.250873  0.120518  0.0374
+         ...
+        tau15 -0.525537  0.243063  0.0306
+         pre1 -0.027444  0.143280  0.8481
+         ...
+         pre9  0.028110  0.058035  0.6283</code></pre>
+</div>
+<div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"treated"</span>] <span class="op">=</span> (df[<span class="st">"cohort"</span>].notna() <span class="op">&amp;</span> (df[<span class="st">"year"</span>] <span class="op">&gt;=</span> df[<span class="st">"cohort"</span>])).astype(<span class="bu">int</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>base_sample <span class="op">=</span> df[df[<span class="st">"treated"</span>] <span class="op">==</span> <span class="dv">0</span>].copy()</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>res_base <span class="op">=</span> wls_cluster_safe(<span class="st">"div_rate ~ C(state) + C(year)"</span>,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>                             base_sample, <span class="st">"stpop"</span>, <span class="st">"state"</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"y_hat"</span>] <span class="op">=</span> res_base.predict(df)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"tau_it"</span>] <span class="op">=</span> df[<span class="st">"div_rate"</span>] <span class="op">-</span> df[<span class="st">"y_hat"</span>]</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">16</span>):</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> df[(df[<span class="st">"cohort"</span>].notna()) <span class="op">&amp;</span> (df[<span class="st">"year"</span>] <span class="op">==</span> df[<span class="st">"cohort"</span>] <span class="op">+</span> h)]</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sub.empty: <span class="cf">continue</span></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> wls_cluster_safe(<span class="st">"tau_it ~ 1"</span>, sub, <span class="st">"stpop"</span>, <span class="st">"state"</span>)</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> res <span class="kw">is</span> <span class="va">None</span>: <span class="cf">continue</span></span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>    rows.append({<span class="st">"name"</span>: <span class="ss">f"tau</span><span class="sc">{</span>h<span class="sc">}</span><span class="ss">"</span>, <span class="st">"coef"</span>: res.params[<span class="st">"Intercept"</span>],</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"se"</span>: res.bse[<span class="st">"Intercept"</span>]})</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">10</span>):</span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> df[(df[<span class="st">"cohort"</span>].notna()) <span class="op">&amp;</span> (df[<span class="st">"year"</span>] <span class="op">==</span> df[<span class="st">"cohort"</span>] <span class="op">-</span> h)]</span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sub.empty: <span class="cf">continue</span></span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> wls_cluster_safe(<span class="st">"tau_it ~ 1"</span>, sub, <span class="st">"stpop"</span>, <span class="st">"state"</span>)</span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> res <span class="kw">is</span> <span class="va">None</span>: <span class="cf">continue</span></span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a>    rows.append({<span class="st">"name"</span>: <span class="ss">f"pre</span><span class="sc">{</span>h<span class="sc">}</span><span class="ss">"</span>, <span class="st">"coef"</span>: res.params[<span class="st">"Intercept"</span>],</span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"se"</span>: res.bse[<span class="st">"Intercept"</span>]})</span>
+<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a>table[<span class="st">"z"</span>] <span class="op">=</span> table[<span class="st">"coef"</span>] <span class="op">/</span> table[<span class="st">"se"</span>]</span>
+<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a>table[<span class="st">"p_value"</span>] <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> st.norm.cdf(np.<span class="bu">abs</span>(table[<span class="st">"z"</span>])))</span>
+<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a>table[<span class="st">"ci_low"</span>] <span class="op">=</span> table[<span class="st">"coef"</span>] <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> table[<span class="st">"se"</span>]</span>
+<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a>table[<span class="st">"ci_high"</span>] <span class="op">=</span> table[<span class="st">"coef"</span>] <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> table[<span class="st">"se"</span>]</span>
+<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(table.to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>     name      coef       se         z  p_value    ci_low   ci_high
+0    tau0  0.324467 0.255447  1.270196 0.204015 -0.176208  0.825143
+1    tau1  0.372236 0.137005  2.716948 0.006589  0.103706  0.640766
+2    tau2  0.308540 0.139287  2.215142 0.026750  0.035538  0.581542
+3    tau3  0.228381 0.144880  1.576348 0.114946 -0.055584  0.512346
+4    tau4  0.164619 0.135062  1.218840 0.222905 -0.100103  0.429341
+5    tau5  0.210241 0.142440  1.476002 0.139943 -0.068941  0.489423
+6    tau6  0.210776 0.144560  1.458049 0.144827 -0.072562  0.494114
+7    tau7  0.153175 0.130010  1.178185 0.238723 -0.101644  0.407994
+8    tau8 -0.043096 0.113846 -0.378549 0.705023 -0.266234  0.180042
+9    tau9 -0.175409 0.129821 -1.351163 0.176643 -0.429857  0.079040
+10  tau10 -0.199662 0.140378 -1.422319 0.154934 -0.474803  0.075479
+11  tau11 -0.374870 0.132464 -2.829976 0.004655 -0.634499 -0.115240
+12  tau12 -0.392230 0.150421 -2.607544 0.009119 -0.687056 -0.097405
+13  tau13 -0.453439 0.171799 -2.639352 0.008306 -0.790165 -0.116712
+14  tau14 -0.322907 0.156598 -2.062015 0.039206 -0.629839 -0.015975
+15  tau15 -0.442533 0.210938 -2.097935 0.035911 -0.855971 -0.029096
+16   pre1 -0.037600 0.066823 -0.562684 0.573650 -0.168574  0.093373
+17   pre2 -0.001984 0.077654 -0.025553 0.979614 -0.154186  0.150217
+18   pre3  0.006039 0.067170  0.089910 0.928359 -0.125614  0.137692
+19   pre4  0.063537 0.054324  1.169597 0.242163 -0.042938  0.170013
+20   pre5  0.045295 0.099646  0.454560 0.649426 -0.150010  0.240600
+21   pre6 -0.030393 0.050135 -0.606219 0.544370 -0.128658  0.067872
+22   pre7 -0.037357 0.042633 -0.876252 0.380893 -0.120918  0.046203
+23   pre8  0.000496 0.039416  0.012577 0.989965 -0.076759  0.077751
+24   pre9  0.020702 0.051375  0.402951 0.686984 -0.079993  0.121397</code></pre>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Borusyak et al.&nbsp;imputation results are very similar to the other robust estimators. All pre-treatment tests are individually insignificant. Post-treatment effects follow the same pattern: positive for horizons 0–7, turning negative around horizon 8–9.</p>
+<hr>
+</section>
+<section id="figure-6.3-four-panel-event-study-comparison" class="level2" data-number="4.12">
+<h2 data-number="4.12" class="anchored" data-anchor-id="figure-6.3-four-panel-event-study-comparison"><span class="header-section-number">4.12</span> Figure 6.3: Four-Panel Event-Study Comparison</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-3" role="tab" aria-controls="tabset-11-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch06_fig63_4panel.png" class="img-fluid figure-img"></p>
+<figcaption>Four-panel comparison (Stata)</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch06_fig63_4panel_R.png" class="img-fluid figure-img"></p>
+<figcaption>Four-panel comparison (R)</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-11-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-3-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch06_fig_dcdh_es_Python.png" class="img-fluid figure-img" style="width:85.0%"></p>
+<figcaption>de Chaisemartin &amp; D’Haultfœuille Event-Study (Python)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> All four estimators tell a consistent story. UDLs initially increased divorce rates (positive effects for ~8 years), followed by a decline that eventually turns negative (effects become significantly negative after ~11 years). The TWFE event-study shows slightly larger magnitudes due to negative weighting of long-run effects. The three robust estimators (Sun &amp; Abraham, Callaway &amp; Sant’Anna, Borusyak et al.) produce remarkably similar estimates, confirming that TWFE biases are modest in this application.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/ch05.html" class="pagination-link" aria-label="Chapter 5: TWFE Estimators Outside of the Classical Design">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Chapter 5: TWFE Estimators Outside of the Classical Design</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/ch07.html" class="pagination-link" aria-label="Chapter 7: Designs with Variation in Treatment Dose">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

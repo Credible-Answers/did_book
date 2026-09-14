@@ -1,0 +1,55 @@
+# Preface {.unnumbered}
+
+This book replicates the four applied examples from:
+
+> **"Using did_multiplegt_dyn to Estimate Event-Study Effects in Complex Designs: Overview, and Four Examples Based on Real Datasets"**
+> by Clément de Chaisemartin, Diego Ciccia, Felix Knau, Mélitine Malézieux, Doulo Sow, David Arboleda, Romain Angotti, Xavier D'Haultfœuille, Bingxue Li, Henri Fabre & Anzony Quispe (2025)
+
+Each example is replicated in **Stata**, **R**, and **Python** with hardcoded outputs, following the same format as the companion DiD Textbook Translations.
+
+## Datasets
+
+All datasets are available for direct download in three formats:
+
+| Example | Paper | `.dta` | `.RData` | `.parquet` |
+|---------|-------|--------|----------|------------|
+| 1 | Deryugina (2017) | [deryugina_2017.dta](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/deryugina_2017.dta) | [.RData](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/deryugina_2017.RData) | [.parquet](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/deryugina_2017.parquet) |
+| 2 | East et al. (2023) | [east_et_al_2023.dta](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/east_et_al_2023.dta) | [.RData](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/east_et_al_2023.RData) | [.parquet](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/east_et_al_2023.parquet) |
+| 3 | Gentzkow et al. (2011) | [gentzkowetal_didtextbook.dta](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/gentzkowetal_didtextbook.dta) | [.RData](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/gentzkowetal_didtextbook.RData) | [.parquet](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/gentzkowetal_didtextbook.parquet) |
+| 4 | Hollingsworth et al. (2022) | [hollingsworth_et_al_2022.dta](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/hollingsworth_et_al_2022.dta) | [.RData](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/hollingsworth_et_al_2022.RData) | [.parquet](https://github.com/anzonyquispe/did_book/raw/main/did_applied_book/data/hollingsworth_et_al_2022.parquet) |
+
+Alternatively, datasets are bundled with the `did_multiplegt_dyn` Stata package:
+
+```stata
+ssc install did_multiplegt_dyn, replace
+net get did_multiplegt_dyn
+```
+
+## Requirements
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_dyn, replace
+```
+
+### R
+
+```r
+install.packages("DIDmultiplegtDYN")
+install.packages("polars")   # required backend
+install.packages("haven")    # to read .dta files
+```
+
+### Python
+
+```python
+pip install did-multiplegt-dyn
+pip install pandas pyarrow    # to read .parquet files
+```
+
+:::
+
+

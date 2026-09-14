@@ -1,0 +1,32 @@
+/* Tab styling */
+.panel-tabset .nav-tabs .nav-link.active {
+  background-color: #1a1a2e;
+  color: white;
+  border-color: #1a1a2e;
+}
+.panel-tabset .nav-tabs .nav-link {
+  color: #1a1a2e;
+  font-weight: 500;
+}
+
+/* Code output */
+.cell-output pre {
+  background-color: #f8f9fa;
+  border-left: 4px solid #1a1a2e;
+  padding: 0.75rem 1rem;
+  font-size: 0.82em;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Section headers */
+h2 { border-bottom: 2px solid #1a1a2e; padding-bottom: 0.3em; margin-top: 2em; }
+h3 { color: #1a1a2e; margin-top: 1.5em; }
+
+/* Callouts */
+.callout-note  { border-left-color: #1a1a2e; }
+.callout-tip   { border-left-color: #2ecc71; }
+.callout-warning { border-left-color: #e67e22; }
+
+/* Tables */
+table { font-size: 0.88em; }

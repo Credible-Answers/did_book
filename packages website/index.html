@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Credible Answers — Heterogeneity-Robust DiD Ecosystem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f7f6f2;--surface:#fff;--border:#e2e0d8;
+  --text:#1a1a18;--muted:#6b6860;
+  --accent:#1a4a3a;--accent-light:#e8f0ec;--accent-border:#c3d9ce;
+  --accent2:#c8400a;
+  --serif:'DM Serif Display',serif;
+  --mono:'DM Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(247,246,242,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 3rem;height:62px}
+.nav-logo{font-family:var(--serif);font-size:1.2rem;color:var(--accent);text-decoration:none}
+.nav-links{display:flex;gap:1.6rem;list-style:none;align-items:center}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.btn-nav{background:var(--accent);color:#fff!important;padding:.38rem .95rem;border-radius:4px;font-size:.8rem!important;font-weight:600!important}
+.btn-nav:hover{opacity:.85}
+
+/* HERO */
+.hero{max-width:860px;margin:0 auto;padding:6rem 2rem 4.5rem;text-align:center;animation:fadeUp .7s ease both}
+.eyebrow{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);background:var(--accent-light);border:1px solid var(--accent-border);border-radius:100px;padding:.28rem .9rem;margin-bottom:1.4rem;letter-spacing:.05em;text-transform:uppercase}
+.hero h1{font-family:var(--serif);font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.08;letter-spacing:-.02em;margin-bottom:1.2rem}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:1.05rem;color:var(--muted);max-width:560px;margin:0 auto 2.5rem;font-weight:300;line-height:1.78}
+.hero-actions{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--accent);color:#fff;padding:.72rem 1.6rem;border-radius:5px;text-decoration:none;font-weight:600;font-size:.9rem;transition:opacity .2s,transform .15s}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--text);padding:.72rem 1.6rem;border-radius:5px;border:1px solid var(--border);text-decoration:none;font-weight:500;font-size:.9rem;transition:border-color .2s,background .2s}
+.btn-secondary:hover{border-color:var(--text);background:#fff}
+
+/* INSTALL */
+.install-strip{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.8rem 2rem;display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap}
+.install-block{background:#f0eeea;border:1px solid var(--border);border-radius:6px;padding:.55rem 1.1rem;display:flex;align-items:center;gap:.6rem}
+.install-label{font-family:var(--mono);font-size:.72rem;color:var(--muted);font-weight:500}
+.install-cmd{font-family:var(--mono);font-size:.8rem;color:var(--accent2);font-weight:500;white-space:nowrap}
+.copy-btn{cursor:pointer;opacity:.4;font-size:.8rem;border:none;background:none;color:var(--muted);transition:opacity .2s;padding:0}
+.copy-btn:hover{opacity:1}
+
+/* SECTIONS */
+section{max-width:1080px;margin:0 auto;padding:5rem 2rem}
+.sec-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.sec-title{font-family:var(--serif);font-size:clamp(1.7rem,3vw,2.4rem);letter-spacing:-.02em;margin-bottom:.9rem;line-height:1.15}
+.sec-sub{color:var(--muted);max-width:580px;font-weight:300;line-height:1.72;margin-bottom:3rem}
+hr.divider{border:none;border-top:1px solid var(--border);margin:0}
+
+/* PACKAGES GRID — one card per family */
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+
+.pkg-card{background:var(--surface);padding:1.75rem;display:flex;flex-direction:column;gap:.8rem;text-decoration:none;color:inherit;transition:background .2s;position:relative}
+.pkg-card:hover{background:#fafaf8}
+
+.pkg-name{font-family:var(--mono);font-size:.92rem;font-weight:600;color:var(--accent);margin-bottom:.1rem}
+
+/* Language pills row */
+.lang-row{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
+.lang-pill{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.04em;padding:.2rem .52rem;border-radius:4px;text-transform:uppercase;display:flex;align-items:center;gap:.3rem}
+.lang-pill.stata{background:#e8edf8;color:#2a4aaa}
+.lang-pill.r    {background:#fde8ef;color:#a01848}
+.lang-pill.py   {background:#e8f4e8;color:#186818}
+.lang-pill.cpp  {background:#f0e8f8;color:#6018a0}
+
+/* Install snippets inside card */
+.install-snippets{display:flex;flex-direction:column;gap:.4rem;margin-top:.2rem}
+.snippet{display:flex;align-items:center;gap:.5rem;background:#f4f2ee;border-radius:5px;padding:.32rem .6rem;overflow:hidden}
+.snippet-lang{font-family:var(--mono);font-size:.62rem;color:var(--muted);font-weight:600;min-width:40px;text-transform:uppercase;flex-shrink:0}
+.snippet-cmd{font-family:var(--mono);font-size:.72rem;color:var(--accent2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.snippet-copy{cursor:pointer;opacity:.4;font-size:.72rem;border:none;background:none;color:var(--muted);padding:0;transition:opacity .2s;flex-shrink:0}
+.snippet-copy:hover{opacity:1}
+.snippet:hover .snippet-cmd{overflow:visible;white-space:normal;word-break:break-all}
+
+.pkg-desc{font-size:.85rem;color:var(--muted);line-height:1.65;flex:1}
+
+.pkg-footer{display:flex;gap:.8rem;align-items:center;font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:.2rem}
+.pkg-gh-link{margin-left:auto;font-family:var(--mono);font-size:.72rem;color:var(--accent);opacity:.7;transition:opacity .2s}
+.pkg-card:hover .pkg-gh-link{opacity:1}
+
+/* MISSION */
+.mission{background:var(--accent);color:#fff;border-radius:12px;padding:3.5rem;max-width:1080px;margin:0 auto 5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.mission h2{font-family:var(--serif);font-size:2rem;line-height:1.2;letter-spacing:-.02em}
+.mission h2 em{font-style:italic;opacity:.65}
+.mission p{font-size:.92rem;opacity:.75;line-height:1.8;font-weight:300}
+
+/* TEAM */
+.team-sub-label{font-size:.7rem;font-family:var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1.4rem;margin-bottom:3rem}
+.team-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s,transform .2s;cursor:default}
+.team-card:hover{border-color:#aaa;transform:translateY(-3px)}
+.team-photo{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:top center;display:block;background:#f0eeea}
+.team-placeholder{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:var(--accent-light);font-family:var(--serif);font-size:2.5rem;color:var(--accent)}
+.team-placeholder.alumni{background:#f0eeea;color:#aaa}
+.team-body{padding:1rem 1.1rem 1.2rem}
+.team-name{font-weight:600;font-size:.86rem;margin-bottom:.15rem;line-height:1.3}
+.team-role{font-size:.72rem;color:var(--muted);font-style:italic;margin-bottom:.45rem}
+.team-affil{font-size:.7rem;color:var(--muted);line-height:1.5;margin-bottom:.65rem}
+.team-links{display:flex;gap:.38rem;flex-wrap:wrap}
+.team-link{font-family:var(--mono);font-size:.63rem;color:var(--accent);text-decoration:none;border:1px solid var(--accent-border);padding:.18rem .48rem;border-radius:3px;transition:background .15s}
+.team-link:hover{background:var(--accent-light)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{opacity:1;transform:none}
+@media(max-width:720px){
+  nav{padding:0 1.2rem}
+  .mission{grid-template-columns:1fr;padding:2rem;margin:0 1rem 3rem}
+  .team-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Credible Answers</a>
+  <ul class="nav-links">
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#" style="opacity:.5;cursor:default;pointer-events:none">DiD Book</a></li>
+    <li><a href="https://credible-answers.github.io/did_multiplegt_dyn_tutorial/" target="_blank">Tutorial</a></li>
+    <li><a class="btn-nav" href="https://github.com/Credible-Answers" target="_blank">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="eyebrow">Open-Source Econometrics · ERC Really Credible</span>
+  <h1>Heterogeneity-Robust<br/><em>Difference-in-Differences</em></h1>
+  <p>An ecosystem of causal inference tools for panel data — available in Stata, R, and Python — built on the research of de&nbsp;Chaisemartin &amp; D'Haultfoeuille.</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="#packages">Explore Packages</a>
+    <a class="btn-primary" href="#team">Team</a>
+    <a class="btn-secondary" href="#" style="opacity:.55;cursor:default;pointer-events:none">DiD Book — coming soon</a>
+    <a class="btn-secondary" href="https://credible-answers.github.io/did_multiplegt_dyn_tutorial/" target="_blank">did_multiplegt_dyn Tutorial ↗</a>
+    <a class="btn-secondary" href="https://github.com/Credible-Answers" target="_blank">GitHub ↗</a>
+  </div>
+</div>
+
+<!-- INSTALL -->
+<div class="install-strip">
+  <div class="install-block">
+    <span class="install-label">Stata</span>
+    <span class="install-cmd">ssc install did_multiplegt_dyn</span>
+    <button class="copy-btn" onclick="copy(this,'ssc install did_multiplegt_dyn')">⎘</button>
+  </div>
+  <div class="install-block">
+    <span class="install-label">R</span>
+    <span class="install-cmd">install.packages("DIDmultiplegtDYN")</span>
+    <button class="copy-btn" onclick="copy(this,'install.packages(\"DIDmultiplegtDYN\")')">⎘</button>
+  </div>
+  <div class="install-block">
+    <span class="install-label">Python</span>
+    <span class="install-cmd">pip install py-did-multiplegt-dyn</span>
+    <button class="copy-btn" onclick="copy(this,'pip install py-did-multiplegt-dyn')">⎘</button>
+  </div>
+</div>
+<hr class="divider"/>
+
+<!-- PACKAGES -->
+<section id="packages" class="fade-in">
+  <p class="sec-label">Libraries</p>
+  <h2 class="sec-title">Our Packages</h2>
+  <p class="sec-sub">Each family groups the same estimator across languages — pick Stata, R, or Python depending on your workflow. All share the same methodology and paper.</p>
+
+  <div class="pkg-grid">
+
+    <!-- 1. did_multiplegt_dyn -->
+    <div class="pkg-card">
+      <div>
+        <div class="pkg-name">did_multiplegt_dyn</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem">Event-study DiD · Multiple groups &amp; periods</div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-pill stata">Stata</span>
+        <span class="lang-pill r">R</span>
+        <span class="lang-pill py">Python</span>
+      </div>
+      <p class="pkg-desc">Flagship package. Computes heterogeneity-robust event-study DID estimators, in general designs where the treatment may be non-binary and/or non absorbing, allowing for effects of lagged treatments on the outcome. The package can also be used if the treatment is binary and absorbing. Based on <a href="https://www.aeaweb.org/articles?id=10.1257/aer.20181169" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">de Chaisemartin and D'Haultfoeuille (2020)</a> and <a href="https://arxiv.org/abs/2508.07808" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">de Chaisemartin and D'Haultfoeuille (2025)</a>.</p>
+      <div class="install-snippets">
+        <div class="snippet">
+          <span class="snippet-lang">Stata</span>
+          <span class="snippet-cmd">ssc install did_multiplegt_dyn</span>
+          <button class="snippet-copy" onclick="copy(this,'ssc install did_multiplegt_dyn')">⎘</button>
+        </div>
+        <div class="snippet">
+          <span class="snippet-lang">R</span>
+          <span class="snippet-cmd">install.packages("DIDmultiplegtDYN")</span>
+          <button class="snippet-copy" onclick="copy(this,'install.packages(\"DIDmultiplegtDYN\")')">⎘</button>
+        </div>
+        <div class="snippet">
+          <span class="snippet-lang">Python</span>
+          <span class="snippet-cmd">pip install py-did-multiplegt-dyn</span>
+          <button class="snippet-copy" onclick="copy(this,'pip install py-did-multiplegt-dyn')">⎘</button>
+        </div>
+      </div>
+      <div class="pkg-footer">
+        <span>★ 80</span><span>⑂ 24</span>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/did_multiplegt_dyn" target="_blank" style="margin-left:auto">Stata &amp; R →</a>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/py_did_multiplegt_dyn" target="_blank">Python →</a>
+      </div>
+    </div>
+
+    <!-- 2. did_multiplegt_stat -->
+    <div class="pkg-card">
+      <div>
+        <div class="pkg-name">did_multiplegt_stat</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem">DiD with continuously distributed treatments</div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-pill stata">Stata</span>
+      </div>
+      <p class="pkg-desc">Computes heterogeneity-robust DID estimators, in general designs where the treatment may be non-binary and/or non absorbing. Unlike _dyn, _stat assumes that lagged treatments do not affect the current outcome beyond a pre-determined lag. On the one hand, allowing for effects of lagged treatments up to any lag is appealing, to avoid misspecification. On the other hand, allowing for this generality also has some downsides: it may yield harder to interpret estimators, which rely on a parallel-trends assumption over a longer horizon. Thus, in settings where past treatments are unlikely to affect the outcome for very long, _stat is an interesting alternative to _dyn. Based on <a href="https://www.aeaweb.org/articles?id=10.1257/aer.20181169" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">de Chaisemartin and D'Haultfoeuille (2020)</a> and <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4011782" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">de Chaisemartin et al (2022)</a>.</p>
+      <div class="install-snippets">
+        <div class="snippet">
+          <span class="snippet-lang">Stata</span>
+          <span class="snippet-cmd">ssc install did_multiplegt_stat</span>
+          <button class="snippet-copy" onclick="copy(this,'ssc install did_multiplegt_stat')">⎘</button>
+        </div>
+        <div class="snippet">
+          <span class="snippet-lang">R</span>
+          <span class="snippet-cmd">install.packages("DIDmultiplegtStat")</span>
+          <button class="snippet-copy" onclick="copy(this,'install.packages(\"DIDmultiplegtStat\")')">⎘</button>
+        </div>
+      </div>
+      <div class="pkg-footer">
+        <span>★ 10</span><span>⑂ 2</span>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/did_multiplegt_stat" target="_blank">GitHub →</a>
+      </div>
+    </div>
+
+    <!-- 3. did_had -->
+    <div class="pkg-card">
+      <div>
+        <div class="pkg-name">did_had</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem">Heterogeneous Adoption Designs</div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-pill stata">Stata</span>
+        <span class="lang-pill r">R</span>
+        <span class="lang-pill py">Python</span>
+      </div>
+      <p class="pkg-desc">Computes heterogeneity-robust DID estimators, in heterogeneous adoption designs where all units start receiving heterogeneous treatment doses at the same date and no unit remains fully untreated. Thus, this package can be used in some designs without "stayers" (units whose treatment does not change over time), while did_multiplegt_dyn and did_multiplegt_stat require stayers. Based on <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4284811" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">de Chaisemartin et al (2025)</a>.</p>
+      <div class="install-snippets">
+        <div class="snippet">
+          <span class="snippet-lang">Stata</span>
+          <span class="snippet-cmd">ssc install did_had</span>
+          <button class="snippet-copy" onclick="copy(this,'ssc install did_had')">⎘</button>
+        </div>
+        <div class="snippet">
+          <span class="snippet-lang">R</span>
+          <span class="snippet-cmd">install.packages("DIDhad")</span>
+          <button class="snippet-copy" onclick="copy(this,'install.packages(\"DIDhad\")')">⎘</button>
+        </div>
+        <div class="snippet">
+          <span class="snippet-lang">Python</span>
+          <span class="snippet-cmd">pip install did-had</span>
+          <button class="snippet-copy" onclick="copy(this,'pip install did-had')">⎘</button>
+        </div>
+      </div>
+      <div class="pkg-footer">
+        <span>★ 5</span><span>⑂ 4</span>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/did_had" target="_blank">GitHub →</a>
+      </div>
+    </div>
+
+    <!-- 4. twowayfeweights -->
+    <div class="pkg-card">
+      <div>
+        <div class="pkg-name">twowayfeweights</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem">TWFE Diagnostic</div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-pill stata">Stata</span>
+        <span class="lang-pill r">R</span>
+      </div>
+      <p class="pkg-desc">Computes the implicit weights attached to two-way fixed effects regressions, as well as summary measures of these regressions' robustness to heterogeneous treatment effects. Based on <a href="https://www.aeaweb.org/articles?id=10.1257/aer.20181169" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">de Chaisemartin and D'Haultfoeuille (2020)</p>
+      <div class="install-snippets">
+        <div class="snippet">
+          <span class="snippet-lang">Stata</span>
+          <span class="snippet-cmd">ssc install twowayfeweights</span>
+          <button class="snippet-copy" onclick="copy(this,'ssc install twowayfeweights')">⎘</button>
+        </div>
+        <div class="snippet">
+          <span class="snippet-lang">R</span>
+          <span class="snippet-cmd">install.packages("TwoWayFEWeights")</span>
+          <button class="snippet-copy" onclick="copy(this,'install.packages(\"TwoWayFEWeights\")')">⎘</button>
+        </div>
+      </div>
+      <div class="pkg-footer">
+        <span>★ 27</span><span>⑂ 3</span>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/twowayfeweights" target="_blank">GitHub →</a>
+      </div>
+    </div>
+
+    <!-- 5. Linearity tests -->
+    <div class="pkg-card">
+      <div>
+        <div class="pkg-name">yatchew_test &amp; stute_test</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem">Linearity Tests</div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-pill stata">Stata</span>
+        <span class="lang-pill r">R</span>
+      </div>
+      <p class="pkg-desc">Non-parametric tests of the linearity of a conditional expectation, based on <a href="https://www.sciencedirect.com/science/article/abs/pii/S0165176597002188" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">Yatchew (1997)</a> and <a href="https://www.jstor.org/stable/2242560" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">Stute (1997)</a>. Can be useful to test the homogeneous and linear effect assumption underlying two-way fixed effects regressions.</p>
+      <div class="install-snippets">
+        <div class="snippet">
+          <span class="snippet-lang">R</span>
+          <span class="snippet-cmd">install.packages("yatchew")</span>
+          <button class="snippet-copy" onclick="copy(this,'install.packages(\"YatchewTest\")')">⎘</button>
+        </div>
+        <div class="snippet">
+          <span class="snippet-lang">Stata</span>
+          <span class="snippet-cmd" style="display:block">ssc install yatchew_test, replace</span>
+          <span class="snippet-cmd" style="display:block">net install stute_test, from("https://raw.githubusercontent.com/chaisemartinPackages/stute_test/main/Stata/dist/git") replace</span>
+          <button class="snippet-copy" onclick="copy(this, 'ssc install yatchew_test, replace\nnet install stute_test, from(\'https://raw.githubusercontent.com/chaisemartinPackages/stute_test/main/Stata/dist/git\') replace')">⎘</button>
+        </div>
+      </div>
+      <div class="pkg-footer">
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/yatchew_test" target="_blank" style="margin-left:0">yatchew →</a>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/stute_test" target="_blank">stute →</a>
+      </div>
+    </div>
+
+    <!-- 6. multisite -->
+    <div class="pkg-card">
+      <div>
+        <div class="pkg-name">multisite</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem">Multi-site Randomized Experiments</div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-pill stata">Stata</span>
+      </div>
+      <p class="pkg-desc">Estimators for treatment-effect heterogeneity across sites in multi-site randomized experiments with few units per site. Based on de Chaisemartin &amp; Deeb (2023).</p>
+      <div class="install-snippets">
+        <div class="snippet">
+          <span class="snippet-lang">Stata</span>
+          <span class="snippet-cmd">ssc install multisite</span>
+          <button class="snippet-copy" onclick="copy(this,'ssc install multisite')">⎘</button>
+        </div>
+      </div>
+      <div class="pkg-footer">
+        <span>★ 3</span>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/multisite" target="_blank">GitHub →</a>
+      </div>
+    </div>
+
+    <!-- 7. dist_lag_het -->
+    <div class="pkg-card">
+      <div>
+        <div class="pkg-name">dist_lag_het</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem">Complex Designs · Distributed Lags</div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-pill r">R</span>
+      </div>
+      <p class="pkg-desc">Estimates average effects of current and lagged treatments, under a parallel-trends assumption and a distributed-lag model allowing for heterogeneous effects across units. Based on <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4284811" target="_blank" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">de Chaisemartin and D'Haultfoeuille (2025).</a></p>
+      <div class="install-snippets">
+        <div class="snippet">
+          <span class="snippet-lang">R</span>
+          <span class="snippet-cmd">devtools::install_github("chaisemartinpackages/dist_lag_het")</span>
+          <button class="snippet-copy" onclick="copy(this,'devtools::install_github('chaisemartinpackages/dist_lag_het')')">⎘</button>
+        </div>
+      </div>
+      <div class="pkg-footer">
+        <span>★ 2</span>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/dist_lag_het" target="_blank">GitHub →</a>
+      </div>
+    </div>
+
+    <!-- 8. Data & Replications -->
+    <div class="pkg-card">
+      <div>
+        <div class="pkg-name">Data &amp; Replications</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.1rem">Datasets · Replication Packages</div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-pill stata">Stata</span>
+      </div>
+      <p class="pkg-desc"><strong>ReplicationPackages</strong> contains full replication code for published papers. <strong>ApplicationData</strong> provides the datasets used in empirical applications of the estimators.</p>
+      <div class="pkg-footer">
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/ReplicationPackages" target="_blank" style="margin-left:0">Replications →</a>
+        <a class="pkg-gh-link" href="https://github.com/Credible-Answers/ApplicationData" target="_blank">Data →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- MISSION -->
+<div class="mission fade-in">
+  <div><h2>Built on <em>rigorous</em><br/>identification theory</h2></div>
+  <div><p>All packages implement heterogeneity-robust estimators valid under parallel trends — even with staggered adoption and treatment effect heterogeneity. They provide credible alternatives to TWFE regressions, whose implicit weighting can be negative and cause sign reversals.</p></div>
+</div>
+
+<!-- TEAM -->
+<section id="team" class="fade-in">
+  <p class="sec-label">ERC Really Credible Team</p>
+  <h2 class="sec-title">The Team</h2>
+  <p class="sec-sub">Led by Clément de Chaisemartin at Sciences Po, maintained by predoctoral research fellows funded by the ERC Really Credible grant.</p>
+
+  <p class="team-sub-label">Principal Investigator</p>
+  <div class="team-grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin-bottom:2.5rem">
+    <div class="team-card">
+      <img class="team-photo" src="figures/Clément.png" alt="Clément de Chaisemartin"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder" style="display:none">C</div>
+      <div class="team-body">
+        <div class="team-name">Clément de Chaisemartin</div>
+        <div class="team-role">Principal Investigator</div>
+        <div class="team-affil">Sciences Po · CEPR<br/>ERC Really Credible Grant Holder</div>
+        <div class="team-links">
+          <a class="team-link" href="https://sites.google.com/site/clementdechaisemartin/" target="_blank">Website</a>
+          <a class="team-link" href="https://github.com/Credible-Answers" target="_blank">GitHub</a>
+          <a class="team-link" href="/cdn-cgi/l/email-protection#ddbeb5bcb4aeb8b0bcafa9b4b3f3adbcbeb6bcbab8ae9dbab0bcb4b1f3beb2b0">Email</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="team-sub-label">Current Predocs</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <img class="team-photo" src="figures/anzony.png" alt="Anzony Quispe"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder" style="display:none">A</div>
+      <div class="team-body">
+        <div class="team-name">Anzony Quispe</div>
+        <div class="team-role">Predoc · 2025–2026</div>
+        <div class="team-affil">Sciences Po</div>
+        <div class="team-links">
+          <a class="team-link" href="https://anzonyquispe.github.io/scientific/science.html" target="_blank">Website</a>
+        </div>
+      </div>
+    </div>
+    <div class="team-card">
+      <img class="team-photo" src="figures/David.png" alt="David Arboleda Carcamo"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder" style="display:none">D</div>
+      <div class="team-body">
+        <div class="team-name">David Arboleda Carcamo</div>
+        <div class="team-role">Predoc · 2024–2026</div>
+        <div class="team-affil">Sciences Po</div>
+        <div class="team-links">
+          <a class="team-link" href="https://www.sciencespo.fr/department-economics/people/postdocs-and-research-fellows/" target="_blank">Profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="team-sub-label" style="margin-top:1.5rem">Alumni</p>
+  <div class="team-grid">
+
+    <div class="team-card" style="opacity:.84">
+      <img class="team-photo" src="figures/romain.png" alt="Romain Angotti"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder alumni" style="display:none">R</div>
+      <div class="team-body">
+        <div class="team-name">Romain Angotti</div>
+        <div class="team-role">Predoc · 2024–2025</div>
+        <div class="team-affil">Now: PhD, Stanford University</div>
+        <div class="team-links"><a class="team-link" href="https://www.linkedin.com/in/romain-angotti-53787817b/" target="_blank">LinkedIn</a></div>
+      </div>
+    </div>
+
+    <div class="team-card" style="opacity:.84">
+      <img class="team-photo" src="figures/Bingxue.png" alt="Bingxue Li"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder alumni" style="display:none">B</div>
+      <div class="team-body">
+        <div class="team-name">Bingxue Li</div>
+        <div class="team-role">Predoc · 2024–2025</div>
+        <div class="team-affil">Now: PhD, U. Illinois Urbana-Champaign</div>
+        <div class="team-links"><a class="team-link" href="https://www.sciencespo.fr/department-economics/people/postdocs-and-research-fellows/" target="_blank">Profile</a></div>
+      </div>
+    </div>
+
+    <div class="team-card" style="opacity:.84">
+      <img class="team-photo" src="figures/diego.png" alt="Diego Ciccia"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder alumni" style="display:none">D</div>
+      <div class="team-body">
+        <div class="team-name">Diego Ciccia</div>
+        <div class="team-role">Predoc · 2023–2024</div>
+        <div class="team-affil">Now: PhD, Northwestern University</div>
+        <div class="team-links"><a class="team-link" href="https://diegociccia.github.io/index.html" target="_blank">Website</a></div>
+      </div>
+    </div>
+
+    <div class="team-card" style="opacity:.84">
+      <img class="team-photo" src="figures/felix.png" alt="Felix Knau"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder alumni" style="display:none">F</div>
+      <div class="team-body">
+        <div class="team-name">Felix Knau</div>
+        <div class="team-role">Predoc · 2023–2024</div>
+        <div class="team-affil">Now: PhD, LMU Munich</div>
+        <div class="team-links"><a class="team-link" href="https://www.linkedin.com/in/felix-knau-51890726b/" target="_blank">LinkedIn</a></div>
+      </div>
+    </div>
+
+    <div class="team-card" style="opacity:.84">
+      <img class="team-photo" src="figures/doulo.png" alt="Doulo Sow"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder alumni" style="display:none">D</div>
+      <div class="team-body">
+        <div class="team-name">Doulo Sow</div>
+        <div class="team-role">Predoc · 2023–2024</div>
+        <div class="team-affil">Now: Senior Research Specialist, Princeton</div>
+        <div class="team-links"><a class="team-link" href="https://www.linkedin.com/in/doulosow/" target="_blank">LinkedIn</a></div>
+      </div>
+    </div>
+
+    <div class="team-card" style="opacity:.84">
+      <img class="team-photo" src="figures/mélitine.png" alt="Mélitine Malézieux"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="team-placeholder alumni" style="display:none">M</div>
+      <div class="team-body">
+        <div class="team-name">Mélitine Malézieux</div>
+        <div class="team-role">Predoc · 2022–2023</div>
+        <div class="team-affil">Now: PhD, Stockholm School of Economics</div>
+        <div class="team-links"><a class="team-link" href="https://www.linkedin.com/in/m%C3%A9litine-mal%C3%A9zieux-2831ba206/" target="_blank">LinkedIn</a></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid var(--border);padding:2.2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+  <span style="font-family:var(--serif);font-size:1rem;color:var(--accent)">Credible Answers</span>
+  <ul style="display:flex;gap:1.4rem;list-style:none">
+    <li><a href="https://github.com/Credible-Answers" target="_blank" style="text-decoration:none;font-size:.8rem;color:var(--muted)">GitHub</a></li>
+    <li><a href="https://github.com/Credible-Answers/did_multiplegt_dyn" target="_blank" style="text-decoration:none;font-size:.8rem;color:var(--muted)">Docs</a></li>
+    <li><a href="https://github.com/Credible-Answers/ReplicationPackages" target="_blank" style="text-decoration:none;font-size:.8rem;color:var(--muted)">Replications</a></li>
+    <li><a href="/cdn-cgi/l/email-protection#b4d7dcd5ddc7d1d9d5c6c0ddda9ac4d5d7dfd5d3d1c7f4d3d9d5ddd89ad7dbd9" style="text-decoration:none;font-size:.8rem;color:var(--muted)">Contact</a></li>
+  </ul>
+  <span style="font-size:.72rem;color:var(--muted)">© 2026 Credible Answers · ERC Really Credible</span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const obs = new IntersectionObserver(
+  es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') }),
+  {threshold:.07}
+);
+document.querySelectorAll('.fade-in').forEach(el => 
