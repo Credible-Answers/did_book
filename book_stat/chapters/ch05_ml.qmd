@@ -1,0 +1,609 @@
+# Machine Learning Estimators {#sec-ml}
+
+| Argument | Role | Default |
+|---|---|---|
+| `model_deltay` | Regresses ΔY on baseline treatment for stayers | `LinearRegression()` |
+| `model_stayer` | Models P(stayer) | `LogisticRegression()` |
+
+---
+
+## ML.01 — Default sklearn {#sec-ml01}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+from sklearn.ensemble import (RandomForestRegressor, RandomForestClassifier,
+                               BaggingRegressor, BaggingClassifier)
+from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
+SEED = 42
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(estimator=["aoss","waoss"], order=1, controls=["lngpinc"],
+                       placebo=2, aoss_vs_waoss=True)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =             1632
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0013835  0.0028180  -0.0069067  0.0041397       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1   0.0016807  0.0031091  -0.0044133  0.0077746       178     881
+Placebo_2  -0.0010693  0.0031541  -0.0072513  0.0051126       200     759
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0037544  0.0010182  -0.0057501  -0.0017587       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss   0.0000586  0.0014497  -0.0027828  0.0029001       178     881
+Placebo_2_waoss  -0.0005920  0.0009609  -0.0024755  0.0012915       200     759
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+      Estimate       SE     LB CI    UB CI  t stat.    pval.
+Diff.  0.00237  0.01625  -0.00223  0.00697  1.01060  0.31221
+```
+
+---
+
+## ML.02 — Random Forest {#sec-ml02}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+from sklearn.ensemble import (RandomForestRegressor, RandomForestClassifier,
+                               BaggingRegressor, BaggingClassifier)
+from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
+SEED = 42
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(
+    estimator=["aoss","waoss"], order=1, controls=["lngpinc"],
+    placebo=2, aoss_vs_waoss=True,
+    model_deltay=RandomForestRegressor(n_estimators=100, max_depth=5, random_state=SEED),
+    model_stayer=RandomForestClassifier(n_estimators=100, max_depth=5, random_state=SEED),
+)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =             1632
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0001613  0.0033366  -0.0067011  0.0063785       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1   0.0024065  0.0041152  -0.0056593  0.0104722       178     881
+Placebo_2  -0.0023659  0.0053504  -0.0128528  0.0081209       200     759
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0031258  0.0009478  -0.0049835  -0.0012680       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss   0.0000665  0.0014793  -0.0028330  0.0029661       178     881
+Placebo_2_waoss  -0.0013124  0.0009823  -0.0032376  0.0006129       200     759
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+      Estimate       SE     LB CI    UB CI  t stat.    pval.
+Diff.  0.00296  0.01971  -0.00261  0.00854  1.04222  0.29731
+```
+
+---
+
+## ML.03 — Neural Network {#sec-ml03}
+
+::: {.callout-warning}
+N=48 units only — large standard errors expected. Neural networks need N>500 to train reliably.
+:::
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+from sklearn.ensemble import (RandomForestRegressor, RandomForestClassifier,
+                               BaggingRegressor, BaggingClassifier)
+from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
+SEED = 42
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(
+    estimator=["aoss","waoss"], order=1, controls=["lngpinc"],
+    placebo=2, aoss_vs_waoss=True,
+    model_deltay=MLPRegressor(hidden_layer_sizes=(64,32), max_iter=300,
+                               random_state=SEED, early_stopping=True),
+    model_stayer=MLPClassifier(hidden_layer_sizes=(64,32), max_iter=300,
+                                random_state=SEED, early_stopping=True),
+)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =             1632
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+     Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  0.0190736  0.0517750  -0.0824055  0.1205527       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0025353  0.0501115  -0.1007538  0.0956833       178     881
+Placebo_2  -0.0122314  0.0400378  -0.0907056  0.0662427       200     759
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+WAS  0.0015197  0.0070590  -0.0123158  0.0153553       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0015798  0.0088036  -0.0188349  0.0156754       178     881
+Placebo_2_waoss   0.0025254  0.0060873  -0.0094057  0.0144565       200     759
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+      Estimate       SE     LB CI    UB CI  t stat.    pval.
+Diff.  0.01755  0.33205  -0.07638  0.11149  0.36626  0.71417
+```
+
+---
+
+## ML.04 — Bagging with Decision Trees {#sec-ml04}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+from sklearn.ensemble import (RandomForestRegressor, RandomForestClassifier,
+                               BaggingRegressor, BaggingClassifier)
+from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
+SEED = 42
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(
+    estimator=["aoss","waoss"], order=1, controls=["lngpinc"],
+    placebo=2, aoss_vs_waoss=True,
+    model_deltay=BaggingRegressor(estimator=DecisionTreeRegressor(max_depth=4),
+                                   n_estimators=100, random_state=SEED),
+    model_stayer=BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=4),
+                                    n_estimators=100, random_state=SEED),
+)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =             1632
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0000916  0.0032394  -0.0064409  0.0062577       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1   0.0023696  0.0041326  -0.0057303  0.0104694       178     881
+Placebo_2  -0.0022219  0.0051141  -0.0122455  0.0078017       200     759
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0031035  0.0009441  -0.0049540  -0.0012529       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss   0.0001202  0.0014720  -0.0027651  0.0030054       178     881
+Placebo_2_waoss  -0.0011834  0.0009587  -0.0030624  0.0006956       200     759
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+      Estimate       SE     LB CI    UB CI  t stat.    pval.
+Diff.  0.00301  0.01920  -0.00242  0.00844  1.08710  0.27699
+```
+
+---
+
+## ML.05 — Bagging with Linear Models {#sec-ml05}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+from sklearn.ensemble import (RandomForestRegressor, RandomForestClassifier,
+                               BaggingRegressor, BaggingClassifier)
+from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
+SEED = 42
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(
+    estimator=["aoss","waoss"], order=1, controls=["lngpinc"],
+    placebo=2, aoss_vs_waoss=True,
+    model_deltay=BaggingRegressor(estimator=LinearRegression(),
+                                   n_estimators=50, random_state=SEED),
+    model_stayer=BaggingClassifier(estimator=LogisticRegression(max_iter=500),
+                                    n_estimators=50, random_state=SEED),
+)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =             1632
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0014002  0.0028504  -0.0069869  0.0041866       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1   0.0016127  0.0029858  -0.0042394  0.0074649       178     881
+Placebo_2  -0.0010839  0.0032151  -0.0073856  0.0052178       200     759
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0037978  0.0010134  -0.0057841  -0.0018115       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0002320  0.0013842  -0.0029450  0.0024810       178     881
+Placebo_2_waoss  -0.0004944  0.0008945  -0.0022476  0.0012587       200     759
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+      Estimate       SE     LB CI    UB CI  t stat.    pval.
+Diff.  0.00240  0.01664  -0.00231  0.00711  0.99826  0.31815
+```
+
+---
+
+## ML.06 — Random Forest + IV-WAS {#sec-ml06}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+from sklearn.ensemble import (RandomForestRegressor, RandomForestClassifier,
+                               BaggingRegressor, BaggingClassifier)
+from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
+SEED = 42
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(
+    estimator=["ivwaoss"], order=1, estimation_method="dr",
+    model_deltay=RandomForestRegressor(n_estimators=100, max_depth=5, random_state=SEED),
+    model_stayer=RandomForestClassifier(n_estimators=100, max_depth=5, random_state=SEED),
+)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="lngpinc", Z="tau")
+m.summary()
+```
+
+```
+                              First stage estimation
+
+-----------------------------------
+N                =               48
+IVWAOSS Method   =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of IVWAOSS(s)
+----------------------------------------------------------------------
+          Estimate          SE        LB CI       UB CI Switchers Stayers
+IV-WAS  -0.6592371  14.8214238  -29.7092277  28.3907535       384   1,248
+
+                              First stage estimation
+
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0058004  0.0009011  0.0040343  0.0075665       384   1,248
+```
+
+---
+
+## ML.07 — Random Forest + `by_baseline` {#sec-ml07}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+from sklearn.ensemble import (RandomForestRegressor, RandomForestClassifier,
+                               BaggingRegressor, BaggingClassifier)
+from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
+SEED = 42
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(
+    estimator=["aoss","waoss"], order=1, estimation_method="dr",
+    placebo=1, by_baseline=3,
+    model_deltay=RandomForestRegressor(n_estimators=50, max_depth=4, random_state=SEED),
+    model_stayer=RandomForestClassifier(n_estimators=50, max_depth=4, random_state=SEED),
+)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =              612
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0003985  0.0048935  -0.0099898  0.0091928       128     484
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+            Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  0.0007885  0.0038006  -0.0066607  0.0082378        99     484
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0076452  0.0018460  -0.0112634  -0.0040270       128     484
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0019779  0.0023136  -0.0065125  0.0025568        99     484
+
+
+-----------------------------------
+N                =              492
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0011362  0.0052207  -0.0113688  0.0090964        76     416
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+            Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  0.0063576  0.0076789  -0.0086930  0.0214082        35     255
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI      UB CI Switchers Stayers
+WAS  -0.0014457  0.0013752  -0.0041410  0.0012497        76     416
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE      LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0046720  0.0021755  0.0004080  0.0089361        35     255
+
+
+-----------------------------------
+N                =              424
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0016839  0.0087521  -0.0188380  0.0154702       102     322
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+            Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  0.0016253  0.0121312  -0.0221519  0.0254024        44     322
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0040365  0.0020165  -0.0079887  -0.0000842       102     322
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0035894  0.0030648  -0.0095963  0.0024176        44     322
+```
+
+---
+
+## ML.08 — Comparison Table {#sec-ml08}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+from sklearn.ensemble import (RandomForestRegressor, RandomForestClassifier,
+                               BaggingRegressor, BaggingClassifier)
+from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
+SEED = 42
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+import time
+
+strategies = {
+    "Default (sklearn)": {},
+    "asinstata":         {"asinstata": True},
+    "Random Forest":     {
+        "model_deltay": RandomForestRegressor(n_estimators=50, max_depth=5, random_state=SEED),
+        "model_stayer": RandomForestClassifier(n_estimators=50, max_depth=5, random_state=SEED)},
+    "Bagging (trees)":   {
+        "model_deltay": BaggingRegressor(estimator=DecisionTreeRegressor(max_depth=4),
+                                          n_estimators=50, random_state=SEED),
+        "model_stayer": BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=4),
+                                           n_estimators=50, random_state=SEED)},
+}
+for name, kwargs in strategies.items():
+    t0 = time.time()
+    m = DIDMultiplegtStat(estimator=["waoss"], order=1, controls=["lngpinc"],
+                           placebo=1, **kwargs)
+    m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau")
+    elapsed = time.time() - t0
+    tbl = m.results_["results"]["table"]
+    coef = float(tbl.loc["WAS"]["Estimate"])
+    se   = float(tbl.loc["WAS"]["SE"])
+    print(f"{name:25s}  WAS={coef:+.7f}  SE={se:.7f}  ({elapsed:.1f}s)")
+```
+
+```
+                        WAS        SE  Time(s)
+Strategy                                      
+Default (sklearn) -0.003754  0.001018     5.45
+asinstata         -0.003756  0.001019     4.21
+Random Forest     -0.003152  0.000945    19.29
+Bagging (trees)   -0.003103  0.000930    26.66
+```

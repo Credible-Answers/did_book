@@ -1,0 +1,65 @@
+# Preface {.unnumbered}
+
+This book illustrates every option of `did_multiplegt_stat` — the heterogeneity-robust
+difference-in-differences estimator for continuously-distributed treatments with stayers —
+side by side in **Stata** and **Python**.
+
+> **Paper:** de Chaisemartin, C., D'Haultfœuille, X., Pasquier, F., Sow, D., Vazquez-Bare, G. (2024).
+> *Difference-in-Differences for Continuous Treatments and Instruments with Stayers.*
+
+---
+
+## Installation
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_stat, replace
+```
+
+### Python
+
+```bash
+pip install did-multiplegt-stat
+```
+
+:::
+
+---
+
+## Datasets
+
+| Dataset | Variables | Source |
+|---------|-----------|--------|
+| `gazoline_did_multiplegt_stat.dta` | `lngca` (log gasoline consumption), `tau` (tax rate) | Li et al. (2014) |
+| `wagepan.dta` | `lwage` (log wage), `union` (union status) | Vella & Verbeek (1998) |
+| `gentzkowetal_didtextbook.dta` | `prestout` (voter turnout), `numdailies` (newspapers) | Gentzkow et al. (2011) |
+
+```python
+import pandas as pd
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+gentzkow = pd.read_stata(
+    "https://raw.githubusercontent.com/anzonyquispe/did_book/main/did_applied_book/data/gentzkowetal_didtextbook.dta"
+)
+```
+
+---
+
+## Structure
+
+| Chapter | Content |
+|---------|---------|
+| **1. All Options** | I.01–I.30: polynomial order, IV-WAS, weights, controls, switchers, cluster, TWFE, cross-validation, trimming |
+| **2. By Group** | III.01–III.04: by_fd, by_baseline |
+| **3. Wagepan** | IV.01–IV.04: exact_match, discrete treatment, IV-WAS, other_treatments |
+| **4. Applied Examples** | V.01–VI.02: Li et al. (2014) and Gentzkow et al. (2011) |
+| **5. ML Estimators** | ML.01–ML.08: Random Forest, Neural Network, Bagging |
+
+::: {.callout-note}
+Every **Stata** tab shows the exact output from `logfile_stat.log` corrido el 18 Jun 2026.
+Every **Python** tab shows the exact output from `vignette_stat_python.log` corrido el 17 Jun 2026 con `asinstata=True`.
+:::

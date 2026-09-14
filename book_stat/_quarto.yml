@@ -1,0 +1,26 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "did_multiplegt_stat: Stata & Python"
+  subtitle: "A Complete Illustrated Guide"
+  author: "de Chaisemartin, D'Haultfœuille, Pasquier, Sow, Vazquez-Bare & Quispe"
+  date: "2026"
+  chapters:
+    - index.qmd
+    - chapters/ch01_options.qmd
+    - chapters/ch02_bygroup.qmd
+    - chapters/ch03_wagepan.qmd
+    - chapters/ch04_applied.qmd
+    - chapters/ch05_ml.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    highlight-style: github
+    css: styles.css

@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; By Group, Quantile, and FD – did_multiplegt_stat: Stata &amp; Python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/ch03_wagepan.html" rel="next">
+<link href="../chapters/ch01_options.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-edaf08ed7d27d62012077beed0893dcb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/ch02_bygroup.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">By Group, Quantile, and FD</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">did_multiplegt_stat: Stata &amp; Python</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch01_options.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Illustrating All Options — Gazoline Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch02_bygroup.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">By Group, Quantile, and FD</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch03_wagepan.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Wagepan: Exact Match</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch04_applied.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Applied Examples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch05_ml.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Machine Learning Estimators</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-iii01" id="toc-sec-iii01" class="nav-link active" data-scroll-target="#sec-iii01"><span class="header-section-number">2.1</span> III.01 — By First Difference <code>by_fd(2)</code></a></li>
+  <li><a href="#sec-iii02" id="toc-sec-iii02" class="nav-link" data-scroll-target="#sec-iii02"><span class="header-section-number">2.2</span> III.02 — IV-WAS by First Difference</a></li>
+  <li><a href="#sec-iii03" id="toc-sec-iii03" class="nav-link" data-scroll-target="#sec-iii03"><span class="header-section-number">2.3</span> III.03 — By Baseline Quantile <code>by_baseline(5)</code></a></li>
+  <li><a href="#sec-iii04" id="toc-sec-iii04" class="nav-link" data-scroll-target="#sec-iii04"><span class="header-section-number">2.4</span> III.04 — By Baseline Quantile <code>by_baseline(3)</code></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-bygroup" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">By Group, Quantile, and FD</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<hr>
+<section id="sec-iii01" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sec-iii01"><span class="header-section-number">2.1</span> III.01 — By First Difference <code>by_fd(2)</code></h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_multiplegt_stat <span class="im">import</span> DIDMultiplegtStat</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>gazoline <span class="op">=</span> pd.read_stata(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> DIDMultiplegtStat(estimator<span class="op">=</span>[<span class="st">"aoss"</span>,<span class="st">"waoss"</span>], order<span class="op">=</span><span class="dv">1</span>, placebo<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                       aoss_vs_waoss<span class="op">=</span><span class="va">True</span>, by_fd<span class="op">=</span><span class="dv">2</span>, asinstata<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>m.fit(gazoline, Y<span class="op">=</span><span class="st">"lngca"</span>, ID<span class="op">=</span><span class="st">"id"</span>, Time<span class="op">=</span><span class="st">"year"</span>, D<span class="op">=</span><span class="st">"tau"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>m.summary()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>-----------------------------------
+N                =             1430
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0016252  0.0039764  -0.0094191  0.0061686       226   1,204
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+            Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  0.0015911  0.0047230  -0.0076660  0.0108483       106     757
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0077393  0.0022351  -0.0121200  -0.0033585       226   1,204
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0035943  0.0030854  -0.0024530  0.0096416       106     757
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+      Estimate       SE     LB CI    UB CI  t stat.    pval.
+Diff.  0.00611  0.02165  -0.00001  0.01224  1.95633  0.05043
+
+
+-----------------------------------
+N                =             1044
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0005438  0.0008330  -0.0021764  0.0010888       158     886
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0006007  0.0012275  -0.0030066  0.0018051        72     552
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0023046  0.0006808  -0.0036390  -0.0009702       158     886
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0016043  0.0010559  -0.0036739  0.0004652        72     552
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+      Estimate       SE    LB CI    UB CI  t stat.    pval.
+Diff.  0.00176  0.00234  0.00110  0.00242  5.22040  0.00000</code></pre>
+<hr>
+</section>
+<section id="sec-iii02" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="sec-iii02"><span class="header-section-number">2.2</span> III.02 — IV-WAS by First Difference</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_multiplegt_stat <span class="im">import</span> DIDMultiplegtStat</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>gazoline <span class="op">=</span> pd.read_stata(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> DIDMultiplegtStat(estimator<span class="op">=</span>[<span class="st">"ivwaoss"</span>], order<span class="op">=</span><span class="dv">1</span>, controls<span class="op">=</span>[<span class="st">"lngpinc"</span>],</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                       placebo<span class="op">=</span><span class="dv">1</span>, by_fd<span class="op">=</span><span class="dv">2</span>, asinstata<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>m.fit(gazoline, Y<span class="op">=</span><span class="st">"lngca"</span>, ID<span class="op">=</span><span class="st">"id"</span>, Time<span class="op">=</span><span class="st">"year"</span>, D<span class="op">=</span><span class="st">"lngpinc"</span>, Z<span class="op">=</span><span class="st">"tau"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>m.summary()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>                              First stage estimation
+
+
+-----------------------------------
+N                =               48
+IVWAOSS Method   =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of IVWAOSS(s)
+----------------------------------------------------------------------
+          Estimate          SE        LB CI       UB CI Switchers Stayers
+IV-WAS  -0.9149952  10.2293911  -20.9646016  19.1346113       226   1,204
+
+----------------------------------------------------------------------
+               Estimation of IVWAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                    Estimate          SE        LB CI       UB CI Switchers Stayers
+Placebo_1_ivwaoss  0.4536864  33.7743292  -65.7439988  66.6513716       106     757
+
+
+-----------------------------------
+N                =               48
+IVWAOSS Method   =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of IVWAOSS(s)
+----------------------------------------------------------------------
+          Estimate          SE        LB CI       UB CI Switchers Stayers
+IV-WAS  -0.4976686  18.7126134  -37.1743909  36.1790537       158     886
+
+----------------------------------------------------------------------
+               Estimation of IVWAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                     Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_ivwaoss  -0.4968386  1.9763371  -4.3704594  3.3767822        72     552
+
+                              First stage estimation
+
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0056598  0.0009041  0.0038878  0.0074317       384   1,248
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0010540  0.0014718  -0.0018306  0.0039386       178     881</code></pre>
+<hr>
+</section>
+<section id="sec-iii03" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-iii03"><span class="header-section-number">2.3</span> III.03 — By Baseline Quantile <code>by_baseline(5)</code></h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_multiplegt_stat <span class="im">import</span> DIDMultiplegtStat</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>gazoline <span class="op">=</span> pd.read_stata(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> DIDMultiplegtStat(estimator<span class="op">=</span>[<span class="st">"waoss"</span>], order<span class="op">=</span><span class="dv">1</span>, placebo<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                       by_baseline<span class="op">=</span><span class="dv">5</span>, asinstata<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>m.fit(gazoline, Y<span class="op">=</span><span class="st">"lngca"</span>, ID<span class="op">=</span><span class="st">"id"</span>, Time<span class="op">=</span><span class="st">"year"</span>, D<span class="op">=</span><span class="st">"tau"</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>m.summary()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0056473  0.0023005  -0.0101562  -0.0011384        92     462
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0041967  0.0034252  -0.0025166  0.0109100        74     462
+
+
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0059251  0.0024026  -0.0106341  -0.0012161        57     333
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0005659  0.0029534  -0.0052228  0.0063546        29     236
+
+
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI      UB CI Switchers Stayers
+WAS  -0.0008566  0.0015629  -0.0039199  0.0022066        45      96
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0031512  0.0020937  -0.0009526  0.0072549        26      96
+
+
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI      UB CI Switchers Stayers
+WAS  -0.0035713  0.0026716  -0.0088077  0.0016651        48     340
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0018208  0.0040551  -0.0097687  0.0061271        25     287
+
+
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0059020  0.0025788  -0.0109566  -0.0008475        64     301
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0019191  0.0032760  -0.0083401  0.0045020        24     266</code></pre>
+<hr>
+</section>
+<section id="sec-iii04" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-iii04"><span class="header-section-number">2.4</span> III.04 — By Baseline Quantile <code>by_baseline(3)</code></h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_multiplegt_stat <span class="im">import</span> DIDMultiplegtStat</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>gazoline <span class="op">=</span> pd.read_stata(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> DIDMultiplegtStat(estimator<span class="op">=</span>[<span class="st">"aoss"</span>,<span class="st">"waoss"</span>], order<span class="op">=</span><span class="dv">1</span>, placebo<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                       by_baseline<span class="op">=</span><span class="dv">3</span>, asinstata<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>m.fit(gazoline, Y<span class="op">=</span><span class="st">"lngca"</span>, ID<span class="op">=</span><span class="st">"id"</span>, Time<span class="op">=</span><span class="st">"year"</span>, D<span class="op">=</span><span class="st">"tau"</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>m.summary()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>-----------------------------------
+N                =              612
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0008158  0.0037946  -0.0082531  0.0066216       128     484
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+            Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  0.0005510  0.0032023  -0.0057255  0.0068276        99     484
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0070309  0.0018229  -0.0106039  -0.0034579       128     484
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0009124  0.0019645  -0.0047628  0.0029380        99     484
+
+
+-----------------------------------
+N                =              492
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0002849  0.0035739  -0.0072898  0.0067200        76     416
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+            Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  0.0035363  0.0057964  -0.0078246  0.0148972        35     255
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI      UB CI Switchers Stayers
+WAS  -0.0014581  0.0013989  -0.0042000  0.0012838        76     416
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE      LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0034379  0.0016811  0.0001430  0.0067329        35     255
+
+
+-----------------------------------
+N                =              424
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  -0.0029136  0.0097247  -0.0219740  0.0161468       102     322
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+            Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  0.0015384  0.0086058  -0.0153290  0.0184057        44     322
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0053806  0.0017538  -0.0088181  -0.0019431       102     322
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0024371  0.0029182  -0.0081568  0.0032825        44     322</code></pre>
+<hr>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/ch01_options.html" class="pagination-link" aria-label="Illustrating All Options — Gazoline Data">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Illustrating All Options — Gazoline Data</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/ch03_wagepan.html" class="pagination-link" aria-label="Wagepan: Exact Match">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Wagepan: Exact Match</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

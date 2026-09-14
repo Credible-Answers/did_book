@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Chapter 9: Applied Examples with did_multiplegt_dyn – Applied Examples with did_multiplegt_dyn</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/ch09.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Chapter 9: Applied Examples with did_multiplegt_dyn</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Applied Examples with did_multiplegt_dyn</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch09.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Chapter 9: Applied Examples with did_multiplegt_dyn</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1.1</span> Overview</a></li>
+  <li><a href="#example-9.1-deryugina-2017-hurricane-hits-and-government-transfers" id="toc-example-9.1-deryugina-2017-hurricane-hits-and-government-transfers" class="nav-link" data-scroll-target="#example-9.1-deryugina-2017-hurricane-hits-and-government-transfers"><span class="header-section-number">1.2</span> Example 9.1: Deryugina (2017) — Hurricane Hits and Government Transfers</a>
+  <ul class="collapse">
+  <li><a href="#t1-verify-one-shot-design" id="toc-t1-verify-one-shot-design" class="nav-link" data-scroll-target="#t1-verify-one-shot-design"><span class="header-section-number">1.2.1</span> T1: Verify One-Shot Design</a></li>
+  <li><a href="#t2-non-normalized-event-study-effects-no-controls" id="toc-t2-non-normalized-event-study-effects-no-controls" class="nav-link" data-scroll-target="#t2-non-normalized-event-study-effects-no-controls"><span class="header-section-number">1.2.2</span> T2: Non-Normalized Event-Study Effects (No Controls)</a></li>
+  <li><a href="#t3-non-normalized-event-study-effects-with-county-level-controls" id="toc-t3-non-normalized-event-study-effects-with-county-level-controls" class="nav-link" data-scroll-target="#t3-non-normalized-event-study-effects-with-county-level-controls"><span class="header-section-number">1.2.3</span> T3: Non-Normalized Event-Study Effects (With County-Level Controls)</a></li>
+  </ul></li>
+  <li><a href="#example-9.2-east-et-al.-2023-prenatal-medicaid-and-low-birth-weight" id="toc-example-9.2-east-et-al.-2023-prenatal-medicaid-and-low-birth-weight" class="nav-link" data-scroll-target="#example-9.2-east-et-al.-2023-prenatal-medicaid-and-low-birth-weight"><span class="header-section-number">1.3</span> Example 9.2: East et al.&nbsp;(2023) — Prenatal Medicaid and Low Birth Weight</a>
+  <ul class="collapse">
+  <li><a href="#t4-verify-continuous-treatment-in-period-1" id="toc-t4-verify-continuous-treatment-in-period-1" class="nav-link" data-scroll-target="#t4-verify-continuous-treatment-in-period-1"><span class="header-section-number">1.3.1</span> T4: Verify Continuous Treatment in Period 1</a></li>
+  <li><a href="#t5-non-normalized-event-study-effects" id="toc-t5-non-normalized-event-study-effects" class="nav-link" data-scroll-target="#t5-non-normalized-event-study-effects"><span class="header-section-number">1.3.2</span> T5: Non-Normalized Event-Study Effects</a></li>
+  <li><a href="#t6-normalized-event-study-effects" id="toc-t6-normalized-event-study-effects" class="nav-link" data-scroll-target="#t6-normalized-event-study-effects"><span class="header-section-number">1.3.3</span> T6: Normalized Event-Study Effects</a></li>
+  </ul></li>
+  <li><a href="#example-9.3-gentzkow-et-al.-2011-newspapers-and-voter-turnout" id="toc-example-9.3-gentzkow-et-al.-2011-newspapers-and-voter-turnout" class="nav-link" data-scroll-target="#example-9.3-gentzkow-et-al.-2011-newspapers-and-voter-turnout"><span class="header-section-number">1.4</span> Example 9.3: Gentzkow et al.&nbsp;(2011) — Newspapers and Voter Turnout</a>
+  <ul class="collapse">
+  <li><a href="#t7-verify-treatment-design" id="toc-t7-verify-treatment-design" class="nav-link" data-scroll-target="#t7-verify-treatment-design"><span class="header-section-number">1.4.1</span> T7: Verify Treatment Design</a></li>
+  <li><a href="#t8-non-normalized-event-study-effects" id="toc-t8-non-normalized-event-study-effects" class="nav-link" data-scroll-target="#t8-non-normalized-event-study-effects"><span class="header-section-number">1.4.2</span> T8: Non-Normalized Event-Study Effects</a></li>
+  <li><a href="#t9-treatment-path-descriptions" id="toc-t9-treatment-path-descriptions" class="nav-link" data-scroll-target="#t9-treatment-path-descriptions"><span class="header-section-number">1.4.3</span> T9: Treatment Path Descriptions</a></li>
+  <li><a href="#t10-normalized-event-study-effects" id="toc-t10-normalized-event-study-effects" class="nav-link" data-scroll-target="#t10-normalized-event-study-effects"><span class="header-section-number">1.4.4</span> T10: Normalized Event-Study Effects</a></li>
+  <li><a href="#t11-joint-test-no-lagged-treatment-effect-constant-effects" id="toc-t11-joint-test-no-lagged-treatment-effect-constant-effects" class="nav-link" data-scroll-target="#t11-joint-test-no-lagged-treatment-effect-constant-effects"><span class="header-section-number">1.4.5</span> T11: Joint Test — No Lagged Treatment Effect + Constant Effects</a></li>
+  </ul></li>
+  <li><a href="#example-9.4-hollingsworth-et-al.-2022-marijuana-laws-and-drug-use" id="toc-example-9.4-hollingsworth-et-al.-2022-marijuana-laws-and-drug-use" class="nav-link" data-scroll-target="#example-9.4-hollingsworth-et-al.-2022-marijuana-laws-and-drug-use"><span class="header-section-number">1.5</span> Example 9.4: Hollingsworth et al.&nbsp;(2022) — Marijuana Laws and Drug Use</a>
+  <ul class="collapse">
+  <li><a href="#t12-verify-binary-absorbing-treatments" id="toc-t12-verify-binary-absorbing-treatments" class="nav-link" data-scroll-target="#t12-verify-binary-absorbing-treatments"><span class="header-section-number">1.5.1</span> T12: Verify Binary Absorbing Treatments</a></li>
+  <li><a href="#t13-effect-of-first-treatment-medical-marijuana-laws" id="toc-t13-effect-of-first-treatment-medical-marijuana-laws" class="nav-link" data-scroll-target="#t13-effect-of-first-treatment-medical-marijuana-laws"><span class="header-section-number">1.5.2</span> T13: Effect of First Treatment (Medical Marijuana Laws)</a></li>
+  <li><a href="#t14-effect-of-second-treatment-recreational-marijuana-laws" id="toc-t14-effect-of-second-treatment-recreational-marijuana-laws" class="nav-link" data-scroll-target="#t14-effect-of-second-treatment-recreational-marijuana-laws"><span class="header-section-number">1.5.3</span> T14: Effect of Second Treatment (Recreational Marijuana Laws)</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.6</span> Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Chapter 9: Applied Examples with did_multiplegt_dyn</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1.1</span> Overview</h2>
+<p>This chapter replicates the four applied examples from de Chaisemartin et al.&nbsp;(2025), using <code>did_multiplegt_dyn</code> on real datasets to estimate event-study effects in complex treatment designs.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Paper</th>
+<th>Treatment Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>9.1</td>
+<td>Deryugina (2017)</td>
+<td>Binary, on-and-off</td>
+</tr>
+<tr class="even">
+<td>9.2</td>
+<td>East et al.&nbsp;(2023)</td>
+<td>Continuous, absorbing</td>
+</tr>
+<tr class="odd">
+<td>9.3</td>
+<td>Gentzkow et al.&nbsp;(2011)</td>
+<td>Discrete multivalued, on-and-off</td>
+</tr>
+<tr class="even">
+<td>9.4</td>
+<td>Hollingsworth et al.&nbsp;(2022)</td>
+<td>Two consecutive binary absorbing</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="example-9.1-deryugina-2017-hurricane-hits-and-government-transfers" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="example-9.1-deryugina-2017-hurricane-hits-and-government-transfers"><span class="header-section-number">1.2</span> Example 9.1: Deryugina (2017) — Hurricane Hits and Government Transfers</h2>
+<p><strong>Research Question:</strong> How do hurricanes affect non-disaster government transfer programs in the United States?</p>
+<p><strong>Data:</strong> County-year panel. Treatment <code>hurricane</code> is binary and non-absorbing (counties are treated for at most one year — a “one-shot” design). Outcome: <code>log_curr_trans_ind_gov_pc</code> (log non-disaster government transfers per capita).</p>
+<section id="t1-verify-one-shot-design" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="t1-verify-one-shot-design"><span class="header-section-number">1.2.1</span> T1: Verify One-Shot Design</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"Deryugina_2017.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">egen</span> total_hurricane = <span class="kw">total</span>(hurricane), <span class="kw">by</span>(county_fips)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">sum</span> total_hurricane</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+total_hurr~e |     49,698    .3163709    .4650642          0          1</code></pre>
+<p>All counties have <code>total_hurricane</code> ∈ {0, 1} — confirming the one-shot design.</p>
+<hr>
+</section>
+<section id="t2-non-normalized-event-study-effects-no-controls" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="t2-non-normalized-event-study-effects-no-controls"><span class="header-section-number">1.2.2</span> T2: Non-Normalized Event-Study Effects (No Controls)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn log_curr_trans_ind_gov_pc county_fips <span class="fu">year</span> hurricane, <span class="co">///</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">effects</span>(11) placebo(11) <span class="kw">cluster</span>(county_fips)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"ch09_fig1_hurricane_nocontrols.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 |  .0108629    .001617   .0076937   .0140321      14240        361
+    Effect_2 |  .0127918   .0023651   .0081563   .0174273      13953        361
+    Effect_3 |  .0158005   .0030075   .0099059    .021695      13766        361
+    Effect_4 |  .0163886    .003393   .0097385   .0230388      13620        361
+    Effect_5 |  .0230699   .0038968   .0154322   .0307076      13462        361
+    Effect_6 |  .0268285   .0042508   .0184972   .0351598      13253        361
+    Effect_7 |  .0377147   .0044926   .0289095     .04652      13038        361
+    Effect_8 |  .0392922   .0050394   .0294151   .0491694      12929        361
+    Effect_9 |   .035109   .0055185   .0242929   .0459251      12840        361
+   Effect_10 |  .0494016    .006029   .0375849   .0612182      12741        361
+   Effect_11 |  .0518123   .0061055   .0398457   .0637788      12619        361
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects : p-value = 0
+
+--------------------------------------------------------------------------------
+               Average cumulative (total) effect per treatment unit
+--------------------------------------------------------------------------------
+  Av_tot_eff |  .3190721   .0406001   .2394973   .3986468      31470       3971
+Average number of time periods over which a treatment's effect is accumulated = 11
+
+--------------------------------------------------------------------------------
+          Testing the parallel trends and no anticipation assumptions
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0055903   .0013173   -.008172  -.0030085      14154        361
+   Placebo_2 | -.0083554   .0020689  -.0124104  -.0043003      13826        361
+   Placebo_3 | -.0128183    .002977  -.0186532  -.0069834      13567        361
+   Placebo_4 |  -.009143   .0033686  -.0157454  -.0025406      13302        361
+   Placebo_5 | -.0075546   .0039816  -.0153585   .0002493      13005        361
+   Placebo_6 | -.0073115   .0043748   -.015886    .001263      12682        361
+   Placebo_7 | -.0079583   .0047566  -.0172812   .0013645      12431        361
+   Placebo_8 |  -.008841   .0053184  -.0192648   .0015829      12214        361
+   Placebo_9 | -.0143816   .0058363  -.0258204  -.0029427      11829        361
+  Placebo_10 | -.0086498   .0061281  -.0206606   .0033611      10807        299
+  Placebo_11 | -.0035924   .0066904  -.0167053   .0095206      10012        282
+--------------------------------------------------------------------------------
+Test of joint nullity of the placebos : p-value = 1.517e-06</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch09_fig1_hurricane_nocontrols.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9.1: Effects of Hurricane Hits on Government Transfers Per Capita</figcaption>
+</figure>
+</div>
+<p><strong>Interpretation:</strong> Effects are positive and increasing — hurricanes raise non-disaster transfers by ~1% in the short run and ~5% in the long run. However, the pre-trend test is highly significant (p = 1.5e-06), suggesting a differential trend starting ~4 periods before treatment. The parallel-trends assumption is likely violated without controls.</p>
+<hr>
+</section>
+<section id="t3-non-normalized-event-study-effects-with-county-level-controls" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="t3-non-normalized-event-study-effects-with-county-level-controls"><span class="header-section-number">1.2.3</span> T3: Non-Normalized Event-Study Effects (With County-Level Controls)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> vars coastal land_area1970 log_pop1969 frac_young1969 frac_old1969 <span class="co">///</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>           frac_black1969 log_wage_pc1969 emp_rate1969</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> controls</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">foreach</span> v <span class="kw">of</span> <span class="kw">local</span> vars {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> <span class="ot">`v'</span>_year = <span class="ot">`v'</span> * <span class="fu">year</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> controls <span class="ot">`controls'</span> <span class="ot">`v'</span>_year</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn log_curr_trans_ind_gov_pc county_fips <span class="fu">year</span> hurricane, <span class="co">///</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">effects</span>(11) placebo(11) <span class="kw">cluster</span>(county_fips) controls(<span class="ot">`controls'</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"ch09_fig2_hurricane_controls.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 |  .0092419   .0015835   .0061383   .0123456      14077        361
+    Effect_2 |  .0095925   .0022712   .0051409   .0140441      13794        361
+    Effect_3 |  .0109771   .0028662   .0053594   .0165948      13609        361
+    Effect_4 |  .0097365   .0032466   .0033733   .0160998      13464        361
+    Effect_5 |  .0144296   .0037154   .0071476   .0217116      13305        361
+    Effect_6 |  .0164425   .0040354   .0085333   .0243517      13097        361
+    Effect_7 |  .0254598   .0042959   .0170399   .0338797      12884        361
+    Effect_8 |  .0251647   .0048611   .0156371   .0346923      12775        361
+    Effect_9 |  .0192179   .0053476   .0087368   .0296989      12685        361
+   Effect_10 |   .031657   .0058645   .0201628   .0431512      12587        361
+   Effect_11 |  .0317402   .0059652   .0200487   .0434317      12465        361
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects : p-value = 0
+
+--------------------------------------------------------------------------------
+               Average cumulative (total) effect per treatment unit
+--------------------------------------------------------------------------------
+  Av_tot_eff |  .2036597    .038535   .1281326   .2791869      31123       3971
+Average number of time periods over which a treatment's effect is accumulated = 11
+
+--------------------------------------------------------------------------------
+          Testing the parallel trends and no anticipation assumptions
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0039173   .0013091   -.006483  -.0013515      14000        361
+   Placebo_2 | -.0051001   .0020352   -.009089  -.0011111      13679        361
+   Placebo_3 | -.0077511   .0029252  -.0134844  -.0020179      13430        361
+   Placebo_4 | -.0024941    .003301  -.0089639   .0039757      13181        361
+   Placebo_5 |  .0011302     .00376  -.0062391   .0084996      12893        361
+   Placebo_6 |   .003105   .0040325  -.0047987   .0110086      12577        361
+   Placebo_7 |   .004438   .0043775  -.0041417   .0130177      12337        361
+   Placebo_8 |  .0054782   .0048862  -.0040986   .0150551      12126        361
+   Placebo_9 |  .0018036   .0052736  -.0085325   .0121397      11749        361
+  Placebo_10 |  .0102888   .0056563  -.0007973   .0213749      10734        299
+  Placebo_11 |  .0177286   .0060115   .0059462    .029511       9948        282
+--------------------------------------------------------------------------------
+Test of joint nullity of the placebos : p-value = 3.280e-07</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch09_fig2_hurricane_controls.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9.2: Effects of Hurricane Hits on Government Transfers Per Capita, with Controls</figcaption>
+</figure>
+</div>
+<p><strong>Interpretation:</strong> After including controls, effects remain positive and significant. Pre-trends improve but the joint test is still significant (p = 3.3e-07), suggesting the differential trend starting ~4 periods before treatment persists even after conditioning on covariates.</p>
+<hr>
+</section>
+</section>
+<section id="example-9.2-east-et-al.-2023-prenatal-medicaid-and-low-birth-weight" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="example-9.2-east-et-al.-2023-prenatal-medicaid-and-low-birth-weight"><span class="header-section-number">1.3</span> Example 9.2: East et al.&nbsp;(2023) — Prenatal Medicaid and Low Birth Weight</h2>
+<p><strong>Research Question:</strong> How does prenatal Medicaid expansion affect the share of low-birth-weight (LBW) infants?</p>
+<p><strong>Data:</strong> State-year panel. Treatment <code>newsimeli</code> is the simulated prenatal Medicaid eligibility rate — continuous and absorbing (each state changes at most once). Outcome: <code>lbw_detrend81</code> (% LBW infants, net of state-specific pre-treatment linear trend).</p>
+<section id="t4-verify-continuous-treatment-in-period-1" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="t4-verify-continuous-treatment-in-period-1"><span class="header-section-number">1.3.1</span> T4: Verify Continuous Treatment in Period 1</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> newsimeli <span class="kw">if</span> dob_y_p == 1975</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>  newsimeli |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   .0427696 |          1        2.00        2.00
+   .0435282 |          1        2.00        4.00
+   ...
+   .2127634 |          1        2.00      100.00
+------------+-----------------------------------
+      Total |         50      100.00</code></pre>
+<p>All 50 states have different values of <code>newsimeli</code> in 1975 — confirming the treatment is continuously distributed in period 1.</p>
+<hr>
+</section>
+<section id="t5-non-normalized-event-study-effects" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="t5-non-normalized-event-study-effects"><span class="header-section-number">1.3.2</span> T5: Non-Normalized Event-Study Effects</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> stcontrols stmarried stblack stother sthsdrop <span class="co">///</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    sthsgrad stsomecoll pop0_4 pop5_17 pop18_24 pop25_44 <span class="co">///</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    pop45_64 urate incpc maxafdc abortconsent abortmedr</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn lbw_detrend81 plborn dob_y_p newsimeli, <span class="co">///</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">effects</span>(5) placebo(5) continuous(1) <span class="co">///</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    controls(<span class="ot">$stcontrols</span>) <span class="kw">weight</span>(births) effects_equal(<span class="st">"all"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"ch09_fig3_medicaid_nonnorm.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 | -.0947772   .0431779  -.1794043  -.0101501        234         28
+    Effect_2 | -.1357354   .0479484  -.2297126  -.0417581        209         28
+    Effect_3 | -.2164912   .0589289  -.3319896  -.1009928        187         28
+    Effect_4 | -.2399434   .0807875   -.398284  -.0816028        176         28
+    Effect_5 | -.2865485   .0995835  -.4817286  -.0913684        138         21
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects  : p-value = .01356529
+Test of equality of the effects       : p-value = .18570771
+
+--------------------------------------------------------------------------------
+               Average cumulative (total) effect per treatment unit
+--------------------------------------------------------------------------------
+  Av_tot_eff | -2.674364   .7711151  -4.185722  -1.163007        405        133
+Average number of time periods over which a treatment's effect is accumulated = 2.8379
+
+--------------------------------------------------------------------------------
+          Testing the parallel trends and no anticipation assumptions
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0333622   .0322533  -.0965775    .029853        234         28
+   Placebo_2 | -.0162464   .0338256  -.0825434   .0500506        209         28
+   Placebo_3 |  .0125248   .0473315  -.0802431   .1052928        187         28
+   Placebo_4 | -.0064571   .0475258  -.0996058   .0866917        176         28
+   Placebo_5 | -.0608374   .0480836  -.1550795   .0334047        106         18
+--------------------------------------------------------------------------------
+Test of joint nullity of the placebos : p-value = .72098785</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch09_fig3_medicaid_nonnorm.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9.3: Effects of a Large Increase in Prenatal Medicaid Eligibility on LBW Rate</figcaption>
+</figure>
+</div>
+<p><strong>Interpretation:</strong> A large increase in prenatal Medicaid eligibility significantly reduces the LBW rate. Effects grow with exposure length (from −0.09 to −0.29). Pre-trends are small and jointly insignificant (p = 0.72), supporting the parallel-trends assumption.</p>
+<hr>
+</section>
+<section id="t6-normalized-event-study-effects" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="t6-normalized-event-study-effects"><span class="header-section-number">1.3.3</span> T6: Normalized Event-Study Effects</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn lbw_detrend81 plborn dob_y_p newsimeli, <span class="co">///</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">effects</span>(5) placebo(5) continuous(1) <span class="co">///</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    controls(<span class="ot">$stcontrols</span>) <span class="kw">weight</span>(births) normalized normalized_weights <span class="co">///</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    effects_equal(<span class="st">"all"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"ch09_fig4_medicaid_norm.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 | -1.298867   .5917281  -2.458633  -.1391013        234         28
+    Effect_2 | -.9288246   .3281068  -1.571902  -.2857471        209         28
+    Effect_3 | -.9876244   .2688312  -1.514524  -.4607251        187         28
+    Effect_4 | -.8192267   .2758287  -1.359841  -.2786122        176         28
+    Effect_5 | -1.122649   .3901516  -1.887333  -.3579662        138         21
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects  : p-value = .01356528
+Test of equality of the effects       : p-value = .58100394
+
+----------------------------------------------------------------------
+               Weights on treatment lags
+----------------------------------------------------------------------
+
+             |       ℓ=1        ℓ=2        ℓ=3        ℓ=4        ℓ=5
+-------------+-------------------------------------------------------
+         k=0 |    1.0000     0.5000     0.3333     0.2500     0.2000
+         k=1 |         .     0.5000     0.3333     0.2500     0.2000
+         k=2 |         .          .     0.3333     0.2500     0.2000
+         k=3 |         .          .          .     0.2500     0.2000
+         k=4 |         .          .          .          .     0.2000
+-------------+-------------------------------------------------------
+       Total |    1.0000     1.0000     1.0000     1.0000     1.0000</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch09_fig4_medicaid_norm.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9.4: Effects of a 1 Percentage Point Increase in Prenatal Medicaid Eligibility on LBW Rate</figcaption>
+</figure>
+</div>
+<p><strong>Interpretation:</strong> A 1 percentage point increase in prenatal Medicaid eligibility reduces the LBW rate by ~1 percentage point. The weights table shows that Effect_1 captures only the contemporaneous effect, while Effect_2 onwards are equal-weighted averages of current and lagged eligibility rates.</p>
+<hr>
+</section>
+</section>
+<section id="example-9.3-gentzkow-et-al.-2011-newspapers-and-voter-turnout" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="example-9.3-gentzkow-et-al.-2011-newspapers-and-voter-turnout"><span class="header-section-number">1.4</span> Example 9.3: Gentzkow et al.&nbsp;(2011) — Newspapers and Voter Turnout</h2>
+<p><strong>Research Question:</strong> What is the effect of daily newspapers on presidential voter turnout?</p>
+<p><strong>Data:</strong> Imbalanced panel of 1,195 US counties, presidential election years 1868–1928. Treatment <code>numdailies</code> (number of daily newspapers) is discrete multivalued and on-and-off. Outcome: <code>prestout</code> (voter turnout rate).</p>
+<section id="t7-verify-treatment-design" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="t7-verify-treatment-design"><span class="header-section-number">1.4.1</span> T7: Verify Treatment Design</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>xtset cnty90 <span class="fu">year</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">bysort</span> cnty90 (<span class="fu">year</span>): <span class="kw">gen</span> first_numdailies = numdailies[1]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> first_numdailies</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>first_numdailies |   Freq.  Percent
+-----------------+-----------------
+               0 |  13,264    78.62
+               1 |   1,113     6.60
+               2 |   1,332     7.89
+             ... |     ...      ...
+              33 |      16     0.09
+-----------------+-----------------
+           Total |  16,872   100.00</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> d_numdailies = .</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">bysort</span> cnty90 (<span class="fu">year</span>): <span class="kw">replace</span> d_numdailies = numdailies - numdailies[<span class="dt">_n</span>-1]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> d_numdailies</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>d_numdailies</code> takes positive and negative values — counties experience both increases and decreases. 19% of counties experience 7 or more changes over the panel.</p>
+<hr>
+</section>
+<section id="t8-non-normalized-event-study-effects" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="t8-non-normalized-event-study-effects"><span class="header-section-number">1.4.2</span> T8: Non-Normalized Event-Study Effects</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn prestout cnty90 <span class="fu">year</span> numdailies, <span class="co">///</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">effects</span>(4) placebo(4) effects_equal(<span class="st">"all"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"ch09_fig5_newspapers_nonnorm.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 |  .0144244   .0042477   .0060992   .0227497       5674       1119
+    Effect_2 |  .0190899   .0058429   .0076381   .0305418       4648       1054
+    Effect_3 |  .0207147   .0079164   .0051989   .0362305       3750        984
+    Effect_4 |  .0272653   .0097924   .0080727    .046458       2980        917
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects  : p-value = .00681389
+Test of equality of the effects       : p-value = .41515197
+
+  Av_tot_eff |  .0160565   .0047761   .0066956   .0254174       8659       4074
+Average number of time periods over which a treatment's effect is accumulated = 2.4376
+
+--------------------------------------------------------------------------------
+          Testing the parallel trends and no anticipation assumptions
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0005025   .0051322  -.0105615   .0095565       4471        902
+   Placebo_2 |  .0020594   .0085031  -.0146063   .0187251       2778        746
+   Placebo_3 | -.0015365   .0116825  -.0244337   .0213607       1644        604
+   Placebo_4 |  .0006573   .0175032  -.0336483   .0349628        910        441
+--------------------------------------------------------------------------------
+Test of joint nullity of the placebos : p-value = .99219793</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch09_fig5_newspapers_nonnorm.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9.5: Non-Normalized Effects of Newspaper Entries/Exits on Voter Turnout</figcaption>
+</figure>
+</div>
+<p><strong>Interpretation:</strong> Being exposed to a weakly larger number of newspapers for one electoral cycle increases turnout by 1.4pp (significant). Effects grow with exposure length, up to 2.7pp after four cycles. One cannot reject equality of effects (p = 0.42). Pre-trends are small and jointly insignificant (p = 0.99).</p>
+<hr>
+</section>
+<section id="t9-treatment-path-descriptions" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="t9-treatment-path-descriptions"><span class="header-section-number">1.4.3</span> T9: Treatment Path Descriptions</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn prestout cnty90 <span class="fu">year</span> numdailies, <span class="co">///</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">effects</span>(2) design(0.8, <span class="kw">console</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+          Detection of treatment paths - 2 periods after first switch
+--------------------------------------------------------------------------------
+
+             |   #Groups    %Groups        ℓ=0        ℓ=1        ℓ=2
+-------------+-------------------------------------------------------
+  TreatPath1 |       343      32.15          0          1          1
+  TreatPath2 |       187      17.53          0          1          0
+  TreatPath3 |       131      12.28          0          1          2
+  TreatPath4 |        57      5.342          0          2          2
+  TreatPath5 |        47      4.405          0          2          1
+  TreatPath6 |        33      3.093          1          2          2
+  TreatPath7 |        30      2.812          0          1          3
+  TreatPath8 |        22      2.062          2          3          2
+  TreatPath9 |        20      1.874          2          1          1
+--------------------------------------------------------------------------------
+Treatment paths detected in at least 80.00% of the switching groups: Total % = 81.54%</code></pre>
+<p><strong>Interpretation:</strong> 32% of effects in Effect_2 come from counties that went from 0 to 1 newspaper and stayed at 1. 17.5% come from counties that gained 1 newspaper but then returned to 0 (on-and-off). This confirms the complex, non-staggered nature of the treatment.</p>
+<hr>
+</section>
+<section id="t10-normalized-event-study-effects" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" class="anchored" data-anchor-id="t10-normalized-event-study-effects"><span class="header-section-number">1.4.4</span> T10: Normalized Event-Study Effects</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn prestout cnty90 <span class="fu">year</span> numdailies, <span class="co">///</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">effects</span>(4) placebo(4) normalized normalized_weights effects_equal(<span class="st">"all"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"ch09_fig6_newspapers_norm.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 |  .0120186   .0035392   .0050819   .0189552       5674       1119
+    Effect_2 |  .0082126   .0025136   .0032859   .0131392       4648       1054
+    Effect_3 |  .0057192   .0021857   .0014354    .010003       3750        984
+    Effect_4 |  .0053873   .0019348   .0015951   .0091795       2980        917
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects  : p-value = .00681389
+Test of equality of the effects       : p-value = .16525779
+
+----------------------------------------------------------------------
+               Weights on treatment lags
+----------------------------------------------------------------------
+
+             |       ℓ=1        ℓ=2        ℓ=3        ℓ=4
+-------------+--------------------------------------------
+         k=0 |    1.0000     0.4849     0.3549     0.2777
+         k=1 |         .     0.5151     0.3131     0.2568
+         k=2 |         .          .     0.3319     0.2271
+         k=3 |         .          .          .     0.2383
+-------------+--------------------------------------------
+       Total |    1.0000     1.0000     1.0000     1.0000</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch09_fig6_newspapers_norm.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9.6: Normalized Effects of Newspaper Entries/Exits on Voter Turnout</figcaption>
+</figure>
+</div>
+<p><strong>Interpretation:</strong> Normalized effects decrease with ℓ (from 0.012 to 0.005), though one cannot reject equality (p = 0.17). This suggests lagged newspapers may have smaller effects on turnout than contemporaneous newspapers.</p>
+<hr>
+</section>
+<section id="t11-joint-test-no-lagged-treatment-effect-constant-effects" class="level3" data-number="1.4.5">
+<h3 data-number="1.4.5" class="anchored" data-anchor-id="t11-joint-test-no-lagged-treatment-effect-constant-effects"><span class="header-section-number">1.4.5</span> T11: Joint Test — No Lagged Treatment Effect + Constant Effects</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>* first_change and same_treat_after_first_change are included <span class="kw">in</span> the dataset</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn prestout cnty90 <span class="fu">year</span> numdailies <span class="co">///</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="fu">year</span> &lt;= first_change | same_treat_after_first_change == 1, <span class="co">///</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">effects</span>(2) effects_equal(<span class="st">"all"</span>) same_switchers graph_off</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 |    .01525   .0058956   .0036949   .0268052       5019        512
+    Effect_2 |  .0164091   .0073633   .0019773   .0308409       4101        512
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects  : p-value = .02913029
+Test of equality of the effects       : p-value = .83016668</code></pre>
+<p><strong>Interpretation:</strong> With p = 0.83, we cannot reject that the two effects are equal, suggesting the first lag of newspapers does not affect current turnout. This supports the “no dynamic effects” hypothesis for this subsample.</p>
+<hr>
+</section>
+</section>
+<section id="example-9.4-hollingsworth-et-al.-2022-marijuana-laws-and-drug-use" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="example-9.4-hollingsworth-et-al.-2022-marijuana-laws-and-drug-use"><span class="header-section-number">1.5</span> Example 9.4: Hollingsworth et al.&nbsp;(2022) — Marijuana Laws and Drug Use</h2>
+<p><strong>Research Question:</strong> How do medical and recreational marijuana laws differentially affect marijuana use?</p>
+<p><strong>Data:</strong> State-year panel, 2002–2016. Two binary absorbing treatments: <code>mm</code> (medical marijuana law) and <code>rm</code> (recreational marijuana law). Medical law always precedes recreational. Outcome: <code>ln_mj_use_365</code> (log marijuana consumption).</p>
+<section id="t12-verify-binary-absorbing-treatments" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="t12-verify-binary-absorbing-treatments"><span class="header-section-number">1.5.1</span> T12: Verify Binary Absorbing Treatments</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"hollingsworth_et_al_2022.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>xtset state <span class="fu">year</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> d_mm = D.mm</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> d_rm = D.rm</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> mm</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> rm</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> d_mm</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> d_rm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>         mm |   Freq.  Percent        rm |   Freq.  Percent
+------------+-------------------  --------+-------------------
+          0 |    532    69.54            0 |    747    97.65
+          1 |    233    30.46            1 |     18     2.35
+
+       d_mm |   Freq.  Percent      d_rm |   Freq.  Percent
+------------+-------------------  --------+-------------------
+          0 |    693    97.06            0 |    707    99.02
+          1 |     21     2.94            1 |      7     0.98</code></pre>
+<p>Both treatments are binary (0/1) and absorbing (first-differences only take values 0 or 1).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> mm_rm_timing = mm - rm</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> mm_rm_timing</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>mm_rm_timing |   Freq.  Percent
+-------------+-------------------
+           0 |    550    71.90
+           1 |    215    28.10</code></pre>
+<p><code>mm_rm_timing</code> ≥ 0 always — medical law always precedes recreational.</p>
+<hr>
+</section>
+<section id="t13-effect-of-first-treatment-medical-marijuana-laws" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" class="anchored" data-anchor-id="t13-effect-of-first-treatment-medical-marijuana-laws"><span class="header-section-number">1.5.2</span> T13: Effect of First Treatment (Medical Marijuana Laws)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn ln_mj_use_365 state <span class="fu">year</span> mm <span class="kw">if</span> rm == 0, <span class="co">///</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    placebo(3) <span class="kw">effects</span>(3)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"ch09_fig7_marijuana_medical.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 |  .0297197   .0136225     .00302   .0564194        361         21
+    Effect_2 |  .0380018   .0189295   .0009006   .0751029        324         16
+    Effect_3 |   .025386   .0213948   -.016547    .067319        307         16
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects : p-value = .15497711
+
+  Av_tot_eff |  .0309117   .0144444   .0026012   .0592221        499         53
+
+--------------------------------------------------------------------------------
+          Testing the parallel trends and no anticipation assumptions
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0157475   .0141094  -.0434015   .0119065        361         21
+   Placebo_2 | -.0112911    .024639  -.0595826   .0370004        281         14
+   Placebo_3 | -.0042399   .0241491  -.0515713   .0430916        265         14
+--------------------------------------------------------------------------------
+Test of joint nullity of the placebos : p-value = .71060368</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch09_fig7_marijuana_medical.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9.7: Effects of Medical Marijuana Laws on Marijuana Use</figcaption>
+</figure>
+</div>
+<p><strong>Interpretation:</strong> Medical marijuana laws increase consumption by ~3–4%, though effects are marginally significant (joint p = 0.15). Pre-trends are small and insignificant (p = 0.71), supporting parallel trends.</p>
+<hr>
+</section>
+<section id="t14-effect-of-second-treatment-recreational-marijuana-laws" class="level3" data-number="1.5.3">
+<h3 data-number="1.5.3" class="anchored" data-anchor-id="t14-effect-of-second-treatment-recreational-marijuana-laws"><span class="header-section-number">1.5.3</span> T14: Effect of Second Treatment (Recreational Marijuana Laws)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">egen</span> fg1 = <span class="fu">min</span>(<span class="fu">cond</span>(mm == 1, <span class="fu">year</span>, .)), <span class="kw">by</span>(state)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn ln_mj_use_365 state <span class="fu">year</span> rm <span class="kw">if</span> mm == 1, <span class="co">///</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    placebo(3) <span class="kw">effects</span>(3) trends_nonparam(fg1)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"ch09_fig8_marijuana_recreational.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>--------------------------------------------------------------------------------
+             Estimation of treatment effects: Event-study effects
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+    Effect_1 |  .0566549   .0226574   .0122473   .1010626         23          7
+    Effect_2 |   .100263    .061912  -.0210824   .2216083         16          5
+    Effect_3 |  .1693897   .1336577  -.0925745    .431354          8          2
+--------------------------------------------------------------------------------
+Test of joint nullity of the effects : p-value = .06567349
+
+  Av_tot_eff |  .0883342   .0407436   .0084782   .1681901         44         14
+Average number of time periods over which a treatment's effect is accumulated = 1.6429
+
+--------------------------------------------------------------------------------
+          Testing the parallel trends and no anticipation assumptions
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI          N  Switchers
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0079344   .0208247  -.0487501   .0328813         23          7
+   Placebo_2 |  .0113437   .0420547  -.0710819   .0937694         16          5
+   Placebo_3 |  .0148201   .0684662  -.1193712   .1490114          8          2
+--------------------------------------------------------------------------------
+Test of joint nullity of the placebos : p-value = .93253844</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch09_fig8_marijuana_recreational.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9.8: Effects of Recreational Marijuana Laws on Marijuana Use</figcaption>
+</figure>
+</div>
+<p><strong>Interpretation:</strong> Recreational laws increase consumption by ~6% in the short run and ~17% in the long run, though effects are marginally significant (p = 0.07). Note: effects are estimated for only 7 states (Effect_1), 5 (Effect_2), and 2 (Effect_3) — asymptotic approximations may be unreliable. Pre-trends are small and insignificant (p = 0.93).</p>
+<hr>
+</section>
+</section>
+<section id="summary" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.6</span> Summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 38%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Example</th>
+<th>Key Finding</th>
+<th>Pre-trends</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Deryugina (2017)</td>
+<td>Hurricanes ↑ gov. transfers 1–5%</td>
+<td>Significant — controls needed</td>
+</tr>
+<tr class="even">
+<td>East et al.&nbsp;(2023)</td>
+<td>Medicaid ↑ eligibility ↓ LBW ~0.09–0.29pp</td>
+<td>Insignificant ✓</td>
+</tr>
+<tr class="odd">
+<td>Gentzkow et al.&nbsp;(2011)</td>
+<td>+1 newspaper ↑ turnout 1.4–2.7pp</td>
+<td>Insignificant ✓</td>
+</tr>
+<tr class="even">
+<td>Hollingsworth et al.&nbsp;(2022)</td>
+<td>Medical: +3%; Recreational: +6–17%</td>
+<td>Insignificant ✓</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,716 @@
+# Applied Examples {#sec-applied}
+
+---
+
+## Applied Paper 1 — Li et al. (2014): Gasoline Taxes {#sec-li2014}
+
+## V.01 — Reduced Form {#sec-v01}
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_stat, replace
+use "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta", clear
+
+did_multiplegt_stat lngca id year tau, or(1) as_vs_was controls(lngpinc) cross_fitting(10)
+```
+
+```
+----------------------------------------------
+                                   Number of observations     =             1632
+                                   Estimation method          =    doubly-robust
+                                   Polynomial order           =              (1)
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                               Average Slope (AS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+          AS | -.0043121   .0027406  -.0096836   .0010594        384       1248 
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS | -.0035981    .001019  -.0055954  -.0016008        384       1248 
+ 
+--------------------------------------------------------------------------------
+ 
+                          Test of difference between AS and WAS
+H0: AS = WAS
+--------------------------------------------------------------------------------
+
+             |     Diff.         SE      LB CI      UB CI      pval.          t 
+-------------+------------------------------------------------------------------
+      AS-WAS | -.0007141   .0156983  -.0051552    .003727   .7526526  -.3151437 
+--------------------------------------------------------------------------------
+```
+
+### Python
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(estimator=["aoss","waoss"], order=1, controls=["lngpinc"],
+                       aoss_vs_waoss=True, cross_fitting=10, asinstata=True)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =             1632
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+Cross-fitting    =               10
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI       UB CI Switchers Stayers
+AS  -0.0058341  0.0027242  -0.0111735  -0.0004947       384   1,248
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0035015  0.0010193  -0.0054994  -0.0015036       384   1,248
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+       Estimate       SE     LB CI    UB CI   t stat.    pval.
+Diff.  -0.00233  0.01557  -0.00674  0.00207  -1.03786  0.29934
+```
+
+:::
+
+---
+
+## V.02 — First Stage {#sec-v02}
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_stat, replace
+use "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta", clear
+
+did_multiplegt_stat lngpinc id year tau, or(1) as_vs_was controls(lngpinc) cross_fitting(10)
+```
+
+```
+----------------------------------------------
+                                   Number of observations     =             1632
+                                   Estimation method          =    doubly-robust
+                                   Polynomial order           =              (1)
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                               Average Slope (AS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+          AS |   .003811   .0024335  -.0009586   .0085807        384       1248 
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  .0058237   .0009065    .004047   .0076005        384       1248 
+ 
+--------------------------------------------------------------------------------
+ 
+                          Test of difference between AS and WAS
+H0: AS = WAS
+--------------------------------------------------------------------------------
+
+             |     Diff.         SE      LB CI      UB CI      pval.          t 
+-------------+------------------------------------------------------------------
+      AS-WAS | -.0020127   .0132356  -.0057571   .0017317   .2920842   -1.05356 
+--------------------------------------------------------------------------------
+```
+
+### Python
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(estimator=["aoss","waoss"], order=1, controls=["lngpinc"],
+                       aoss_vs_waoss=True, cross_fitting=10, asinstata=True)
+m.fit(gazoline, Y="lngpinc", ID="id", Time="year", D="tau")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =             1632
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+Cross-fitting    =               10
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+     Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  0.0033850  0.0024339  -0.0013855  0.0081554       384   1,248
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0053933  0.0009005  0.0036282  0.0071583       384   1,248
+
+----------------------------------------------------------------------
+               Difference test: AOSS and WAOSS
+----------------------------------------------------------------------
+H0: AOSS = WAOSS
+       Estimate       SE     LB CI    UB CI   t stat.    pval.
+Diff.  -0.00201  0.01330  -0.00577  0.00175  -1.04641  0.29537
+```
+
+:::
+
+---
+
+## V.03 — IV-WAS {#sec-v03}
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_stat, replace
+use "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta", clear
+
+did_multiplegt_stat lngca id year lngpinc tau, or(1) controls(lngpinc) cross_fitting(10) bootstrap(10) seed(1)
+```
+
+```
+You specified the 5th input variable (Instrumental variable) which is only compatible with the iv-was estimator.
+Therefore your estimator will be replaced by iv-was.
+--------------------------------------------------------------------------------
+                              First stage estimation
+--------------------------------------------------------------------------------
+                                  ----------------------------------------------
+                                   Number of observations     =             1632
+                                   Estimation method          =    doubly-robust
+                                   Polynomial order           =              (1)
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  .0058237   .0009065    .004047   .0076005        384       1248 
+ 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+                                  ----------------------------------------------
+                                   Number of observations     =             1632
+                                   IV-WAS Estimation method   =    doubly-robust
+                                   Polynomial order           =              (1)
+                                  ----------------------------------------------
+                                     (Bootstrap Std. err. from 10 replications.)
+--------------------------------------------------------------------------------
+                         IV-Weighted Average Slope (IV-WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+      IV-WAS | -.6178301   1.313182  -1.166969    3.51248        384       1248 
+ 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+                                  ----------------------------------------------
+                                   Number of observations     =             1059
+                                   Estimation method          =    doubly-robust
+                                   Polynomial order           =              (1)
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  -.002679   .0011677  -.0049677  -.0003903        178        881 
+ 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+                                  ----------------------------------------------
+                                   Number of observations     =             1059
+                                   Estimation method          =    doubly-robust
+                                   Polynomial order           =              (1)
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  .0050699   .0011968   .0027241   .0074156        178        881 
+ 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+. /***********************************************************************
+
+
+================================================================
+
+
+================================================================
+
+
+
+                                  ----------------------------------------------
+```
+
+### Python
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+m = DIDMultiplegtStat(estimator=["ivwaoss"], order=1, controls=["lngpinc"],
+                       cross_fitting=10, bootstrap=10, seed=1, asinstata=True)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="lngpinc", Z="tau")
+m.summary()
+```
+
+```
+                              First stage estimation
+Bootstrap (10 replications)...
+
+-----------------------------------
+N                =               48
+IVWAOSS Method   =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+Cross-fitting    =               10
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of IVWAOSS(s)
+----------------------------------------------------------------------
+          Estimate         SE       LB CI       UB CI Switchers Stayers
+IV-WAS  -0.6637077  0.2618955  -1.0605345  -0.2339641       384   1,248
+
+                              First stage estimation
+
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+Cross-fitting    =               10
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0053933  0.0009005  0.0036282  0.0071583       384   1,248
+```
+
+:::
+
+---
+
+## V.04–V.05 — On Placebo Sample {#sec-v04}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+
+gazoline = pd.read_stata(
+    "https://github.com/chaisemartinPackages/ApplicationData/raw/main/data_gazoline.dta"
+)
+
+# V.04 — reduced form on placebo sample
+m = DIDMultiplegtStat(estimator=["waoss"], order=1, controls=["lngpinc"],
+                       cross_fitting=10, on_placebo_sample=True, asinstata=True)
+m.fit(gazoline, Y="lngca", ID="id", Time="year", D="tau"); m.summary()
+
+# V.05 — first stage on placebo sample
+m = DIDMultiplegtStat(estimator=["waoss"], order=1, controls=["lngpinc"],
+                       cross_fitting=10, on_placebo_sample=True, asinstata=True)
+m.fit(gazoline, Y="lngpinc", ID="id", Time="year", D="tau"); m.summary()
+```
+
+```
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+Cross-fitting    =               10
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+       Estimate         SE       LB CI       UB CI Switchers Stayers
+WAS  -0.0042495  0.0011510  -0.0065055  -0.0019935       178     881
+
+-----------------------------------
+N                =               48
+WAOSS Method     =    Doubly Robust
+Polynomial Order =                1
+Controls         =          lngpinc
+Cross-fitting    =               10
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0052668  0.0012068  0.0029016  0.0076321       178     881
+```
+
+---
+
+## Applied Paper 2 — Gentzkow et al. (2011): Newspapers {#sec-gentzkow}
+
+## VI.01 — Exact Match, Placebo 1 {#sec-vi01}
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_stat, replace
+use "https://raw.githubusercontent.com/anzonyquispe/did_book/main/did_applied_book/data/gentzkowetal_didtextbook.dta", clear
+
+did_multiplegt_stat prestout cnty90 year numdailies, placebo(1) exact_match
+```
+
+```
+----------------------------------------------
+                                   Number of observations     =            15466
+                                   Estimation method          =  reg. adjustment
+                                   Common support*            =   exact matching
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                               Average Slope (AS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+          AS |  .0060678   .0016463    .002841   .0092947       4423      11043 
+--------------------------------------------------------------------------------
+                                 Placebo(s) AS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0011278   .0025056  -.0060387   .0037832       2287       7743 
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  .0057351   .0015079   .0027796   .0086905       4423      11043 
+--------------------------------------------------------------------------------
+                                 Placebo(s) WAS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0000123   .0022931  -.0045069   .0044822       2287       7743 
+ 
+--------------------------------------------------------------------------------
+* : 141 switchers are dropped out of the estimation because their baseline 
+ treatments do not belong to the support of stayers' baseline treatments.
+* : 22 stayers are dropped out of the estimation because their baseline 
+ treatments do not belong to the support of switchers' baseline treatments.
+--------------------------------------------------------------------------------
+```
+
+### Python
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+
+gentzkow = pd.read_stata(
+    "https://raw.githubusercontent.com/anzonyquispe/did_book/main/did_applied_book/data/gentzkowetal_didtextbook.dta"
+)
+
+m = DIDMultiplegtStat(estimator=["aoss","waoss"], exact_match=True,
+                       placebo=1, asinstata=True)
+m.fit(gentzkow, Y="prestout", ID="cnty90", Time="year", D="numdailies")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =            15466
+WAOSS Method     =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+     Estimate         SE      LB CI      UB CI Switchers Stayers
+AS  0.0060724  0.0016308  0.0028759  0.0092688     4,423  11,043
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0011280  0.0025056  -0.0060389  0.0037829     2,287   7,743
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0057194  0.0014903  0.0027984  0.0086404     4,423  11,043
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0000125  0.0022931  -0.0045071  0.0044820     2,287   7,743
+```
+
+:::
+
+---
+
+## VI.02 — By Baseline, Exact Match {#sec-vi02}
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_stat, replace
+use "https://raw.githubusercontent.com/anzonyquispe/did_book/main/did_applied_book/data/gentzkowetal_didtextbook.dta", clear
+
+did_multiplegt_stat prestout cnty90 year numdailies, placebo(1) exact_match by_baseline(2)
+```
+
+```
+--------------------------------------------------------------------------------
+                         Baseline D in [0; 1]
+--------------------------------------------------------------------------------
+                                  ----------------------------------------------
+                                   Number of observations     =             9688
+                                   Estimation method          =  reg. adjustment
+                                   Common support             =   exact matching
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                               Average Slope (AS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+          AS |  .0086298   .0021366   .0044422   .0128175       2047       7641 
+--------------------------------------------------------------------------------
+                                 Placebo(s) AS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0025744   .0029822  -.0084195   .0032707       1300       5712 
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  .0079922   .0019323   .0042049   .0117796       2047       7641 
+--------------------------------------------------------------------------------
+                                 Placebo(s) WAS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 | -.0005939   .0026724  -.0058318   .0046441       1300       5712 
+ 
+--------------------------------------------------------------------------------
+* : 3424 stayers are dropped out of the estimation because their baseline 
+ treatments do not belong to the support of switchers' baseline treatments.
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+                         Baseline D in ]1; 45]
+--------------------------------------------------------------------------------
+                                  ----------------------------------------------
+                                   Number of observations     =             5778
+                                   Estimation method          =  reg. adjustment
+                                   Common support*            =   exact matching
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                               Average Slope (AS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+          AS |  .0039795   .0028176  -.0015431   .0095021       2376       3402 
+--------------------------------------------------------------------------------
+                                 Placebo(s) AS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 |  .0009864   .0045295  -.0078915   .0098643        987       2031 
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  .0039586   .0025661  -.0010709   .0089881       2376       3402 
+--------------------------------------------------------------------------------
+                                 Placebo(s) WAS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 |   .001051   .0041471  -.0070774   .0091794        987       2031 
+ 
+--------------------------------------------------------------------------------
+* : 141 switchers are dropped out of the estimation because their baseline 
+ treatments do not belong to the support of stayers' baseline treatments.
+* : 7663 stayers are dropped out of the estimation because their baseline 
+ treatments do not belong to the support of switchers' baseline treatments.
+--------------------------------------------------------------------------------
+
+. log close
+      name:  <unnamed>
+       log:  C:\Users\Usuario\Documents\GitHub\py_did_multiplegt_stat\stat_python\logfile_stat.log
+  log type:  text
+ closed on:  18 Jun 2026, 00:54:12
+-----------------------------------------------------------------------------------------------------------------
+```
+
+### Python
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+
+gentzkow = pd.read_stata(
+    "https://raw.githubusercontent.com/anzonyquispe/did_book/main/did_applied_book/data/gentzkowetal_didtextbook.dta"
+)
+
+m = DIDMultiplegtStat(estimator=["aoss","waoss"], exact_match=True,
+                       placebo=1, by_baseline=2, asinstata=True)
+m.fit(gentzkow, Y="prestout", ID="cnty90", Time="year", D="numdailies")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =            10083
+WAOSS Method     =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+     Estimate         SE      LB CI      UB CI Switchers Stayers
+AS  0.0071402  0.0014247  0.0043477  0.0099326     2,968   7,115
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0003443  0.0020098  -0.0042834  0.0035949     1,806   7,115
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0066023  0.0013099  0.0040349  0.0091697     2,968   7,115
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0008213  0.0018347  -0.0027748  0.0044173     1,806   7,115
+
+
+-----------------------------------
+N                =             1874
+WAOSS Method     =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+     Estimate         SE       LB CI      UB CI Switchers Stayers
+AS  0.0032242  0.0035413  -0.0037168  0.0101651     1,229     645
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0041784  0.0077763  -0.0194199  0.0110631       481     628
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+WAS  0.0034538  0.0033505  -0.0031132  0.0100208     1,229     645
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0030316  0.0070917  -0.0169313  0.0108680       481     628
+```
+
+:::
+
+---
+

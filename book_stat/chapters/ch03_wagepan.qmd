@@ -1,0 +1,339 @@
+# Wagepan: Exact Match {#sec-wagepan}
+
+**Data:** `wagepan` — 545 workers, 8 years (1980–1987).  
+**Outcome:** `lwage`. **Treatment:** `union` (binary).
+
+---
+
+## IV.01 — Binary Treatment: `union` {#sec-iv01}
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_stat, replace
+ssc install bcuse, replace
+bcuse wagepan, clear
+
+did_multiplegt_stat lwage nr year union, estimator(was) exact_match placebo(1)
+```
+
+```
+----------------------------------------------
+                                   Number of observations     =             3815
+                                   Estimation method          =  reg. adjustment
+                                   Common support             =   exact matching
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  .0261226   .0224862  -.0179503   .0701955        508       3307 
+--------------------------------------------------------------------------------
+                                 Placebo(s) WAS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 |  .0993211    .032164   .0362796   .1623626        247       2595 
+ 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+. set seed 12345
+```
+
+### Python
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import numpy as np
+import wooldridge
+from did_multiplegt_stat import DIDMultiplegtStat
+
+wagepan = wooldridge.data("wagepan")
+
+m = DIDMultiplegtStat(estimator=["waoss"], exact_match=True, placebo=1, asinstata=True)
+m.fit(wagepan, Y="lwage", ID="nr", Time="year", D="union")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =              545
+WAOSS Method     =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+WAS  0.0261226  0.0224862  -0.0179503  0.0701955       508   3,307
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE      LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0993211  0.0321640  0.0362795  0.1623626       247   2,595
+  Runtime: 1.19s
+```
+
+:::
+
+---
+
+## IV.02 — Discrete Treatment: `dis_u` {#sec-iv02}
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+ssc install did_multiplegt_stat, replace
+ssc install bcuse, replace
+bcuse wagepan, clear
+
+set seed 12345
+gen dis_u = runiformint(1, 5) + union
+gen lwage2 = lwage + 3*dis_u
+did_multiplegt_stat lwage2 nr year dis_u, estimator(was as) exact_match placebo(1)
+```
+
+```
+. set seed 12345
+
+
+
+                                  ----------------------------------------------
+                                   Number of observations     =             3815
+                                   Estimation method          =  reg. adjustment
+                                   Common support             =   exact matching
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                               Average Slope (AS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+          AS |  3.007353    .007713   2.992235    3.02247       3065        750 
+--------------------------------------------------------------------------------
+                                 Placebo(s) AS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 |  .0332532   .0381158  -.0414538   .1079601        499        115 
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  3.007869    .006742   2.994655   3.021084       3065        750 
+--------------------------------------------------------------------------------
+                                 Placebo(s) WAS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 |  .0218425   .0361303  -.0489729   .0926579        499        115 
+ 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+                              First stage estimation
+--------------------------------------------------------------------------------
+                                  ----------------------------------------------
+                                   Number of observations     =             3815
+                                   Estimation method          =  reg. adjustment
+                                   Common support             =   exact matching
+                                  ----------------------------------------------
+--------------------------------------------------------------------------------
+                           Weighted Average Slope (WAS)
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+         WAS |  .8889526   .1135999   .6662969   1.111608        508       3307 
+--------------------------------------------------------------------------------
+                                 Placebo(s) WAS
+--------------------------------------------------------------------------------
+
+             |  Estimate         SE      LB CI      UB CI  Switchers    Stayers 
+-------------+------------------------------------------------------------------
+   Placebo_1 |  .3281657   .1311108   .0711886   .5851428        247       2595
+```
+
+### Python
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import numpy as np
+import wooldridge
+from did_multiplegt_stat import DIDMultiplegtStat
+
+wagepan = wooldridge.data("wagepan")
+
+rng = np.random.default_rng(12345)
+wagepan2 = wagepan.copy()
+wagepan2["dis_u"]  = rng.integers(1, 6, size=len(wagepan)) + wagepan["union"]
+wagepan2["lwage2"] = wagepan["lwage"] + 3 * wagepan2["dis_u"]
+
+m = DIDMultiplegtStat(estimator=["waoss","aoss"], exact_match=True, placebo=1, asinstata=True)
+m.fit(wagepan2, Y="lwage2", ID="nr", Time="year", D="dis_u")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =             3815
+WAOSS Method     =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  3.0067371  0.0063037  2.9943818  3.0190924     3,066     749
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0059617  0.0218461  -0.0487801  0.0368566       519     116
+
+----------------------------------------------------------------------
+                    Estimation of AOSS(s)
+----------------------------------------------------------------------
+     Estimate         SE      LB CI      UB CI Switchers Stayers
+AS  3.0037169  0.0074543  2.9891064  3.0183274     3,066     749
+
+----------------------------------------------------------------------
+               Estimation of AOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0198865  0.0267513  -0.0723191  0.0325460       519     116
+```
+
+:::
+
+---
+
+## IV.03 — IV-WAS with Exact Match {#sec-iv03}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import numpy as np
+import wooldridge
+from did_multiplegt_stat import DIDMultiplegtStat
+
+wagepan = wooldridge.data("wagepan")
+
+rng = np.random.default_rng(12345)
+wagepan2 = wagepan.copy()
+wagepan2["dis_u"]  = rng.integers(1, 6, size=len(wagepan)) + wagepan["union"]
+wagepan2["lwage2"] = wagepan["lwage"] + 3 * wagepan2["dis_u"]
+
+m = DIDMultiplegtStat(estimator=["ivwaoss"], exact_match=True, placebo=1, asinstata=True)
+m.fit(wagepan2, Y="lwage2", ID="nr", Time="year", D="dis_u", Z="union")
+m.summary()
+```
+
+```
+                              First stage estimation
+
+-----------------------------------
+N                =              545
+IVWAOSS Method   =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of IVWAOSS(s)
+----------------------------------------------------------------------
+         Estimate         SE      LB CI      UB CI Switchers Stayers
+IV-WAS  3.0265266  0.1710133  2.6913406  3.3617126       508   3,307
+
+----------------------------------------------------------------------
+               Estimation of IVWAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                    Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_ivwaoss  0.0831820  2.9004038  -5.6016094  5.7679734       247   2,595
+
+                              First stage estimation
+
+-----------------------------------
+N                =              545
+WAOSS Method     =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.9847691  0.1043792  0.7801858  1.1893524       508   3,307
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                   Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  -0.0059217  0.1320987  -0.2648350  0.2529917       247   2,595
+```
+
+---
+
+## IV.04 — Other Treatments {#sec-iv04}
+
+```python
+import warnings
+warnings.filterwarnings("ignore")
+import numpy as np
+import wooldridge
+from did_multiplegt_stat import DIDMultiplegtStat
+
+wagepan = wooldridge.data("wagepan")
+
+wagepan3 = wagepan.copy()
+wagepan3["othertreat"]  = (wagepan["lwage"] > 1.5).astype(int)
+wagepan3["othertreat2"] = ((wagepan["lwage"] < 1) | (wagepan["lwage"] > 2)).astype(int)
+
+m = DIDMultiplegtStat(estimator=["waoss"], exact_match=True, placebo=1,
+                       other_treatments=["othertreat","othertreat2"], asinstata=True)
+m.fit(wagepan3, Y="lwage", ID="nr", Time="year", D="union")
+m.summary()
+```
+
+```
+-----------------------------------
+N                =              545
+WAOSS Method     =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of WAOSS(s)
+----------------------------------------------------------------------
+      Estimate         SE       LB CI      UB CI Switchers Stayers
+WAS  0.0097421  0.0103923  -0.0106269  0.0301110       317   2,105
+
+----------------------------------------------------------------------
+               Estimation of WAOSS(s) - Placebo(s)
+----------------------------------------------------------------------
+                  Estimate         SE      LB CI      UB CI Switchers Stayers
+Placebo_1_waoss  0.0700272  0.0247435  0.0215299  0.1185245       139   1,376
+```
+
+---
+
