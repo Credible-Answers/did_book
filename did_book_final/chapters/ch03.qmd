@@ -84,10 +84,10 @@ plt.show()
 copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 
-* Ejemplo 1: xtreg
+* Option 1: xtreg
 xtreg patents twea i.year, fe i(subclass) robust cluster(subclass)
 
-* Ejemplo 2: reghdfe
+* Option 2: reghdfe
 reghdfe patents twea, absorb(subclass year) cluster(subclass)
 ```
 
@@ -315,10 +315,10 @@ print(m3.summary())
 copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 forvalues l = 1/18 {
-    gen reltimeminus`l' = treatmentgroup * (year == 1918 - `l')
+    cap gen reltimeminus`l' = treatmentgroup * (year == 1918 - `l')
 }
 forvalues l = 1/21 {
-    gen reltimeplus`l' = treatmentgroup * (year == 1918 + `l')
+    cap gen reltimeplus`l' = treatmentgroup * (year == 1918 + `l')
 }
 reg patents i.year treatmentgroup reltimeminus* reltimeplus*, cluster(subclass)
 
@@ -440,7 +440,25 @@ reltimeplus1 coef:        0.02352017
 copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 reg patents i.year treatmentgroup reltimeminus* reltimeplus*, cluster(subclass)
-coefplot, keep(reltimeminus* reltimeplus*) vertical yline(0) xline(18.5, lpattern(dash)) xtitle("Relative time to year before TWEA") ytitle("Effect") title("TWFE Event-study estimates") ciopts(recast(rcap) color(cranberry))
+
+local leads ""
+forvalues l = 18(-1)1 {
+    local leads "`leads' reltimeminus`l'"
+}
+local lags ""
+forvalues l = 1(1)21 {
+    local lags "`lags' reltimeplus`l'"
+}
+
+coefplot, keep(reltimeminus* reltimeplus*) ///
+    order(`leads' `lags'') ///
+    vertical yline(0, lcolor(gs12) lpattern(solid)) xline(18.5, lpattern(dash)) ///
+    title("TWFE Event-study estimates") ///
+    xtitle("Relative time to year before TWEA") ytitle("Effect") ///
+    scheme(s2mono) ///
+    mcolor(gs4) ciopts(lcolor(gs4)) connect(l) lcolor(gs4) msymbol(O) msize(small) ///
+    xlabel(1 "-18" 4 "-15" 7 "-12" 10 "-9" 13 "-6" 16 "-3" 18.5 "0" 21 "3" 24 "6" 27 "9" ///
+           30 "12" 33 "15" 36 "18" 39 "21", noticks)
 graph export "figures/ch03_fig32_es_twfe.png", replace width(1200)
 ```
 
@@ -525,10 +543,10 @@ plt.savefig("figures/ch03_fig32_es_twfe_Python.png", dpi=150, bbox_inches="tight
 copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 forvalues l = 1/18 {
-    gen reltimeminus`l' = treatmentgroup * (year == 1918 - `l')
+    cap gen reltimeminus`l' = treatmentgroup * (year == 1918 - `l')
 }
 forvalues l = 1/21 {
-    gen reltimeplus`l' = treatmentgroup * (year == 1918 + `l')
+    cap gen reltimeplus`l' = treatmentgroup * (year == 1918 + `l')
 }
 reghdfe patents reltimeminus* reltimeplus*, absorb(treatmentgroup year) cluster(subclass)
 pretrends power 0.5, numpre(6)
@@ -614,7 +632,7 @@ Slope for 50% power (numpre=6): 0.0098252
 copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 forvalues l = 1/21 {
-    gen reltimeplus`l' = treatmentgroup * (year == 1918 + `l')
+    cap gen reltimeplus`l' = treatmentgroup * (year == 1918 + `l')
 }
 reg patents i.yearpost treatmentgroup reltimeplus*, cluster(subclass)
 ```
@@ -754,7 +772,16 @@ estimates store m1
 reg patents i.yearpost treatmentgroup reltimeplus*, cluster(subclass)
 estimates store m2
 
-coefplot (m1, label("With Pre-Periods") mcolor(gs10) ciopts(lcolor(gs10)) connect(l) lcolor(gs10) msymbol(O) msize(small)) (m2, label("Without Pre-Periods") mcolor(gs4) ciopts(lcolor(gs4)) connect(l) lcolor(gs4) msymbol(O) msize(small)), keep(reltimeplus*) vertical yline(0, lcolor(gs12) lpattern(solid)) title("TWFE Event-study estimates") xtitle("Relative time to year before TWEA") ytitle("Effect") legend(rows(1) position(6)) scheme(s2mono) rename(reltimeplus1="0" reltimeplus4="3" reltimeplus7="6" reltimeplus10="9" reltimeplus13="12" reltimeplus16="15" reltimeplus19="18" reltimeplus21="21" reltimeplus2=" " reltimeplus3=" " reltimeplus5=" " reltimeplus6=" " reltimeplus8=" " reltimeplus9=" " reltimeplus11=" " reltimeplus12=" " reltimeplus14=" " reltimeplus15=" " reltimeplus17=" " reltimeplus18=" " reltimeplus20=" ")
+coefplot (m1, label("With Pre-Periods") mcolor(gs10) ciopts(lcolor(gs10)) connect(l) lcolor(gs10) msymbol(O) msize(small)) ///
+         (m2, label("Without Pre-Periods") mcolor(gs4) ciopts(lcolor(gs4)) connect(l) lcolor(gs4) msymbol(O) msize(small)), ///
+    keep(reltimeplus*) vertical ///
+    yline(0, lcolor(gs12) lpattern(solid)) ///
+    title("TWFE Event-study estimates") ///
+    xtitle("Relative time to year before TWEA") ///
+    ytitle("Effect") ///
+    legend(rows(1) position(6)) ///
+    scheme(s2mono) ///
+    xlabel(1 "0" 4 "3" 7 "6" 10 "9" 13 "12" 16 "15" 19 "18" 21 "21", noticks)
 graph export "figures/ch03_fig35_comparison.png", replace width(1200)
 ```
 

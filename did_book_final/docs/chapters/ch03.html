@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>1&nbsp; Chapter 3: The Classical DID Design – Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -69,15 +75,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -107,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -339,10 +344,10 @@ window.Quarto = {
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta"</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>* Ejemplo 1: <span class="kw">xtreg</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>* Option 1: <span class="kw">xtreg</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">xtreg</span> patents twea i.<span class="fu">year</span>, <span class="kw">fe</span> i(subclass) <span class="kw">robust</span> <span class="kw">cluster</span>(subclass)</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>* Ejemplo 2: reghdfe</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>* Option 2: reghdfe</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>reghdfe patents twea, absorb(subclass <span class="fu">year</span>) <span class="kw">cluster</span>(subclass)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Both commands yield the same coefficient:
                            (Std. err. adjusted for 7,248 clusters in subclass)
@@ -525,10 +530,10 @@ treatmentgroup -0.178087   0.033815 -5.26649 1.4306e-07 ***</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta"</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="ot">l</span> = 1/18 {</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> reltimeminus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 - <span class="ot">`l'</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    cap <span class="kw">gen</span> reltimeminus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 - <span class="ot">`l'</span>)</span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="ot">l</span> = 1/21 {</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> reltimeplus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 + <span class="ot">`l'</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    cap <span class="kw">gen</span> reltimeplus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 + <span class="ot">`l'</span>)</span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> patents i.<span class="fu">year</span> treatmentgroup reltimeminus* reltimeplus*, <span class="kw">cluster</span>(subclass)</span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
@@ -628,8 +633,26 @@ reltimeplus1 coef:        0.02352017</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta"</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> patents i.<span class="fu">year</span> treatmentgroup reltimeminus* reltimeplus*, <span class="kw">cluster</span>(subclass)</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>coefplot, <span class="kw">keep</span>(reltimeminus* reltimeplus*) vertical <span class="kw">yline</span>(0) <span class="bn">xline</span>(18.5, lpattern(<span class="kw">dash</span>)) <span class="bn">xtitle</span>(<span class="st">"Relative time to year before TWEA"</span>) <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="bn">title</span>(<span class="st">"TWFE Event-study estimates"</span>) ciopts(<span class="kw">recast</span>(rcap) <span class="kw">color</span>(<span class="bn">cranberry</span>))</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch03_fig32_es_twfe.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> leads <span class="st">""</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="ot">l</span> = 18(-1)1 {</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> leads <span class="st">"`leads' reltimeminus`l'"</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> lags <span class="st">""</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="ot">l</span> = 1(1)21 {</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> lags <span class="st">"`lags' reltimeplus`l'"</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>coefplot, <span class="kw">keep</span>(reltimeminus* reltimeplus*) <span class="co">///</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">order</span>(<span class="ot">`leads'</span> <span class="ot">`lags'</span>') <span class="co">///</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>    vertical <span class="kw">yline</span>(0, lcolor(gs12) lpattern(solid)) <span class="bn">xline</span>(18.5, lpattern(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    <span class="bn">title</span>(<span class="st">"TWFE Event-study estimates"</span>) <span class="co">///</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>    <span class="bn">xtitle</span>(<span class="st">"Relative time to year before TWEA"</span>) <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="co">///</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>    <span class="dv">scheme</span>(s2mono) <span class="co">///</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>    mcolor(gs4) ciopts(lcolor(gs4)) <span class="kw">connect</span>(<span class="ot">l</span>) lcolor(gs4) <span class="bn">msymbol</span>(O) msize(small) <span class="co">///</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">xlabel</span>(1 <span class="st">"-18"</span> 4 <span class="st">"-15"</span> 7 <span class="st">"-12"</span> 10 <span class="st">"-9"</span> 13 <span class="st">"-6"</span> 16 <span class="st">"-3"</span> 18.5 <span class="st">"0"</span> 21 <span class="st">"3"</span> 24 <span class="st">"6"</span> 27 <span class="st">"9"</span> <span class="co">///</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>           30 <span class="st">"12"</span> 33 <span class="st">"15"</span> 36 <span class="st">"18"</span> 39 <span class="st">"21"</span>, noticks)</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch03_fig32_es_twfe.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../figures/ch03_fig32_es_twfe.png" class="img-fluid figure-img"></p>
@@ -720,10 +743,10 @@ reltimeplus1 coef:        0.02352017</code></pre>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta"</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="ot">l</span> = 1/18 {</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> reltimeminus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 - <span class="ot">`l'</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    cap <span class="kw">gen</span> reltimeminus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 - <span class="ot">`l'</span>)</span>
 <span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="ot">l</span> = 1/21 {</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> reltimeplus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 + <span class="ot">`l'</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    cap <span class="kw">gen</span> reltimeplus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 + <span class="ot">`l'</span>)</span>
 <span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>reghdfe patents reltimeminus* reltimeplus*, absorb(treatmentgroup <span class="fu">year</span>) <span class="kw">cluster</span>(subclass)</span>
 <span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>pretrends power 0.5, numpre(6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -794,7 +817,7 @@ reltimeplus1 coef:        0.02352017</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta"</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="ot">l</span> = 1/21 {</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> reltimeplus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 + <span class="ot">`l'</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    cap <span class="kw">gen</span> reltimeplus<span class="ot">`l'</span> = treatmentgroup * (<span class="fu">year</span> == 1918 + <span class="ot">`l'</span>)</span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> patents i.yearpost treatmentgroup reltimeplus*, <span class="kw">cluster</span>(subclass)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>                             (Std. err. adjusted for 7,248 clusters in subclass)
@@ -919,8 +942,17 @@ RMSE: 1.337 R2: 0.026 R2 Within: 0.001</code></pre>
 <span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> patents i.yearpost treatmentgroup reltimeplus*, <span class="kw">cluster</span>(subclass)</span>
 <span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> m2</span>
 <span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>coefplot (m1, <span class="kw">label</span>(<span class="st">"With Pre-Periods"</span>) mcolor(gs10) ciopts(lcolor(gs10)) <span class="kw">connect</span>(<span class="ot">l</span>) lcolor(gs10) <span class="bn">msymbol</span>(O) msize(small)) (m2, <span class="kw">label</span>(<span class="st">"Without Pre-Periods"</span>) mcolor(gs4) ciopts(lcolor(gs4)) <span class="kw">connect</span>(<span class="ot">l</span>) lcolor(gs4) <span class="bn">msymbol</span>(O) msize(small)), <span class="kw">keep</span>(reltimeplus*) vertical <span class="kw">yline</span>(0, lcolor(gs12) lpattern(solid)) <span class="bn">title</span>(<span class="st">"TWFE Event-study estimates"</span>) <span class="bn">xtitle</span>(<span class="st">"Relative time to year before TWEA"</span>) <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="bn">legend</span>(<span class="bn">rows</span>(1) <span class="bn">position</span>(6)) <span class="dv">scheme</span>(s2mono) <span class="kw">rename</span>(reltimeplus1=<span class="st">"0"</span> reltimeplus4=<span class="st">"3"</span> reltimeplus7=<span class="st">"6"</span> reltimeplus10=<span class="st">"9"</span> reltimeplus13=<span class="st">"12"</span> reltimeplus16=<span class="st">"15"</span> reltimeplus19=<span class="st">"18"</span> reltimeplus21=<span class="st">"21"</span> reltimeplus2=<span class="st">" "</span> reltimeplus3=<span class="st">" "</span> reltimeplus5=<span class="st">" "</span> reltimeplus6=<span class="st">" "</span> reltimeplus8=<span class="st">" "</span> reltimeplus9=<span class="st">" "</span> reltimeplus11=<span class="st">" "</span> reltimeplus12=<span class="st">" "</span> reltimeplus14=<span class="st">" "</span> reltimeplus15=<span class="st">" "</span> reltimeplus17=<span class="st">" "</span> reltimeplus18=<span class="st">" "</span> reltimeplus20=<span class="st">" "</span>)</span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch03_fig35_comparison.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>coefplot (m1, <span class="kw">label</span>(<span class="st">"With Pre-Periods"</span>) mcolor(gs10) ciopts(lcolor(gs10)) <span class="kw">connect</span>(<span class="ot">l</span>) lcolor(gs10) <span class="bn">msymbol</span>(O) msize(small)) <span class="co">///</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>         (m2, <span class="kw">label</span>(<span class="st">"Without Pre-Periods"</span>) mcolor(gs4) ciopts(lcolor(gs4)) <span class="kw">connect</span>(<span class="ot">l</span>) lcolor(gs4) <span class="bn">msymbol</span>(O) msize(small)), <span class="co">///</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">keep</span>(reltimeplus*) vertical <span class="co">///</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yline</span>(0, lcolor(gs12) lpattern(solid)) <span class="co">///</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>    <span class="bn">title</span>(<span class="st">"TWFE Event-study estimates"</span>) <span class="co">///</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    <span class="bn">xtitle</span>(<span class="st">"Relative time to year before TWEA"</span>) <span class="co">///</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>    <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="co">///</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>    <span class="bn">legend</span>(<span class="bn">rows</span>(1) <span class="bn">position</span>(6)) <span class="co">///</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>    <span class="dv">scheme</span>(s2mono) <span class="co">///</span></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">xlabel</span>(1 <span class="st">"0"</span> 4 <span class="st">"3"</span> 7 <span class="st">"6"</span> 10 <span class="st">"9"</span> 13 <span class="st">"12"</span> 16 <span class="st">"15"</span> 19 <span class="st">"18"</span> 21 <span class="st">"21"</span>, noticks)</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch03_fig35_comparison.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../figures/ch03_fig35_comparison.png" class="img-fluid figure-img"></p>
