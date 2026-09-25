@@ -12,4 +12,4 @@ for (p in names(github)) {
 }
 
 dir.create("figures", showWarnings = FALSE, recursive = TRUE)
-# call from Github source("https://raw.githubusercontent.com/Credible-Answers/did_book/Version2/did_book_final/requirements/setup.R")
+# call from Github source("https://raw.githubusercontent.com/Credible-Answers/did_book/blob/Version2/did_book_final/requirements/setup.R")
