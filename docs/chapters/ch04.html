@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>2&nbsp; Chapter 4: Alternatives to Parallel Trends – Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -69,15 +75,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch03.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -107,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -814,7 +819,7 @@ Test of joint nullity of the placebos : p-value = 1.685e-12</code></pre>
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install fect, <span class="kw">replace</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>* net install fect, from(https:<span class="co">//raw.githubusercontent.com/xuyiqing/fect_stata/master/) replace</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta"</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"moser_voena_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>* Cross-validation</span>
@@ -877,31 +882,32 @@ IFE ATT = 0.296834</code></pre>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span> b_twfe = <span class="fu">e</span>(b)</span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span> V_twfe = <span class="fu">vecdiag</span>(<span class="fu">e</span>(<span class="kw">V</span>))</span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>fect patents, treat(twea) unit(subclass) time(<span class="fu">year</span>) method(<span class="st">"ife"</span>) <span class="fu">r</span>(2) tol(1e-4) se</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span> ife_atts = <span class="fu">e</span>(ATTs)</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 21</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> x = <span class="dt">_n</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> coef_twfe = .</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> se_twfe = .</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> coef_ife = .</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_ife_lo = .</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_ife_hi = .</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/21 {</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef_twfe = b_twfe[1, 59 + <span class="ot">`i'</span>] <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> se_twfe = <span class="fu">sqrt</span>(V_twfe[1, 59 + <span class="ot">`i'</span>]) <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef_ife = ife_atts[19 + <span class="ot">`i'</span>, 3] <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> ci_ife_lo = ife_atts[19 + <span class="ot">`i'</span>, 6] <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> ci_ife_hi = ife_atts[19 + <span class="ot">`i'</span>, 7] <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_twfe_lo = coef_twfe - 1.96*se_twfe</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_twfe_hi = coef_twfe + 1.96*se_twfe</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (rcap ci_twfe_hi ci_twfe_lo x, lcolor(gs10)) (connected coef_twfe x, lcolor(gs10) mcolor(gs10) <span class="bn">msymbol</span>(O) msize(vsmall)) (rcap ci_ife_hi ci_ife_lo x, lcolor(gs4)) (connected coef_ife x, lcolor(gs4) mcolor(gs4) <span class="bn">msymbol</span>(O) msize(vsmall)), <span class="kw">yline</span>(0, lcolor(gs12)) <span class="bn">title</span>(<span class="st">"Event-study estimates"</span>) <span class="bn">xtitle</span>(<span class="st">"Years after TWEA"</span>) <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="kw">xlabel</span>(1 <span class="st">"1"</span> 6 <span class="st">"6"</span> 11 <span class="st">"11"</span> 16 <span class="st">"16"</span> 21 <span class="st">"21"</span>) <span class="bn">legend</span>(<span class="kw">order</span>(2 <span class="st">"TWFE"</span> 4 <span class="st">"IFE"</span>) <span class="bn">rows</span>(1) <span class="bn">position</span>(6)) <span class="dv">scheme</span>(s2mono) <span class="kw">ylabel</span>(-.5(.25)1.5)</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch04_fig43_ife_twfe.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>fect patents, treat(twea) unit(subclass) time(<span class="fu">year</span>) method(<span class="st">"ife"</span>) <span class="fu">r</span>(2) tol(1e-4) se</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span> ife_atts = <span class="fu">e</span>(ATTs)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 21</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> x = <span class="dt">_n</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> coef_twfe = .</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> se_twfe = .</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> coef_ife = .</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_ife_lo = .</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_ife_hi = .</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/21 {</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef_twfe = b_twfe[1, 59 + <span class="ot">`i'</span>] <span class="kw">in</span> <span class="ot">`i'</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> se_twfe = <span class="fu">sqrt</span>(V_twfe[1, 59 + <span class="ot">`i'</span>]) <span class="kw">in</span> <span class="ot">`i'</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef_ife = ife_atts[19 + <span class="ot">`i'</span>, 3] <span class="kw">in</span> <span class="ot">`i'</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> ci_ife_lo = ife_atts[19 + <span class="ot">`i'</span>, 6] <span class="kw">in</span> <span class="ot">`i'</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> ci_ife_hi = ife_atts[19 + <span class="ot">`i'</span>, 7] <span class="kw">in</span> <span class="ot">`i'</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_twfe_lo = coef_twfe - 1.96*se_twfe</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_twfe_hi = coef_twfe + 1.96*se_twfe</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (rcap ci_twfe_hi ci_twfe_lo x, lcolor(gs10)) (connected coef_twfe x, lcolor(gs10) mcolor(gs10) <span class="bn">msymbol</span>(O) msize(vsmall)) (rcap ci_ife_hi ci_ife_lo x, lcolor(gs4)) (connected coef_ife x, lcolor(gs4) mcolor(gs4) <span class="bn">msymbol</span>(O) msize(vsmall)), <span class="kw">yline</span>(0, lcolor(gs12)) <span class="bn">title</span>(<span class="st">"Event-study estimates"</span>) <span class="bn">xtitle</span>(<span class="st">"Years after TWEA"</span>) <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="kw">xlabel</span>(1 <span class="st">"1"</span> 6 <span class="st">"6"</span> 11 <span class="st">"11"</span> 16 <span class="st">"16"</span> 21 <span class="st">"21"</span>) <span class="bn">legend</span>(<span class="kw">order</span>(2 <span class="st">"TWFE"</span> 4 <span class="st">"IFE"</span>) <span class="bn">rows</span>(1) <span class="bn">position</span>(6)) <span class="dv">scheme</span>(s2mono) <span class="kw">ylabel</span>(-.5(.25)1.5)</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch04_fig43_ife_twfe.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../figures/ch04_fig43_ife_twfe.png" class="img-fluid figure-img"></p>
@@ -1171,27 +1177,29 @@ Demeaned SC ATT = 0.474263
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span> sdid_atts = <span class="fu">e</span>(H)</span>
 <span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 21</span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> x = <span class="dt">_n</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 22</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> x = <span class="dt">_n</span> - 1          </span>
 <span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> coef_twfe = .</span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> se_twfe = .</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> se_twfe   = .</span>
 <span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> coef_sdid = .</span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> se_sdid = .</span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/21 {</span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef_twfe = b_twfe[1, 59 + <span class="ot">`i'</span>] <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> se_twfe = <span class="fu">sqrt</span>(V_twfe[1, 59 + <span class="ot">`i'</span>]) <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef_sdid = sdid_atts[1 + <span class="ot">`i'</span>, 1] <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> se_sdid = sdid_atts[1 + <span class="ot">`i'</span>, 2] <span class="kw">in</span> <span class="ot">`i'</span></span>
-<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_twfe_lo = coef_twfe - 1.96*se_twfe</span>
-<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_twfe_hi = coef_twfe + 1.96*se_twfe</span>
-<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_sdid_lo = coef_sdid - 1.96*se_sdid</span>
-<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_sdid_hi = coef_sdid + 1.96*se_sdid</span>
-<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (rcap ci_twfe_hi ci_twfe_lo x, lcolor(gs10)) (connected coef_twfe x, lcolor(gs10) mcolor(gs10) <span class="bn">msymbol</span>(O) msize(vsmall)) (rcap ci_sdid_hi ci_sdid_lo x, lcolor(gs4)) (connected coef_sdid x, lcolor(gs4) mcolor(gs4) <span class="bn">msymbol</span>(O) msize(vsmall)), <span class="kw">yline</span>(0, lcolor(gs12)) <span class="bn">title</span>(<span class="st">"Event-study estimates"</span>) <span class="bn">xtitle</span>(<span class="st">"Years after TWEA"</span>) <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="kw">xlabel</span>(1 <span class="st">"1"</span> 6 <span class="st">"6"</span> 11 <span class="st">"11"</span> 16 <span class="st">"16"</span> 21 <span class="st">"21"</span>) <span class="bn">legend</span>(<span class="kw">order</span>(2 <span class="st">"TWFE"</span> 4 <span class="st">"SD"</span>) <span class="bn">rows</span>(1) <span class="bn">position</span>(6)) <span class="dv">scheme</span>(s2mono) <span class="kw">ylabel</span>(-.25(.25)1)</span>
-<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch04_fig45_sdid_twfe.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> se_sdid   = .</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> coef_twfe = 0 <span class="kw">in</span> 1</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/21 {</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> <span class="ot">row</span> = <span class="ot">`i'</span> + 1</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef_twfe = b_twfe[1, 59 + <span class="ot">`i'</span>]           <span class="kw">in</span> <span class="ot">`row'</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> se_twfe   = <span class="fu">sqrt</span>(V_twfe[1, 59 + <span class="ot">`i'</span>])     <span class="kw">in</span> <span class="ot">`row'</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef_sdid = sdid_atts[1 + <span class="ot">`i'</span>, 1]         <span class="kw">in</span> <span class="ot">`row'</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> se_sdid   = sdid_atts[1 + <span class="ot">`i'</span>, 2]         <span class="kw">in</span> <span class="ot">`row'</span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_twfe_lo = coef_twfe - 1.96*se_twfe</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_twfe_hi = coef_twfe + 1.96*se_twfe</span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_sdid_lo = coef_sdid - 1.96*se_sdid</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_sdid_hi = coef_sdid + 1.96*se_sdid</span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (rcap ci_twfe_hi ci_twfe_lo x, lcolor(gs10)) (connected coef_twfe x, lcolor(gs10) mcolor(gs10) <span class="bn">msymbol</span>(O) msize(vsmall)) (rcap ci_sdid_hi ci_sdid_lo x, lcolor(gs4)) (connected coef_sdid x, lcolor(gs4) mcolor(gs4) <span class="bn">msymbol</span>(O) msize(vsmall)), <span class="kw">yline</span>(0, lcolor(gs12)) <span class="bn">title</span>(<span class="st">"Event-study estimates"</span>) <span class="bn">xtitle</span>(<span class="st">"Years after TWEA"</span>) <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="bn">xscale</span>(<span class="kw">range</span>(0 21)) <span class="kw">xlabel</span>(1 <span class="st">"1"</span> 6 <span class="st">"6"</span> 11 <span class="st">"11"</span> 16 <span class="st">"16"</span> 21 <span class="st">"21"</span>) <span class="bn">legend</span>(<span class="kw">order</span>(2 <span class="st">"TWFE"</span> 4 <span class="st">"SD"</span>) <span class="bn">rows</span>(1) <span class="bn">position</span>(6)) <span class="dv">scheme</span>(s2mono) <span class="kw">ylabel</span>(-.25(.25)1)</span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch04_fig45_sdid_twfe.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../figures/ch04_fig45_sdid_twfe.png" class="img-fluid figure-img"></p>
@@ -1428,7 +1436,7 @@ RMSE: 1.33587     Adj. R2: 0.026953
 <span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span> V_orig = <span class="fu">e</span>(<span class="kw">V</span>)</span>
 <span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 39</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 40</span>
 <span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> x = <span class="dt">_n</span> - 19</span>
 <span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> coef = .</span>
 <span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ci_lo = .</span>
@@ -1437,7 +1445,7 @@ RMSE: 1.33587     Adj. R2: 0.026953
 <span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> hd_hi = .</span>
 <span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/19 {</span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> <span class="ot">row</span> = 20 - <span class="ot">`i'</span></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> <span class="ot">row</span> = <span class="ot">`i'</span></span>
 <span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> coef = b_orig[1, <span class="ot">`i'</span>] <span class="kw">in</span> <span class="ot">`row'</span></span>
 <span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = <span class="fu">sqrt</span>(V_orig[<span class="ot">`i'</span>, <span class="ot">`i'</span>])</span>
 <span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> ci_lo = b_orig[1, <span class="ot">`i'</span>] - 1.96*<span class="ot">`se'</span> <span class="kw">in</span> <span class="ot">`row'</span></span>

@@ -567,7 +567,7 @@ Test of joint nullity of the placebos : p-value = 1.685e-12
 ### Stata
 
 ``` stata
-* ssc install fect, replace
+* net install fect, from(https://raw.githubusercontent.com/xuyiqing/fect_stata/master/) replace
 copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 * Cross-validation
@@ -646,6 +646,7 @@ reg patents i.year treatmentgroup reltimeminus* reltimeplus*, cluster(subclass)
 matrix b_twfe = e(b)
 matrix V_twfe = vecdiag(e(V))
 
+set seed 1
 fect patents, treat(twea) unit(subclass) time(year) method("ife") r(2) tol(1e-4) se
 matrix ife_atts = e(ATTs)
 
@@ -949,18 +950,20 @@ sdid_event patents subclass year twea, brep(200)
 matrix sdid_atts = e(H)
 
 clear
-set obs 21
-gen x = _n
+set obs 22
+gen x = _n - 1          
 gen coef_twfe = .
-gen se_twfe = .
+gen se_twfe   = .
 gen coef_sdid = .
-gen se_sdid = .
+gen se_sdid   = .
+replace coef_twfe = 0 in 1
 
 forvalues i = 1/21 {
-    replace coef_twfe = b_twfe[1, 59 + `i'] in `i'
-    replace se_twfe = sqrt(V_twfe[1, 59 + `i']) in `i'
-    replace coef_sdid = sdid_atts[1 + `i', 1] in `i'
-    replace se_sdid = sdid_atts[1 + `i', 2] in `i'
+    local row = `i' + 1
+    replace coef_twfe = b_twfe[1, 59 + `i']           in `row'
+    replace se_twfe   = sqrt(V_twfe[1, 59 + `i'])     in `row'
+    replace coef_sdid = sdid_atts[1 + `i', 1]         in `row'
+    replace se_sdid   = sdid_atts[1 + `i', 2]         in `row'
 }
 
 gen ci_twfe_lo = coef_twfe - 1.96*se_twfe
@@ -968,7 +971,7 @@ gen ci_twfe_hi = coef_twfe + 1.96*se_twfe
 gen ci_sdid_lo = coef_sdid - 1.96*se_sdid
 gen ci_sdid_hi = coef_sdid + 1.96*se_sdid
 
-twoway (rcap ci_twfe_hi ci_twfe_lo x, lcolor(gs10)) (connected coef_twfe x, lcolor(gs10) mcolor(gs10) msymbol(O) msize(vsmall)) (rcap ci_sdid_hi ci_sdid_lo x, lcolor(gs4)) (connected coef_sdid x, lcolor(gs4) mcolor(gs4) msymbol(O) msize(vsmall)), yline(0, lcolor(gs12)) title("Event-study estimates") xtitle("Years after TWEA") ytitle("Effect") xlabel(1 "1" 6 "6" 11 "11" 16 "16" 21 "21") legend(order(2 "TWFE" 4 "SD") rows(1) position(6)) scheme(s2mono) ylabel(-.25(.25)1)
+twoway (rcap ci_twfe_hi ci_twfe_lo x, lcolor(gs10)) (connected coef_twfe x, lcolor(gs10) mcolor(gs10) msymbol(O) msize(vsmall)) (rcap ci_sdid_hi ci_sdid_lo x, lcolor(gs4)) (connected coef_sdid x, lcolor(gs4) mcolor(gs4) msymbol(O) msize(vsmall)), yline(0, lcolor(gs12)) title("Event-study estimates") xtitle("Years after TWEA") ytitle("Effect") xscale(range(0 21)) xlabel(1 "1" 6 "6" 11 "11" 16 "16" 21 "21") legend(order(2 "TWFE" 4 "SD") rows(1) position(6)) scheme(s2mono) ylabel(-.25(.25)1)
 graph export "figures/ch04_fig45_sdid_twfe.png", replace width(1200)
 ```
 
@@ -990,7 +993,7 @@ graph export "figures/ch04_fig45_sdid_twfe.png", replace width(1200)
 * ssc install honestdid, replace
 copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
-gen reltimeminus0 = 0
+cap gen reltimeminus0 = 0
 reghdfe patents reltimeminus18 reltimeminus17 reltimeminus16 reltimeminus15 reltimeminus14 reltimeminus13 reltimeminus12 reltimeminus11 reltimeminus10 reltimeminus9 reltimeminus8 reltimeminus7 reltimeminus6 reltimeminus5 reltimeminus4 reltimeminus3 reltimeminus2 reltimeminus1 reltimeminus0 reltimeplus*, absorb(year treatmentgroup) cluster(subclass)
 honestdid, pre(1/19) post(20/40) delta(rm) mvec(1)
 ```
@@ -1210,14 +1213,14 @@ print(delta_rm)
 copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta" "moser_voena_didtextbook.dta", replace
 use "moser_voena_didtextbook.dta", clear
 
-gen reltimeminus0 = 0
+cap gen reltimeminus0 = 0
 reghdfe patents reltimeminus18 reltimeminus17 reltimeminus16 reltimeminus15 reltimeminus14 reltimeminus13 reltimeminus12 reltimeminus11 reltimeminus10 reltimeminus9 reltimeminus8 reltimeminus7 reltimeminus6 reltimeminus5 reltimeminus4 reltimeminus3 reltimeminus2 reltimeminus1 reltimeminus0 reltimeplus*, absorb(year treatmentgroup) cluster(subclass)
 
 matrix b_orig = e(b)
 matrix V_orig = e(V)
 
 clear
-set obs 39
+set obs 40
 gen x = _n - 19
 gen coef = .
 gen ci_lo = .
@@ -1226,7 +1229,7 @@ gen hd_lo = .
 gen hd_hi = .
 
 forvalues i = 1/19 {
-    local row = 20 - `i'
+     local row = `i'
     replace coef = b_orig[1, `i'] in `row'
     local se = sqrt(V_orig[`i', `i'])
     replace ci_lo = b_orig[1, `i'] - 1.96*`se' in `row'
@@ -1243,7 +1246,7 @@ forvalues i = 1/21 {
 save _plot_temp, replace
 
 use "moser_voena_didtextbook.dta", clear
-gen reltimeminus0 = 0
+cap gen reltimeminus0 = 0
 reghdfe patents reltimeminus18 reltimeminus17 reltimeminus16 reltimeminus15 reltimeminus14 reltimeminus13 reltimeminus12 reltimeminus11 reltimeminus10 reltimeminus9 reltimeminus8 reltimeminus7 reltimeminus6 reltimeminus5 reltimeminus4 reltimeminus3 reltimeminus2 reltimeminus1 reltimeminus0 reltimeplus*, absorb(year treatmentgroup) cluster(subclass)
 
 forvalues i = 1/21 {
@@ -1256,7 +1259,7 @@ forvalues i = 1/21 {
     replace hd_hi = `ub' in `=19 + `i''
     save _plot_temp, replace
     use "moser_voena_didtextbook.dta", clear
-    gen reltimeminus0 = 0
+    cap gen reltimeminus0 = 0
     reghdfe patents reltimeminus18 reltimeminus17 reltimeminus16 reltimeminus15 reltimeminus14 reltimeminus13 reltimeminus12 reltimeminus11 reltimeminus10 reltimeminus9 reltimeminus8 reltimeminus7 reltimeminus6 reltimeminus5 reltimeminus4 reltimeminus3 reltimeminus2 reltimeminus1 reltimeminus0 reltimeplus*, absorb(year treatmentgroup) cluster(subclass)
 }
 
