@@ -1067,3 +1067,4 @@ Bottom and top decile of effects: [0.336320, 0.948113]
 :::
 
 **Result:** The treated group has a larger variance ($\hat{\sigma}_1 = 2.01 > \hat{\sigma}_0 = 1.77$). The implied SD of treatment effects is $\approx 0.239$, and the bottom and top deciles of subclass-specific effects are respectively equal to 0.336 and 0.948.
+**version 2909**
