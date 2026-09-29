@@ -13,7 +13,7 @@ Each chapter is presented in three separate pages, one per language, so that all
 | Chapters | Paper                    | Stata (.dta) | R (.RData) | Python (.parquet) |
 |----------|--------------------------|:---:|:---:|:---:|
 | 3 & 4    | Moser & Voena (2012)     | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet) |
-| 5 & 8    | Gentzkow et al. (2011)   | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.parquet) |
+| 5 & 8    | Gentzkow et al. (2011)   | [.dta](https://github.com/Credible-Answers/did_book/tree/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/tree/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/tree/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet) |
 | 6        | Wolfers (2006)           | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet) |
 | 7        | Pierce & Schott (2016)   | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet) |
 
@@ -23,7 +23,7 @@ Download the dataset in your preferred format and place it in your working direc
 
 - **Quarto** ≥ 1.4: <https://quarto.org/docs/download/>
 - **Stata 17+** with `nbstata`: `pip install nbstata && python -m nbstata.install`
-- **R** with packages: `install.packages(c("haven", "fixest", "dplyr", "ggplot2", "broom", "car"))`
+- **R** with packages: ` source("https://raw.githubusercontent.com/Credible-Answers/did_book/Version2/did_book_final/requirements/setup.R")`
 - **Python** with packages: `pip install pandas numpy pyfixest scipy matplotlib pyreadstat`
 
 ## Source code

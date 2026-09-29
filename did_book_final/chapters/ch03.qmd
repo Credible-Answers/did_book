@@ -109,19 +109,19 @@ library(fixest); library(haven)
 options(digits=7)
 load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
 
-# Ejemplo 1
+# Example 1
 summary(feols(patents ~ twea + i(year) | subclass, data = df, cluster = ~subclass))
 
-# Ejemplo 2
+# Example 2
 summary(feols(patents ~ twea | subclass + year, data = df, cluster = ~subclass))
 ```
 
 ```         
-Ejemplo 1 (feols with i(year)):
+Example 1 (feols with i(year)):
      Estimate Std. Error  t value   Pr(>|t|)
 twea 0.288262   0.038887  7.412783 1.3770e-13 ***
 
-Ejemplo 2 (feols with subclass + year):
+Example 2 (feols with subclass + year):
      Estimate Std. Error t value  Pr(>|t|)
 twea 0.288262   0.038887 7.41278 1.377e-13 ***
 ```
@@ -134,27 +134,27 @@ import pyfixest as pf
 
 df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
 
-# Ejemplo 1
+# Example 1
 m1 = pf.feols('patents ~ twea + i(year) | subclass', data=df, vcov={'CRV1': 'subclass'})
 c1 = m1.coef(); s1 = m1.se(); t1 = m1.tstat(); p1 = m1.pvalue()
 for name in c1.index:
     print(f"{name:>20s} | {c1[name]:>12.7f}  {s1[name]:>10.7f}  {t1[name]:>8.2f}   {p1[name]:>8.4f}")
 
-# Ejemplo 2
+# Example 2
 m2 = pf.feols('patents ~ twea | subclass + year', data=df, vcov={'CRV1': 'subclass'})
 c2 = m2.coef(); s2 = m2.se(); t2 = m2.tstat(); p2 = m2.pvalue()
-print("\n--- Ejemplo 2 ---")
+print("\n--- Example 2 ---")
 for name in c2.index:
     print(f"{name:>20s} | {c2[name]:>12.7f}  {s2[name]:>10.7f}  {t2[name]:>8.2f}   {p2[name]:>8.4f}")
 ```
 
 ```         
-Ejemplo 1:
+Example 1:
                 twea |    0.2882615   0.0388871      7.41     0.0000
      C(year)[T.1901] |    0.0059327   0.0077529      0.77     0.4442
      ...
 
-Ejemplo 2:
+Example 2:
                 twea |    0.2882615   0.0388871      7.41     0.0000
 ```
 :::
@@ -304,9 +304,9 @@ print(m3.summary())
 
 ------------------------------------------------------------------------
 
-## CQ#4–7: Event-Study TWFE Regression
+## CQ#4: Event-Study TWFE Regression
 
-> Using the `moser_voena_didtextbook` dataset, estimate an ES-TWFER of patents on a treatment group FE, year FEs, indicators for having been exposed to treatment for 1, 2, ..., 21 years, and indicators for being a treatment group subclass 1, 2, ..., 18 years before 1918, clustering standard errors at the subclass level. According to this regression, does compulsory licensing have an effect on US innovation? Do Assumptions NA and PT seem to hold? Then, verify that (3.7) holds for $\ell = 1$, by computing in Stata the DID in the right hand side of that equation.
+> Using the `moser_voena_didtextbook` dataset, estimate an ES-TWFER of patents on a treatment group FE, year FEs, indicators for having been exposed to treatment for 1, 2, ..., 21 years, and indicators for being a treatment group subclass 1, 2, ..., 18 years before 1918, clustering standard errors at the subclass level.
 
 ::: panel-tabset
 ### Stata
@@ -321,31 +321,6 @@ forvalues l = 1/21 {
     cap gen reltimeplus`l' = treatmentgroup * (year == 1918 + `l')
 }
 reg patents i.year treatmentgroup reltimeminus* reltimeplus*, cluster(subclass)
-
-* F-test on pre-trends
-test reltimeminus1 reltimeminus2 reltimeminus3 reltimeminus4 reltimeminus5 reltimeminus6 reltimeminus7 reltimeminus8 reltimeminus9 reltimeminus10 reltimeminus11 reltimeminus12 reltimeminus13 reltimeminus14 reltimeminus15 reltimeminus16 reltimeminus17 reltimeminus18
-```
-
-```         
-       F( 18,  7247) =    3.79
-            Prob > F =    0.0000
-```
-
-``` stata
-* Verify equation (3.7) for l=1 (continues from above)
-quietly summarize patents if year==1919 & treatmentgroup==1
-scalar m1 = r(mean)
-quietly summarize patents if year==1918 & treatmentgroup==1
-scalar m2 = r(mean)
-quietly summarize patents if year==1919 & treatmentgroup==0
-scalar m3 = r(mean)
-quietly summarize patents if year==1918 & treatmentgroup==0
-scalar m4 = r(mean)
-display "DID manual = " m1-m2-(m3-m4)
-```
-
-```         
-DID manual (eq 3.7, l=1) = .02352017
 ```
 
 ### R
@@ -361,24 +336,6 @@ event_formula <- as.formula(paste(
   paste(paste0("reltimeminus", 1:18), collapse = " + "), "+",
   paste(paste0("reltimeplus", 1:21), collapse = " + ")))
 model4 <- feols(event_formula, data = df, cluster = ~subclass)
-
-# F-test on pre-trends
-library(car)
-linearHypothesis(model4, paste0("reltimeminus", 1:18))
-
-# DID manual
-m1 <- mean(df$patents[df$year == 1919 & df$treatmentgroup == 1])
-m2 <- mean(df$patents[df$year == 1918 & df$treatmentgroup == 1])
-m3 <- mean(df$patents[df$year == 1919 & df$treatmentgroup == 0])
-m4 <- mean(df$patents[df$year == 1918 & df$treatmentgroup == 0])
-cat("DID manual:", m1 - m2 - (m3 - m4))
-```
-
-```         
-Chisq = 68.25, p-value = 8.915e-08
-
-DID manual (eq 3.7, l=1): 0.02352017
-reltimeplus1 coef:         0.02352017
 ```
 
 ### Python
@@ -401,35 +358,8 @@ all_reltime = minus_vars + plus_vars
 
 fml_es = "patents ~ " + " + ".join(all_reltime) + " + treatmentgroup | year"
 m4 = pf.feols(fml_es, data=df, vcov={"CRV1": "subclass"})
-
-# F-test on pre-trends
-c = m4.coef()
-v_mat = pd.DataFrame(m4._vcov, index=c.index, columns=c.index)
-pre_names = [x for x in minus_vars if x in c.index]
-beta_pre = c[pre_names].values
-V_pre = v_mat.loc[pre_names, pre_names].values
-F_stat = beta_pre @ np.linalg.inv(V_pre) @ beta_pre / len(pre_names)
-p_val = 1 - stats.f.cdf(F_stat, len(pre_names), df["subclass"].nunique() - 1)
-print(f"F-test: F({len(pre_names)}, {df['subclass'].nunique()-1}) = {F_stat:.4f}, p = {p_val:.4f}")
-
-# DID manual
-m1v = df.loc[(df["year"]==1919) & (df["treatmentgroup"]==1), "patents"].mean()
-m2v = df.loc[(df["year"]==1918) & (df["treatmentgroup"]==1), "patents"].mean()
-m3v = df.loc[(df["year"]==1919) & (df["treatmentgroup"]==0), "patents"].mean()
-m4v = df.loc[(df["year"]==1918) & (df["treatmentgroup"]==0), "patents"].mean()
-print(f"DID manual (eq 3.7, l=1): {m1v - m2v - (m3v - m4v):.8f}")
-print(f"reltimeplus1 coef:        {m4.coef()['reltimeplus1']:.8f}")
-```
-
-```         
-F-test: F(18, 7247) = 3.7917, p = 0.0000
-
-DID manual (eq 3.7, l=1): 0.02352017
-reltimeplus1 coef:        0.02352017
 ```
 :::
-
-**Result:** Pre-trends are jointly significant ($F = 3.79$, $p < 0.001$). The manual DID (**0.02352**) matches `reltimeplus1` exactly.
 
 ### Figure 3.2: TWFE Event-Study Plot
 
@@ -451,7 +381,7 @@ forvalues l = 1(1)21 {
 }
 
 coefplot, keep(reltimeminus* reltimeplus*) ///
-    order(`leads' `lags'') ///
+    order(`leads' `lags') ///
     vertical yline(0, lcolor(gs12) lpattern(solid)) xline(18.5, lpattern(dash)) ///
     title("TWFE Event-study estimates") ///
     xtitle("Relative time to year before TWEA") ytitle("Effect") ///
@@ -468,23 +398,29 @@ graph export "figures/ch03_fig32_es_twfe.png", replace width(1200)
 
 ``` r
 library(fixest); library(haven)
-options(digits=7)
+options(digits = 7)
 load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.RData"))
+
 reltimeminus_vars <- paste0("reltimeminus", 1:18)
-reltimeplus_vars <- paste0("reltimeplus", 1:21)
+reltimeplus_vars  <- paste0("reltimeplus", 1:21)
 formula_str <- paste("patents ~", paste(reltimeminus_vars, collapse = " + "), "+",
-    paste(reltimeplus_vars, collapse = " + "), "+ treatmentgroup | year")
+                     paste(reltimeplus_vars, collapse = " + "), "+ treatmentgroup | year")
 model4 <- feols(as.formula(formula_str), data = df, cluster = ~subclass)
+
 rt <- c(-(18:1), 0, 1:21)
-coefs <- c(rev(coef(model4)[paste0("reltimeminus", 18:1)]), 0,
+# 18:1 already gives the order -18,...,-1 (no rev())
+coefs <- c(coef(model4)[paste0("reltimeminus", 18:1)], 0,
            coef(model4)[paste0("reltimeplus", 1:21)])
-ses <- c(rev(se(model4)[paste0("reltimeminus", 18:1)]), 0,
-         se(model4)[paste0("reltimeplus", 1:21)])
+ses   <- c(se(model4)[paste0("reltimeminus", 18:1)], 0,
+           se(model4)[paste0("reltimeplus", 1:21)])
 png("figures/ch03_fig32_es_twfe_R.png", width = 1000, height = 600)
 plot(rt, coefs, type = "b", pch = 19, col = "navy", cex = 0.6,
      xlab = "Relative time to year before TWEA", ylab = "Effect",
-     main = "TWFE Event-study estimates", ylim = range(coefs - 1.96*ses, coefs + 1.96*ses))
-arrows(rt, coefs - 1.96*ses, rt, coefs + 1.96*ses,
+     main = "TWFE Event-study estimates",
+     ylim = range(coefs - 1.96 * ses, coefs + 1.96 * ses))
+# at rt = 0 the CI has zero length and arrows() warns: exclude that point
+nz <- ses > 0
+arrows(rt[nz], (coefs - 1.96 * ses)[nz], rt[nz], (coefs + 1.96 * ses)[nz],
        length = 0.03, angle = 90, code = 3, col = "firebrick")
 abline(h = 0, col = "black", lwd = 0.8)
 abline(v = 0, col = "black", lty = 2)
@@ -528,6 +464,127 @@ plt.savefig("figures/ch03_fig32_es_twfe_Python.png", dpi=150, bbox_inches="tight
 :::
 
 *Figure 3.2: Effects of compulsory licensing on US innovation, according to an ES-TWFER. Standard errors clustered at the patent subclass level. 95% confidence intervals shown in red.*
+
+## CQ#5: Effect of Compulsory Licensing
+
+> According to this regression, does compulsory licensing have an effect on US innovation?
+
+Based on Figure 3.2.
+
+**Result:** No short-term effect: the coefficients $\hat\beta^{fe}_\ell$ are small and insignificant for $\ell \in \{1,\dots,7\}$. After eight years, effects become positive and significant, and after 14 years they become very large.
+
+## CQ#6: Assumptions NA and PT
+
+> Do Assumptions NA and PT seem to hold?
+
+Based on Figure 3.2, plus a joint test of the pre-trends (continues from CQ#4).
+
+::: panel-tabset
+### Stata
+
+``` stata
+* F-test on pre-trends
+test reltimeminus1 reltimeminus2 reltimeminus3 reltimeminus4 reltimeminus5 reltimeminus6 reltimeminus7 reltimeminus8 reltimeminus9 reltimeminus10 reltimeminus11 reltimeminus12 reltimeminus13 reltimeminus14 reltimeminus15 reltimeminus16 reltimeminus17 reltimeminus18
+```
+
+```
+       F( 18,  7247) =    3.79
+            Prob > F =    0.0000
+```
+
+### R
+
+``` r
+# F-test on pre-trends
+linearHypothesis(model4, paste0("reltimeminus", 1:18))
+```
+
+```
+Chisq = 68.25, p-value = 8.915e-08
+```
+
+### Python
+
+``` python
+# F-test on pre-trends
+c = m4.coef()
+v_mat = pd.DataFrame(m4._vcov, index=c.index, columns=c.index)
+pre_names = [x for x in minus_vars if x in c.index]
+beta_pre = c[pre_names].values
+V_pre = v_mat.loc[pre_names, pre_names].values
+F_stat = beta_pre @ np.linalg.inv(V_pre) @ beta_pre / len(pre_names)
+p_val = 1 - stats.f.cdf(F_stat, len(pre_names), df["subclass"].nunique() - 1)
+print(f"F-test: F({len(pre_names)}, {df['subclass'].nunique()-1}) = {F_stat:.4f}, p = {p_val:.4f}")
+```
+
+```
+F-test: F(18, 7247) = 3.7917, p = 0.0000
+```
+:::
+
+**Result:** The pretrend estimates are small, and substantially smaller than the estimated mid- and long-run effects; only one out of 18 is individually significant at the 5% level. However, they are jointly significant ($F = 3.79$, $p < 0.001$).
+
+## CQ#7: Verify Equation (3.7)
+
+> Verify that (3.7) holds for $\ell = 1$, by computing in Stata the DID in the right hand side of that equation.
+
+::: panel-tabset
+### Stata
+
+``` stata
+* Verify equation (3.7) for l=1 (continues from CQ#4)
+quietly summarize patents if year==1919 & treatmentgroup==1
+scalar m1 = r(mean)
+quietly summarize patents if year==1918 & treatmentgroup==1
+scalar m2 = r(mean)
+quietly summarize patents if year==1919 & treatmentgroup==0
+scalar m3 = r(mean)
+quietly summarize patents if year==1918 & treatmentgroup==0
+scalar m4 = r(mean)
+display "DID manual = " m1-m2-(m3-m4)
+```
+
+```
+DID manual (eq 3.7, l=1) = .02352017
+```
+
+### R
+
+``` r
+# DID manual (continues from CQ#4)
+m1 <- mean(df$patents[df$year == 1919 & df$treatmentgroup == 1])
+m2 <- mean(df$patents[df$year == 1918 & df$treatmentgroup == 1])
+m3 <- mean(df$patents[df$year == 1919 & df$treatmentgroup == 0])
+m4 <- mean(df$patents[df$year == 1918 & df$treatmentgroup == 0])
+cat("DID manual:", m1 - m2 - (m3 - m4), "\n")
+cat("reltimeplus1 coef:", coef(model4)["reltimeplus1"])
+```
+
+```
+DID manual (eq 3.7, l=1): 0.02352017
+reltimeplus1 coef:         0.02352017
+```
+
+### Python
+
+``` python
+# DID manual (continues from CQ#4)
+m1v = df.loc[(df["year"]==1919) & (df["treatmentgroup"]==1), "patents"].mean()
+m2v = df.loc[(df["year"]==1918) & (df["treatmentgroup"]==1), "patents"].mean()
+m3v = df.loc[(df["year"]==1919) & (df["treatmentgroup"]==0), "patents"].mean()
+m4v = df.loc[(df["year"]==1918) & (df["treatmentgroup"]==0), "patents"].mean()
+print(f"DID manual (eq 3.7, l=1): {m1v - m2v - (m3v - m4v):.8f}")
+print(f"reltimeplus1 coef:        {m4.coef()['reltimeplus1']:.8f}")
+```
+
+```
+DID manual (eq 3.7, l=1): 0.02352017
+reltimeplus1 coef:        0.02352017
+```
+:::
+
+**Result:** The manual DID (**0.02352**) matches `reltimeplus1` exactly.
+
 
 ------------------------------------------------------------------------
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,16 +10,10 @@
 
 <title>Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -40,14 +34,15 @@ ul.task-list li input[type="checkbox"] {
 <link href="./chapters/ch03.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -234,9 +229,9 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td>5 &amp; 8</td>
 <td>Gentzkow et al.&nbsp;(2011)</td>
-<td style="text-align: center;"><a href="https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.dta">.dta</a></td>
-<td style="text-align: center;"><a href="https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.RData">.RData</a></td>
-<td style="text-align: center;"><a href="https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20Shapiro%20and%20Sinkinson%202011/gentzkowetal_didtextbook.parquet">.parquet</a></td>
+<td style="text-align: center;"><a href="https://github.com/Credible-Answers/did_book/tree/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta">.dta</a></td>
+<td style="text-align: center;"><a href="https://github.com/Credible-Answers/did_book/tree/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData">.RData</a></td>
+<td style="text-align: center;"><a href="https://github.com/Credible-Answers/did_book/tree/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet">.parquet</a></td>
 </tr>
 <tr class="odd">
 <td>6</td>
@@ -261,7 +256,7 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><strong>Quarto</strong> ≥ 1.4: <a href="https://quarto.org/docs/download/" class="uri">https://quarto.org/docs/download/</a></li>
 <li><strong>Stata 17+</strong> with <code>nbstata</code>: <code>pip install nbstata &amp;&amp; python -m nbstata.install</code></li>
-<li><strong>R</strong> with packages: <code>install.packages(c("haven", "fixest", "dplyr", "ggplot2", "broom", "car"))</code></li>
+<li><strong>R</strong> with packages: <code>source("https://raw.githubusercontent.com/Credible-Answers/did_book/Version2/did_book_final/requirements/setup.R")</code></li>
 <li><strong>Python</strong> with packages: <code>pip install pandas numpy pyfixest scipy matplotlib pyreadstat</code></li>
 </ul>
 </section>
