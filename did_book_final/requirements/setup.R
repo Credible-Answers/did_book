@@ -23,6 +23,32 @@ github <- c(
   DIDHAD    = "chaisemartinPackages/did_had/R"              # ch07
 )
 
+# System requirement for HonestDiD: GLPK library (needed by Rglpk)
+os <- Sys.info()[["sysname"]]
+if (!requireNamespace("Rglpk", quietly = TRUE)) {
+  if (os == "Linux") {
+    has_glpk <- nzchar(Sys.which("glpsol")) ||
+                length(Sys.glob(c("/usr/lib/*/libglpk.so*", "/usr/lib/libglpk.so*"))) > 0
+    if (!has_glpk) {
+      can_sudo <- system("sudo -n true", ignore.stdout = TRUE, ignore.stderr = TRUE) == 0
+      if (can_sudo) {
+        message("Installing GLPK system library (needed by HonestDiD)...")
+        system("sudo apt-get update && sudo apt-get install -y libglpk-dev")
+      } else {
+        message("GLPK system library not found and no sudo access. ",
+                "HonestDiD will not install. Ask your administrator to run: ",
+                "sudo apt-get install libglpk-dev")
+      }
+    }
+  } else if (os == "Darwin") {
+    if (nzchar(Sys.which("brew")) && !nzchar(Sys.which("glpsol"))) {
+      message("Installing GLPK via Homebrew (needed by HonestDiD)...")
+      system("brew install glpk")
+    }
+  }
+  # Windows: nothing needed, CRAN binaries include GLPK
+}
+
 # polars (required by DIDmultiplegtDYN) is not on CRAN
 if (!requireNamespace("polars", quietly = TRUE)) {
   install.packages("polars", repos = "https://community.r-multiverse.org")
