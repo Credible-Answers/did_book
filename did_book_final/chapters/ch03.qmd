@@ -2,7 +2,7 @@
 title: "Chapter 3: The Classical DID Design"
 ---
 
-## Overview
+## Overview {.unnumbered}
 
 Dataset: **Moser & Voena (2012)** — `moser_voena_didtextbook.dta(Stata), moser_voena_didtextbook.RData (R), moser_voena_didtextbook.parquet (Python)`
 
@@ -10,7 +10,7 @@ The Trading with the Enemy Act (TWEA) allowed US firms to use German-owned paten
 
 ------------------------------------------------------------------------
 
-## Panel View
+## Panel View {.unnumbered}
 
 ::: panel-tabset
 ### Stata
