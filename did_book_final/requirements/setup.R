@@ -9,7 +9,10 @@ cran <- c(
   "zoo",                                                    # needed by didimputation
   "didimputation",                                          # Borusyak et al. (ch06)
   "fect",                                                   # IFE (ch04)
-  "nprobust"                                                # needed by DIDHAD (ch07)
+  "nprobust",                                               # needed by DIDHAD (ch07)
+  "CVXR", "ECOSolveR", "Rglpk", "lpSolveAPI",              # needed by HonestDiD (ch04)
+  "TruncatedNormal", "matrixStats", "pracma",               # needed by HonestDiD (ch04)
+  "latex2exp", "mvtnorm", "foreach", "purrr", "tibble"      # needed by HonestDiD (ch04)
 )
 
 # Packages from GitHub
