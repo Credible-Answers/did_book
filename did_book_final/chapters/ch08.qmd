@@ -2,7 +2,7 @@
 title: "Chapter 8: General Designs"
 ---
 
-## Overview
+## Overview {.unnumbered}
 
 Dataset: **Gentzkow, Shapiro & Sinkinson (2011)** — `gentzkowetal_didtextbook.dta (Stata), gentzkowetal_didtextbook.RData (R), gentzkowetal_didtextbook.parquet (Python)` (16,872 observations, 1,195 counties, 16 election years 1868–1928)
 

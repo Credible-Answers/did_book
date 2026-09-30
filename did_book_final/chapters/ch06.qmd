@@ -2,7 +2,7 @@
 title: "Chapter 6: Designs with Variation in Treatment Timing"
 ---
 
-## Overview
+## Overview {.unnumbered}
 
 Dataset: **Wolfers (2006)** — `wolfers2006_didtextbook.dta(Stata), wolfers2006_didtextbook.RData (R), wolfers2006_didtextbook.parquet (Python)`
 
@@ -12,7 +12,7 @@ Key topics: decomposition of the static TWFE estimator, event-study TWFE, and fo
 
 ------------------------------------------------------------------------
 
-## PanelView
+## PanelView {.unnumbered}
 
 ::: panel-tabset
 ### Stata

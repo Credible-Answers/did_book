@@ -2,7 +2,7 @@
 title: "Chapter 7: Designs with Variation in Treatment Dose"
 ---
 
-## Overview
+## Overview {.unnumbered}
 
 Dataset: **Pierce & Schott (2016)** — `pierce_schott_didtextbook.dta (Stata), pierce_schott_didtextbook.RData (R), pierce_schott_didtextbook.parquet (Python)` (103 industries, 22 variables)
 
@@ -20,7 +20,7 @@ This chapter applies the **Heterogeneous Adoption Design (HAD)** framework to st
 
 ---
 
-## PanelView
+## PanelView {.unnumbered}
 
 > Note: In the Pierce & Schott (2016) application, treatment is continuous (NTR gap), so the standard binary PanelView is not applicable. See the code below for reference, but plots are omitted.
 

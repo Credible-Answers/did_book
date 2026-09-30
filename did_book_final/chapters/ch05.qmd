@@ -2,7 +2,7 @@
 title: "Chapter 5: TWFE Estimators Outside of the Classical Design"
 ---
 
-## Overview
+## Overview {.unnumbered}
 
 Dataset: **Gentzkow, Shapiro & Sinkinson (2011)** — `gentzkowetal_didtextbook.dta (Stata), gentzkowetal_didtextbook.RData (R), gentzkowetal_didtextbook.parquet (Python)`
 

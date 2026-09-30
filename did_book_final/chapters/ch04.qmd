@@ -2,7 +2,7 @@
 title: "Chapter 4: Alternatives to Parallel Trends"
 ---
 
-## Overview
+## Overview {.unnumbered}
 
 Dataset: **Moser & Voena (2012)** — `moser_voena_didtextbook.dta` (Stata), `moser_voena_didtextbook.RData` (R), `moser_voena_didtextbook.parquet` (Python)
 
