@@ -1,91 +1,496 @@
-# Use precompiled binaries on Windows/macOS (much faster, no compilation needed)
-if (.Platform$OS.type == "windows" || Sys.info()[["sysname"]] == "Darwin") {
-  options(pkgType = "binary", install.packages.compile.from.source = "never")
+# ============================================================
+# did_book - setup.R
+# Nuvolos / renv / R 4.6
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. CONFIGURATION
+# ------------------------------------------------------------
+
+options(
+  repos = c(
+    CRAN = "https://cloud.r-project.org"
+  )
+)
+
+os <- Sys.info()[["sysname"]]
+
+message("Operating system: ", os)
+message("R version: ", R.version.string)
+message("R platform: ", R.version$platform)
+
+
+# Use precompiled binaries on Windows/macOS
+if (
+  .Platform$OS.type == "windows" ||
+  os == "Darwin"
+) {
+  
+  options(
+    pkgType = "binary",
+    install.packages.compile.from.source = "never"
+  )
 }
 
-# Packages from CRAN (order matters: dependencies first)
+
+# ------------------------------------------------------------
+# 2. CRAN PACKAGES
+# ------------------------------------------------------------
+
 cran <- c(
-  "fixest", "haven", "dplyr", "tidyr", "car", "ggplot2",   # data & regressions
-  "sandwich", "lmtest",                                     # HC2 SEs (ch07)
-  "panelView",                                              # panel view plots
-  "TwoWayFEWeights",                                        # ch05-ch08
-  "DIDmultiplegtDYN",                                       # ch04, ch06, ch08
-  "did",                                                    # Callaway & Sant'Anna (ch06)
-  "zoo",                                                    # needed by didimputation
-  "didimputation",                                          # Borusyak et al. (ch06)
-  "fect",                                                   # IFE (ch04)
-  "nprobust",                                               # needed by DIDHAD (ch07)
-  "CVXR", "ECOSolveR", "Rglpk", "lpSolveAPI",              # needed by HonestDiD (ch04)
-  "TruncatedNormal", "matrixStats", "pracma",               # needed by HonestDiD (ch04)
-  "latex2exp", "mvtnorm", "foreach", "purrr", "tibble"      # needed by HonestDiD (ch04)
+  
+  # Data and regressions
+  "fixest",
+  "haven",
+  "dplyr",
+  "tidyr",
+  "car",
+  "ggplot2",
+  
+  # HC2 standard errors
+  "sandwich",
+  "lmtest",
+  
+  # Panel plots
+  "panelView",
+  
+  # TWFE weights
+  "TwoWayFEWeights",
+  
+  # DID
+  "DIDmultiplegtDYN",
+  "did",
+  
+  # Other DID dependencies
+  "zoo",
+  "didimputation",
+  "fect",
+  "nprobust",
+  
+  # HonestDiD
+  "CVXR",
+  "ECOSolveR",
+  "Rglpk",
+  "lpSolveAPI",
+  "TruncatedNormal",
+  "matrixStats",
+  "pracma",
+  "latex2exp",
+  "mvtnorm",
+  "foreach",
+  "purrr",
+  "tibble"
 )
 
-# Packages from GitHub
+
+# ------------------------------------------------------------
+# 3. GITHUB PACKAGES
+# ------------------------------------------------------------
+
 github <- c(
-  pretrends = "jonathandroth/pretrends",                    # ch03
-  HonestDiD = "asheshrambachan/HonestDiD",                  # ch04
-  synthdid  = "synth-inference/synthdid",                   # ch04
-  DIDHAD    = "chaisemartinPackages/did_had/R"              # ch07
+  
+  pretrends = "jonathandroth/pretrends",
+  
+  HonestDiD = "asheshrambachan/HonestDiD",
+  
+  synthdid = "synth-inference/synthdid",
+  
+  DIDHAD = "chaisemartinPackages/did_had/R"
 )
 
-# System requirement for HonestDiD: GLPK library (needed by Rglpk)
-os <- Sys.info()[["sysname"]]
+
+# ------------------------------------------------------------
+# 4. MAKE SURE renv IS AVAILABLE
+# ------------------------------------------------------------
+
+if (!requireNamespace("renv", quietly = TRUE)) {
+  
+  install.packages(
+    "renv",
+    repos = "https://cloud.r-project.org"
+  )
+}
+
+
+# ------------------------------------------------------------
+# 5. GLPK
+# Required by Rglpk / HonestDiD
+# ------------------------------------------------------------
+
 if (!requireNamespace("Rglpk", quietly = TRUE)) {
+  
   if (os == "Linux") {
-    has_glpk <- nzchar(Sys.which("glpsol")) ||
-                length(Sys.glob(c("/usr/lib/*/libglpk.so*", "/usr/lib/libglpk.so*"))) > 0
+    
+    has_glpk <-
+      nzchar(Sys.which("glpsol")) ||
+      length(
+        Sys.glob(
+          c(
+            "/usr/lib/*/libglpk.so*",
+            "/usr/lib/libglpk.so*"
+          )
+        )
+      ) > 0
+    
     if (!has_glpk) {
-      can_sudo <- system("sudo -n true", ignore.stdout = TRUE, ignore.stderr = TRUE) == 0
+      
+      can_sudo <- system(
+        "sudo -n true",
+        ignore.stdout = TRUE,
+        ignore.stderr = TRUE
+      ) == 0
+      
       if (can_sudo) {
-        message("Installing GLPK system library (needed by HonestDiD)...")
-        system("sudo apt-get update && sudo apt-get install -y libglpk-dev")
+        
+        message(
+          "Installing GLPK system library..."
+        )
+        
+        system(
+          "sudo apt-get update && ",
+          "sudo apt-get install -y libglpk-dev"
+        )
+        
       } else {
-        message("GLPK system library not found and no sudo access. ",
-                "HonestDiD will not install. Ask your administrator to run: ",
-                "sudo apt-get install libglpk-dev")
+        
+        message(
+          "GLPK system library not found and no sudo access."
+        )
+        
+        message(
+          "Administrator command:"
+        )
+        
+        message(
+          "sudo apt-get install libglpk-dev"
+        )
       }
     }
+    
   } else if (os == "Darwin") {
-    if (nzchar(Sys.which("brew")) && !nzchar(Sys.which("glpsol"))) {
-      message("Installing GLPK via Homebrew (needed by HonestDiD)...")
+    
+    if (
+      nzchar(Sys.which("brew")) &&
+      !nzchar(Sys.which("glpsol"))
+    ) {
+      
+      message(
+        "Installing GLPK via Homebrew..."
+      )
+      
       system("brew install glpk")
     }
   }
-  # Windows: nothing needed, CRAN binaries include GLPK
 }
 
-# polars (required by DIDmultiplegtDYN) is not on CRAN
-if (!requireNamespace("polars", quietly = TRUE)) {
-  install.packages("polars",
-                   repos = c("https://community.r-multiverse.org", getOption("repos")))
+
+# ------------------------------------------------------------
+# 6. S7
+#
+# Required by polars
+#
+# IMPORTANT:
+# Nuvolos uses renv.
+# Therefore S7 must be installed through renv.
+# ------------------------------------------------------------
+
+message("")
+message("============================================================")
+message("Installing/checking S7")
+message("============================================================")
+
+
+if (!requireNamespace("S7", quietly = TRUE)) {
+  
+  message(
+    "Installing S7 into the active renv project..."
+  )
+  
+  renv::install(
+    "S7"
+  )
 }
 
-# Install missing CRAN packages, one at a time
-for (p in cran) {
-  if (!requireNamespace(p, quietly = TRUE)) {
-    tryCatch(install.packages(p),
-             error = function(e) message("Could not install ", p, ": ", conditionMessage(e)))
-  }
-}
 
-# Install missing GitHub packages
-if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-for (p in names(github)) {
-  if (!requireNamespace(p, quietly = TRUE)) {
-    tryCatch(remotes::install_github(github[[p]]),
-             error = function(e) message("Could not install ", p, ": ", conditionMessage(e)))
-  }
-}
-
-# Check that everything was installed
-all_pkgs <- c("polars", cran, names(github))
-still_missing <- all_pkgs[!vapply(all_pkgs, requireNamespace, logical(1), quietly = TRUE)]
-if (length(still_missing) > 0) {
-  message("These packages could not be installed: ", paste(still_missing, collapse = ", "))
+if (!requireNamespace("S7", quietly = TRUE)) {
+  
+  stop(
+    "S7 could not be installed in the active renv project."
+  )
+  
 } else {
-  message("All packages installed.")
+  
+  message(
+    "[OK] S7 ",
+    as.character(packageVersion("S7"))
+  )
 }
 
-# Create output folder for figures
-dir.create("figures", showWarnings = FALSE, recursive = TRUE)
-# call from GitHub: source("https://raw.githubusercontent.com/Credible-Answers/did_book/Version2/did_book_final/requirements/setup.R")
+
+# ------------------------------------------------------------
+# 7. POLARS
+#
+# Required by DIDmultiplegtDYN
+#
+# polars is NOT installed from standard CRAN.
+#
+# Nuvolos:
+#   R 4.6
+#   Ubuntu Noble
+#   x86_64
+#   renv
+#
+# rpolars.r-universe.dev provides the package.
+# The package downloads the precompiled Rust library.
+# ------------------------------------------------------------
+
+message("")
+message("============================================================")
+message("Installing/checking polars")
+message("============================================================")
+
+
+if (!requireNamespace("polars", quietly = TRUE)) {
+  
+  message(
+    "Installing polars..."
+  )
+  
+  # Tell polars that this is not a CRAN build
+  Sys.setenv(
+    NOT_CRAN = "true"
+  )
+  
+  tryCatch(
+    
+    {
+      
+      renv::install(
+        "polars",
+        repos = c(
+          polars = "https://rpolars.r-universe.dev",
+          CRAN = "https://cloud.r-project.org"
+        ),
+        rebuild = TRUE
+      )
+      
+    },
+    
+    error = function(e) {
+      
+      message("")
+      message(
+        "ERROR installing polars:"
+      )
+      
+      message(
+        conditionMessage(e)
+      )
+    }
+  )
+}
+
+
+if (requireNamespace("polars", quietly = TRUE)) {
+  
+  message(
+    "[OK] polars ",
+    as.character(packageVersion("polars"))
+  )
+  
+} else {
+  
+  stop(
+    "polars could not be installed in the active renv project."
+  )
+}
+
+
+# ------------------------------------------------------------
+# 8. CRAN PACKAGES
+# ------------------------------------------------------------
+
+message("")
+message("============================================================")
+message("Installing/checking CRAN packages")
+message("============================================================")
+
+
+for (p in cran) {
+  
+  if (!requireNamespace(p, quietly = TRUE)) {
+    
+    message(
+      "Installing ",
+      p,
+      "..."
+    )
+    
+    tryCatch(
+      
+      {
+        
+        install.packages(
+          p,
+          repos = "https://cloud.r-project.org"
+        )
+        
+      },
+      
+      error = function(e) {
+        
+        message(
+          "Could not install ",
+          p,
+          ": ",
+          conditionMessage(e)
+        )
+      }
+    )
+    
+  } else {
+    
+    message(
+      "[OK] ",
+      p
+    )
+  }
+}
+
+
+# ------------------------------------------------------------
+# 9. GITHUB PACKAGES
+# ------------------------------------------------------------
+
+message("")
+message("============================================================")
+message("Installing/checking GitHub packages")
+message("============================================================")
+
+
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  
+  install.packages(
+    "remotes",
+    repos = "https://cloud.r-project.org"
+  )
+}
+
+
+for (p in names(github)) {
+  
+  if (!requireNamespace(p, quietly = TRUE)) {
+    
+    message(
+      "Installing GitHub package: ",
+      p
+    )
+    
+    tryCatch(
+      
+      {
+        
+        remotes::install_github(
+          github[[p]],
+          dependencies = TRUE
+        )
+        
+      },
+      
+      error = function(e) {
+        
+        message(
+          "Could not install ",
+          p,
+          ": ",
+          conditionMessage(e)
+        )
+      }
+    )
+    
+  } else {
+    
+    message(
+      "[OK] ",
+      p
+    )
+  }
+}
+
+
+# ------------------------------------------------------------
+# 10. FINAL CHECK
+# ------------------------------------------------------------
+
+all_pkgs <- c(
+  "polars",
+  cran,
+  names(github)
+)
+
+
+installed <- vapply(
+  all_pkgs,
+  requireNamespace,
+  logical(1),
+  quietly = TRUE
+)
+
+
+still_missing <- all_pkgs[
+  !installed
+]
+
+
+message("")
+message("============================================================")
+message("FINAL PACKAGE CHECK")
+message("============================================================")
+
+
+if (length(still_missing) == 0) {
+  
+  message("")
+  message(
+    "All packages installed successfully."
+  )
+  
+} else {
+  
+  message("")
+  message(
+    "These packages could not be installed:"
+  )
+  
+  for (p in still_missing) {
+    message(
+      "  - ",
+      p
+    )
+  }
+}
+
+
+# ------------------------------------------------------------
+# 11. FIGURES DIRECTORY
+# ------------------------------------------------------------
+
+dir.create(
+  "figures",
+  showWarnings = FALSE,
+  recursive = TRUE
+)
+
+
+message("")
+message("============================================================")
+message("SETUP FINISHED")
+message("============================================================")
+
+
+# Original GitHub command:
+#
+# source(
+#   "https://raw.githubusercontent.com/Credible-Answers/did_book/Version2/did_book_final/requirements/setup.R"
+# )
