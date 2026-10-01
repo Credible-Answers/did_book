@@ -1,3 +1,8 @@
+# Use precompiled binaries on Windows/macOS (much faster, no compilation needed)
+if (.Platform$OS.type == "windows" || Sys.info()[["sysname"]] == "Darwin") {
+  options(pkgType = "binary", install.packages.compile.from.source = "never")
+}
+
 # Packages from CRAN (order matters: dependencies first)
 cran <- c(
   "fixest", "haven", "dplyr", "tidyr", "car", "ggplot2",   # data & regressions
@@ -51,7 +56,8 @@ if (!requireNamespace("Rglpk", quietly = TRUE)) {
 
 # polars (required by DIDmultiplegtDYN) is not on CRAN
 if (!requireNamespace("polars", quietly = TRUE)) {
-  install.packages("polars", repos = "https://community.r-multiverse.org")
+  install.packages("polars",
+                   repos = c("https://community.r-multiverse.org", getOption("repos")))
 }
 
 # Install missing CRAN packages, one at a time
