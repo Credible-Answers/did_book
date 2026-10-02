@@ -35,3 +35,6 @@ Download the dataset in your preferred format and place it in your working direc
 - [Anthony Quispe](https://github.com/anzonyquispe)
 - [Karla Vega](https://karlavegaleg.github.io)
 - [Jhosbel Damian](https://damianrojasjhosbel-sudo.github.io/)
+- [Ana María Patrón](https://anamariapatron.github.io/)
+- [Alberto Trelles](https://github.com/albertotrelles)
+- [Anton Jayet](https://www.linkedin.com/in/anton-jayet-222556331/)
