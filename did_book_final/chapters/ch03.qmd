@@ -522,7 +522,8 @@ F-test: F(18, 7247) = 3.7917, p = 0.0000
 ```
 :::
 
-**Result:** The pretrend estimates are small, and substantially smaller than the estimated mid- and long-run effects; only one out of 18 is individually significant at the 5% level. However, they are jointly significant ($F = 3.79$, $p < 0.001$).
+**Result:** The pretrend estimates are small, and substantially smaller than the estimated mid- and long-run effects; only one out of 18 is individually significant at the 5% level. However, they are jointly significant ($F = 3.79$, $p < 0.001$). The no-anticipation and parallel trends
+assumptions seem to hold in this application.
 
 ## CQ#7: Verify Equation (3.7)
 

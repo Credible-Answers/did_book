@@ -17,7 +17,7 @@ Each chapter is presented in three separate pages, one per language, so that all
 | 6        | Wolfers (2006)           | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet) |
 | 7        | Pierce & Schott (2016)   | [.dta](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta) | [.RData](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData) | [.parquet](https://github.com/Credible-Answers/did_book/raw/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet) |
 
-Download the dataset in your preferred format and place it in your working directory. All code blocks in the chapters assume the dataset is in the current directory.
+Datasets are loaded directly from the book's GitHub repository inside each code block, so there is nothing to download. The files are also available in Stata (.dta), R (.RData) and Python (.parquet) formats in the table above.
 
 ## Requirements
 
