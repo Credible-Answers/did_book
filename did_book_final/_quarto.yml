@@ -21,3 +21,4 @@ format:
     toc: true
     code-fold: false
     code-tools: false
+    number-sections: false
