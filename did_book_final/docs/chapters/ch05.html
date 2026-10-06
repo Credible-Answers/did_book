@@ -258,7 +258,7 @@ window.Quarto = {
 <h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
 <p>Dataset: <strong>Gentzkow, Shapiro &amp; Sinkinson (2011)</strong> — <code>gentzkowetal_didtextbook.dta (Stata), gentzkowetal_didtextbook.RData (R), gentzkowetal_didtextbook.parquet (Python)</code></p>
 <p>This chapter investigates what the TWFE estimator <span class="math inline">\(\hat{\beta}^{fe}\)</span> estimates outside the classical design, using the effect of newspapers on voter turnout. The design features a non-binary treatment (number of newspapers), non-absorbing treatment changes, and variation in treatment timing across 1,195 US counties from 1868 to 1928.</p>
-<p>Key tool: the <code>twowayfeweights</code> package (Stata/R) decomposes <span class="math inline">\(\hat{\beta}^{fe}\)</span> into a weighted sum of treatment effects, where some weights may be negative — meaning <span class="math inline">\(\hat{\beta}^{fe}\)</span> may not estimate a convex combination of effects.</p>
+<p>Key tool: the <code>twowayfeweights</code> package decomposes <span class="math inline">\(\hat{\beta}^{fe}\)</span> into a weighted sum of treatment effects, where some weights may be negative — meaning <span class="math inline">\(\hat{\beta}^{fe}\)</span> may not estimate a convex combination of effects.</p>
 <p>No event-study plots in this chapter — only numerical outputs from regressions and decompositions.</p>
 <hr>
 </section>
@@ -343,7 +343,8 @@ year::1928                  -0.1102546    0.0108236     -10.19      0.000   -0.1
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"cnty90"</span>},</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"full"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>m1.summary(digits<span class="op">=</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Dep. var.:      prestout
 Observations:   16872
 Fixed effects:  cnty90
@@ -371,6 +372,7 @@ year::1928             -0.1102546    0.0108236     -10.19      0.000 [-0.1314688
 </div>
 </div>
 </div>
+<p><strong>Result (CQ#18):</strong> <span class="math inline">\(\hat{\beta}^{fe} = 0.0029\)</span>: according to this regression, one more newspaper increases turnout by 0.29 percentage points. The coefficient is marginally insignificant at the 5% level (s.e. = 0.0016).</p>
 <hr>
 </section>
 <section id="cq19-weight-decomposition-of-the-twfe-coefficient" class="level2">
@@ -418,7 +420,7 @@ Total                     10378            1</code></pre>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                          <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>)</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>print_twowayfeweights(result, D_name<span class="op">=</span><span class="st">"numdailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
-beta estimates a weighted sum of 10378 ATTs.
+the TWFE coefficient beta, equal to 0.0029, estimates a weighted sum of 10378 ATTs.
 6180 ATTs receive a positive weight, and 4198 receive a negative weight.
 ------------------------------------------------
 Treat. var: numdailies  # ATTs      Σ weights
@@ -431,6 +433,7 @@ Total                   10378       1.0000
 </div>
 </div>
 </div>
+<p><strong>Result (CQ#19):</strong> Under the parallel trends assumption, <span class="math inline">\(\hat{\beta}^{fe}\)</span> estimates a weighted combination of the effects of newspapers on turnout in 10,378 county-election-year cells, where 6180 effects are weighted positively, while 4198 are weighted negatively, and where negative weights sum to −0.47. Accordingly, <span class="math inline">\(\hat{\beta}^{fe}\)</span> is far from estimating a convex combination of effects.</p>
 <hr>
 </section>
 <section id="cq20-twfe-regression-with-stateyear-fes" class="level2">
@@ -518,21 +521,33 @@ Negative weights           4147      -0.5331
 Total                     10342            1</code></pre>
 </div>
 <div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install twowayfeweights  (install from the authors' repository)</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights, print_twowayfeweights</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate state-year dummies (not pre-computed in the parquet)</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="op">=</span> pd.get_dummies(df[<span class="st">"styr"</span>], prefix<span class="op">=</span><span class="st">"styr"</span>, prefix_sep<span class="op">=</span><span class="st">""</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="op">=</span> <span class="bu">list</span>(styr_dummies.columns)</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, styr_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> twowayfeweights(df, <span class="st">"prestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>, <span class="st">"numdailies"</span>,</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>                          <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, controls<span class="op">=</span>styr_cols)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>print_twowayfeweights(result, D_name<span class="op">=</span><span class="st">"numdailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyfixest <span class="im">as</span> pf</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>m2 <span class="op">=</span> pf.feols(</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"prestout ~ numdailies + C(year) + C(styr) | cnty90"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"cnty90"</span>},</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"full"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>b, se, t <span class="op">=</span> m2.coef()[<span class="st">"numdailies"</span>], m2.se()[<span class="st">"numdailies"</span>], m2.tstat()[<span class="st">"numdailies"</span>]</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"numdailies:  coef = </span><span class="sc">{</span>b<span class="sc">:12.7f}</span><span class="ss">  se = </span><span class="sc">{</span>se<span class="sc">:12.7f}</span><span class="ss">  t = </span><span class="sc">{</span>t<span class="sc">:10.5f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
+(year and state-year FEs absorbed, not shown)</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights, print_twowayfeweights</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Decomposition with state-year controls</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="op">=</span> pd.get_dummies(df[<span class="st">"styr"</span>], prefix<span class="op">=</span><span class="st">"styr"</span>, drop_first<span class="op">=</span><span class="va">False</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, styr_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="op">=</span> <span class="bu">sorted</span>(styr_dummies.columns.tolist())</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> twowayfeweights(df, <span class="st">"prestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>, <span class="st">"numdailies"</span>,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                          <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, controls<span class="op">=</span>styr_cols)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>print_twowayfeweights(result, D_name<span class="op">=</span><span class="st">"numdailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
-beta estimates a weighted sum of 10342 ATTs.
+the TWFE coefficient beta, equal to -0.0012, estimates a weighted sum of 10342 ATTs.
 6195 ATTs receive a positive weight, and 4147 receive a negative weight.
-36 ATTs receive a weight equal to 0.
+10378 (g,t) cells receive the treatment, but the ATTs of 36 cells receive a weight equal to zero.
 ------------------------------------------------
 Treat. var: numdailies  # ATTs      Σ weights
 ------------------------------------------------
@@ -544,6 +559,8 @@ Total                   10342       1.0000
 </div>
 </div>
 </div>
+<p><strong>Result (CQ#20):</strong> According to this regression, one more newspaper reduces turnout by 0.12 percentage points. The coefficient is insignificant (s.e. = 0.0011).</p>
+<p><strong>Result (CQ#21):</strong> The newspaper coefficient estimates a weighted combination of the effects of newspapers on turnout in 10,342 county-election-year cells, where 6195 effects are weighted positively, while 4147 are weighted negatively, and where negative weights sum to −0.53.</p>
 <hr>
 </section>
 <section id="cq22-first-difference-regression" class="level2">
@@ -553,9 +570,9 @@ Total                   10342       1.0000
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">areg</span> changeprestout changedailies, absorb(styr) <span class="kw">cluster</span>(cnty90)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="kw">areg</span> changeprestout changedailies, absorb(styr) <span class="kw">cluster</span>(cnty90)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Linear regression, absorbing indicators             Number of obs     = 15,627
 Absorbed variable: styr                             No. of categories =    634
                                                     F(1, 1194)        =   7.68
@@ -574,11 +591,11 @@ changedailies |   .0025907   .0009351     2.77   0.006     .0007561    .0044252
 -------------------------------------------------------------------------------</code></pre>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(fixest)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"</span>))</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">feols</span>(changeprestout <span class="sc">~</span> changedailies <span class="sc">|</span> styr,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> df, <span class="at">cluster =</span> <span class="sc">~</span>cnty90,</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">ssc =</span> <span class="fu">ssc</span>(<span class="at">fixef.K =</span> <span class="st">"full"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(fixest)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">feols</span>(changeprestout <span class="sc">~</span> changedailies <span class="sc">|</span> styr,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> df, <span class="at">cluster =</span> <span class="sc">~</span>cnty90,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">ssc =</span> <span class="fu">ssc</span>(<span class="at">fixef.K =</span> <span class="st">"full"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Dep. var.: changeprestout | Obs: 15607 | FE: styr | Cluster: cnty90
 ------------------------------------------------------------------------------------------
 Variable                   Coefficient    Std. Err.    t value   Pr(&gt;|t|)         2.5%        97.5%
@@ -587,16 +604,16 @@ changedailies                0.0025907    0.0009345       2.77     0.0057    0.0
 ------------------------------------------------------------------------------------------</code></pre>
 </div>
 <div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyfixest <span class="im">as</span> pf</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="op">=</span> pf.feols(</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"changeprestout ~ changedailies | styr"</span>,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"cnty90"</span>},</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"full"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>),</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    fixef_rm<span class="op">=</span><span class="st">"none"</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyfixest <span class="im">as</span> pf</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="op">=</span> pf.feols(</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"changeprestout ~ changedailies | styr"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"cnty90"</span>},</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"full"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    fixef_rm<span class="op">=</span><span class="st">"none"</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Dep. var.:      changeprestout
 Observations:   15627
 Fixed effects:  styr
@@ -618,11 +635,11 @@ changedailies           0.0025907    0.0009351       2.77     0.0057 [ 0.0007580
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content">
 <div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install twowayfeweights, <span class="kw">replace</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">qui</span> <span class="kw">tab</span> styr, <span class="kw">gen</span>(styr)</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>twowayfeweights changeprestout cnty90 <span class="fu">year</span> changedailies numdailies, <span class="dv">type</span>(fdTR) controls(styr1-styr683)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install twowayfeweights, <span class="kw">replace</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">qui</span> <span class="kw">tab</span> styr, <span class="kw">gen</span>(styr)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>twowayfeweights changeprestout cnty90 <span class="fu">year</span> changedailies numdailies, <span class="dv">type</span>(fdTR) controls(styr1-styr683)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
 the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
 5371 ATTs receive a positive weight, and 4505 receive a negative weight.
@@ -637,15 +654,15 @@ Total                      9876        1.0000
 ------------------------------------------------</code></pre>
 </div>
 <div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"</span>))</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="fu">factor</span>(styr) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> df)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(styr_dummies) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"styr"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(styr_dummies))</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df, styr_dummies)</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"styr"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(styr_dummies))</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>decomp3 <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"changeprestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>,</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"changedailies"</span>, <span class="at">D0 =</span> <span class="st">"numdailies"</span>,</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">type =</span> <span class="st">"fdTR"</span>, <span class="at">controls =</span> styr_cols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"</span>))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="fu">factor</span>(styr) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> df)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(styr_dummies) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"styr"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(styr_dummies))</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df, styr_dummies)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"styr"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(styr_dummies))</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>decomp3 <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"changeprestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"changedailies"</span>, <span class="at">D0 =</span> <span class="st">"numdailies"</span>,</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">type =</span> <span class="st">"fdTR"</span>, <span class="at">controls =</span> styr_cols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
 the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
 5371 ATTs receive a positive weight, and 4505 receive a negative weight.
@@ -657,22 +674,41 @@ Negative weights             4505      -1.4271
 Total                        9876            1</code></pre>
 </div>
 <div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install twowayfeweights  (install from the authors' repository)</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights, print_twowayfeweights</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate state-year dummies (not pre-computed in the parquet)</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="op">=</span> pd.get_dummies(df[<span class="st">"styr"</span>], prefix<span class="op">=</span><span class="st">"styr"</span>, prefix_sep<span class="op">=</span><span class="st">""</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="op">=</span> <span class="bu">list</span>(styr_dummies.columns)</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, styr_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>result3 <span class="op">=</span> twowayfeweights(df, <span class="st">"changeprestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>,</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"changedailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>, D0<span class="op">=</span><span class="st">"numdailies"</span>,</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>                           controls<span class="op">=</span>styr_cols)</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>print_twowayfeweights(result3, D_name<span class="op">=</span><span class="st">"changedailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyfixest <span class="im">as</span> pf</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="op">=</span> pf.feols(</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"changeprestout ~ changedailies | styr"</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"cnty90"</span>},</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"full"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    fixef_rm<span class="op">=</span><span class="st">"none"</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>m3.summary(digits<span class="op">=</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Dep. var.:      changeprestout
+Observations:   15627
+Fixed effects:  styr
+Cluster var:    cnty90
+--------------------------------------------------------------------------------
+Variable              Coefficient    Std. Err.          t      P&gt;|t|                 [95% CI]
+--------------------------------------------------------------------------------
+changedailies           0.0025907    0.0009351       2.77     0.0057 [ 0.0007580,  0.0044234]
+--------------------------------------------------------------------------------</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights, print_twowayfeweights</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co"># FD weight decomposition (fdTR type)</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="op">=</span> pd.get_dummies(df[<span class="st">"styr"</span>], prefix<span class="op">=</span><span class="st">"styr"</span>, drop_first<span class="op">=</span><span class="va">False</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, styr_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="op">=</span> <span class="bu">sorted</span>(styr_dummies.columns.tolist())</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>result3 <span class="op">=</span> twowayfeweights(df, <span class="st">"changeprestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"changedailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>, D0<span class="op">=</span><span class="st">"numdailies"</span>,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>                           controls<span class="op">=</span>styr_cols)</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>print_twowayfeweights(result3, D_name<span class="op">=</span><span class="st">"changedailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
-beta estimates a weighted sum of 9876 ATTs.
+the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
 5371 ATTs receive a positive weight, and 4505 receive a negative weight.
-502 ATTs receive a weight equal to 0.
+10378 (g,t) cells receive the treatment, but the ATTs of 502 cells receive a weight equal to zero.
 ------------------------------------------------
 Treat. var: changedailies # ATTs     Σ weights
 ------------------------------------------------
@@ -693,44 +729,43 @@ Total                   9876        1.0000
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content">
 <div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install twowayfeweights, <span class="kw">replace</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">qui</span> <span class="kw">tab</span> styr, <span class="kw">gen</span>(styr)</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>twowayfeweights changeprestout cnty90 <span class="fu">year</span> changedailies numdailies, <span class="dv">type</span>(fdTR) controls(styr1-styr683) test_random_weights(<span class="fu">year</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install twowayfeweights, <span class="kw">replace</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="kw">qui</span> <span class="kw">tab</span> styr, <span class="kw">gen</span>(styr)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>twowayfeweights changeprestout cnty90 <span class="fu">year</span> changedailies numdailies, <span class="dv">type</span>(fdTR) controls(styr1-styr683) test_random_weights(<span class="fu">year</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Regression of variables possibly correlated with the treatment effect on the weights
 
              Coef           SE       t-stat  Correlation
 year    -.1674271    .05101171   -3.2821307    -.0631614</code></pre>
 </div>
 <div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"</span>))</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="fu">factor</span>(styr) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> df)</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(styr_dummies) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"styr"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(styr_dummies))</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df, styr_dummies)</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"styr"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(styr_dummies))</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>decomp3_test <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"changeprestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>,</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"changedailies"</span>, <span class="at">D0 =</span> <span class="st">"numdailies"</span>,</span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">type =</span> <span class="st">"fdTR"</span>, <span class="at">controls =</span> styr_cols,</span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">test_random_weights =</span> <span class="st">"year"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"</span>))</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="fu">factor</span>(styr) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> df)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(styr_dummies) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"styr"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(styr_dummies))</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df, styr_dummies)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"styr"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(styr_dummies))</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>decomp3_test <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"changeprestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>,</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"changedailies"</span>, <span class="at">D0 =</span> <span class="st">"numdailies"</span>,</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">type =</span> <span class="st">"fdTR"</span>, <span class="at">controls =</span> styr_cols,</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">test_random_weights =</span> <span class="st">"year"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Regression of variables possibly correlated with the treatment effect on the weights:
               Coef         SE    t-stat Correlation
 RW_year -0.1674271 0.05101171 -3.282131  -0.0631614</code></pre>
 </div>
 <div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install twowayfeweights  (install from the authors' repository)</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights, print_twowayfeweights</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate state-year dummies (not pre-computed in the parquet)</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="op">=</span> pd.get_dummies(df[<span class="st">"styr"</span>], prefix<span class="op">=</span><span class="st">"styr"</span>, prefix_sep<span class="op">=</span><span class="st">""</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="op">=</span> <span class="bu">list</span>(styr_dummies.columns)</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, styr_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>result3b <span class="op">=</span> twowayfeweights(df, <span class="st">"changeprestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>,</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"changedailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>, D0<span class="op">=</span><span class="st">"numdailies"</span>,</span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>                            controls<span class="op">=</span>styr_cols, test_random_weights<span class="op">=</span><span class="st">"year"</span>)</span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>print_twowayfeweights(result3b, D_name<span class="op">=</span><span class="st">"changedailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights, print_twowayfeweights</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Test random weights (year)</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>styr_dummies <span class="op">=</span> pd.get_dummies(df[<span class="st">"styr"</span>], prefix<span class="op">=</span><span class="st">"styr"</span>, drop_first<span class="op">=</span><span class="va">False</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, styr_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>styr_cols <span class="op">=</span> <span class="bu">sorted</span>(styr_dummies.columns.tolist())</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>result3b <span class="op">=</span> twowayfeweights(df, <span class="st">"changeprestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>,</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"changedailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>, D0<span class="op">=</span><span class="st">"numdailies"</span>,</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>                            controls<span class="op">=</span>styr_cols, test_random_weights<span class="op">=</span><span class="st">"year"</span>)</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>print_twowayfeweights(result3b, D_name<span class="op">=</span><span class="st">"changedailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"fdTR"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Regression of variables possibly correlated with the treatment effect on the weights
 
              Coef           SE       t-stat  Correlation
@@ -738,6 +773,9 @@ year   -0.1674271    0.0510117   -3.2821306   -0.0631614</code></pre>
 </div>
 </div>
 </div>
+<p><strong>Result (CQ#22):</strong> According to this regression, one more newspaper increases turnout by 0.26 percentage points. The coefficient is significant at all conventional levels (s.e. = 0.0009).</p>
+<p><strong>Result (CQ#23):</strong> The newspaper coefficient estimates a weighted combination of the effects of newspapers on turnout in 9876 county-election-year cells, where 5371 effects are weighted positively, while 4505 are weighted negatively, and where negative weights sum to −1.43.</p>
+<p><strong>Result (CQ#24):</strong> The weights are negatively correlated with the election year, and the correlation is significant: the first-difference regression (FDR) is more likely to up-weight newspapers’ effects in early elections, and to down-weight or weight negatively newspapers’ effects in late elections. If the effect of newspapers diminishes over time, for instance because new means of communication, such as the radio, appear toward the end of the period, the negative correlation between the weights and the year variable could lead the FDR to overestimate the average effect of newspapers. Conversely, if the effect of newspapers increases over time, for instance because readership per newspaper increases as the literacy rate rises over the period, this negative correlation between the weights and the year variable could lead the FDR to underestimate the average effect of newspapers.</p>
 
 
 </section>
