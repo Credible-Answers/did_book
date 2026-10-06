@@ -494,6 +494,7 @@ m3 = pf.feols(
     ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True),
     fixef_rm="none"
 )
+m3.summary(digits=7)
 ```
 
 ```
@@ -509,25 +510,25 @@ changedailies           0.0025907    0.0009351       2.77     0.0057 [ 0.0007580
 ```
 
 ```python
-# pip install twowayfeweights  (install from the authors' repository)
 import pandas as pd
 from twowayfeweights import twowayfeweights, print_twowayfeweights
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
-# Generate state-year dummies (not pre-computed in the parquet)
-styr_dummies = pd.get_dummies(df["styr"], prefix="styr", prefix_sep="", dtype=int)
-styr_cols = list(styr_dummies.columns)
+# FD weight decomposition (fdTR type)
+styr_dummies = pd.get_dummies(df["styr"], prefix="styr", drop_first=False).astype(int)
 df = pd.concat([df, styr_dummies], axis=1)
+styr_cols = sorted(styr_dummies.columns.tolist())
 result3 = twowayfeweights(df, "changeprestout", "cnty90", "year",
                            "changedailies", type="fdTR", D0="numdailies",
                            controls=styr_cols)
 print_twowayfeweights(result3, D_name="changedailies", type="fdTR")
+
 ```
 
 ```
 Under the common trends assumption,
-beta estimates a weighted sum of 9876 ATTs.
+the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
 5371 ATTs receive a positive weight, and 4505 receive a negative weight.
-502 ATTs receive a weight equal to 0.
+10378 (g,t) cells receive the treatment, but the ATTs of 502 cells receive a weight equal to zero.
 ------------------------------------------------
 Treat. var: changedailies # ATTs     Σ weights
 ------------------------------------------------
@@ -539,18 +540,18 @@ Total                   9876        1.0000
 ```
 
 ```python
-# pip install twowayfeweights  (install from the authors' repository)
 import pandas as pd
 from twowayfeweights import twowayfeweights, print_twowayfeweights
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
-# Generate state-year dummies (not pre-computed in the parquet)
-styr_dummies = pd.get_dummies(df["styr"], prefix="styr", prefix_sep="", dtype=int)
-styr_cols = list(styr_dummies.columns)
+# Test random weights (year)
+styr_dummies = pd.get_dummies(df["styr"], prefix="styr", drop_first=False).astype(int)
 df = pd.concat([df, styr_dummies], axis=1)
+styr_cols = sorted(styr_dummies.columns.tolist())
 result3b = twowayfeweights(df, "changeprestout", "cnty90", "year",
                             "changedailies", type="fdTR", D0="numdailies",
                             controls=styr_cols, test_random_weights="year")
 print_twowayfeweights(result3b, D_name="changedailies", type="fdTR")
+
 ```
 
 ```
