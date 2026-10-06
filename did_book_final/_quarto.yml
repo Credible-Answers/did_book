@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: ../docs
+  output-dir: docs
 
 book:
   title: "Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions"
