@@ -141,6 +141,7 @@ year::1928             -0.1102546    0.0108236     -10.19      0.000 [-0.1314688
 ```
 
 :::
+**Result (CQ#18):** $\hat{\beta}^{fe} = 0.0029$: according to this regression, one more newspaper increases turnout by 0.29 percentage points. The coefficient is marginally insignificant at the 5% level (s.e. = 0.0016).
 
 ---
 
@@ -220,7 +221,6 @@ Total                   10378       1.0000
 
 :::
 
-**Result (CQ#18):** $\hat{\beta}^{fe} = 0.0029$: according to this regression, one more newspaper increases turnout by 0.29 percentage points. The coefficient is marginally insignificant at the 5% level (s.e. = 0.0016).
 
 **Result (CQ#19):** Under the parallel trends assumption, $\hat{\beta}^{fe}$ estimates a weighted combination of the effects of newspapers on turnout in 10,378 county-election-year cells, where 6180 effects are weighted positively, while 4198 are weighted negatively, and where negative weights sum to −0.47. Accordingly, $\hat{\beta}^{fe}$ is far from estimating a convex combination of effects.
 
