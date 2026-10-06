@@ -8,7 +8,7 @@ Dataset: **Gentzkow, Shapiro & Sinkinson (2011)** — `gentzkowetal_didtextbook.
 
 This chapter investigates what the TWFE estimator $\hat{\beta}^{fe}$ estimates outside the classical design, using the effect of newspapers on voter turnout. The design features a non-binary treatment (number of newspapers), non-absorbing treatment changes, and variation in treatment timing across 1,195 US counties from 1868 to 1928.
 
-Key tool: the `twowayfeweights` package (Stata/R) decomposes $\hat{\beta}^{fe}$ into a weighted sum of treatment effects, where some weights may be negative — meaning $\hat{\beta}^{fe}$ may not estimate a convex combination of effects.
+Key tool: the `twowayfeweights` package decomposes $\hat{\beta}^{fe}$ into a weighted sum of treatment effects, where some weights may be negative — meaning $\hat{\beta}^{fe}$ may not estimate a convex combination of effects.
 
 No event-study plots in this chapter — only numerical outputs from regressions and decompositions.
 
@@ -110,6 +110,7 @@ m1 = pf.feols(
     vcov={"CRV1": "cnty90"},
     ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True)
 )
+m1.summary(digits=7)
 ```
 
 ```
@@ -205,7 +206,7 @@ print_twowayfeweights(result, D_name="numdailies", type="feTR")
 
 ```
 Under the common trends assumption,
-beta estimates a weighted sum of 10378 ATTs.
+the TWFE coefficient beta, equal to 0.0029, estimates a weighted sum of 10378 ATTs.
 6180 ATTs receive a positive weight, and 4198 receive a negative weight.
 ------------------------------------------------
 Treat. var: numdailies  # ATTs      Σ weights
@@ -218,6 +219,10 @@ Total                   10378       1.0000
 ```
 
 :::
+
+**Result (CQ#18):** $\hat{\beta}^{fe} = 0.0029$: according to this regression, one more newspaper increases turnout by 0.29 percentage points. The coefficient is marginally insignificant at the 5% level (s.e. = 0.0016).
+
+**Result (CQ#19):** Under the parallel trends assumption, $\hat{\beta}^{fe}$ estimates a weighted combination of the effects of newspapers on turnout in 10,378 county-election-year cells, where 6180 effects are weighted positively, while 4198 are weighted negatively, and where negative weights sum to −0.47. Accordingly, $\hat{\beta}^{fe}$ is far from estimating a convex combination of effects.
 
 ---
 
@@ -338,14 +343,32 @@ Total                     10342            1
 ### Python
 
 ```python
-# pip install twowayfeweights  (install from the authors' repository)
+import pandas as pd
+import pyfixest as pf
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
+m2 = pf.feols(
+    "prestout ~ numdailies + C(year) + C(styr) | cnty90",
+    data=df,
+    vcov={"CRV1": "cnty90"},
+    ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True)
+)
+b, se, t = m2.coef()["numdailies"], m2.se()["numdailies"], m2.tstat()["numdailies"]
+print(f"numdailies:  coef = {b:12.7f}  se = {se:12.7f}  t = {t:10.5f}")
+```
+
+```
+numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
+(year and state-year FEs absorbed, not shown)
+```
+
+```python
 import pandas as pd
 from twowayfeweights import twowayfeweights, print_twowayfeweights
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
-# Generate state-year dummies (not pre-computed in the parquet)
-styr_dummies = pd.get_dummies(df["styr"], prefix="styr", prefix_sep="", dtype=int)
-styr_cols = list(styr_dummies.columns)
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
+# Decomposition with state-year controls
+styr_dummies = pd.get_dummies(df["styr"], prefix="styr", drop_first=False).astype(int)
 df = pd.concat([df, styr_dummies], axis=1)
+styr_cols = sorted(styr_dummies.columns.tolist())
 result = twowayfeweights(df, "prestout", "cnty90", "year", "numdailies",
                           type="feTR", controls=styr_cols)
 print_twowayfeweights(result, D_name="numdailies", type="feTR")
@@ -353,9 +376,9 @@ print_twowayfeweights(result, D_name="numdailies", type="feTR")
 
 ```
 Under the common trends assumption,
-beta estimates a weighted sum of 10342 ATTs.
+the TWFE coefficient beta, equal to -0.0012, estimates a weighted sum of 10342 ATTs.
 6195 ATTs receive a positive weight, and 4147 receive a negative weight.
-36 ATTs receive a weight equal to 0.
+10378 (g,t) cells receive the treatment, but the ATTs of 36 cells receive a weight equal to zero.
 ------------------------------------------------
 Treat. var: numdailies  # ATTs      Σ weights
 ------------------------------------------------
@@ -367,6 +390,10 @@ Total                   10342       1.0000
 ```
 
 :::
+
+**Result (CQ#20):** According to this regression, one more newspaper reduces turnout by 0.12 percentage points. The coefficient is insignificant (s.e. = 0.0011).
+
+**Result (CQ#21):** The newspaper coefficient estimates a weighted combination of the effects of newspapers on turnout in 10,342 county-election-year cells, where 6195 effects are weighted positively, while 4147 are weighted negatively, and where negative weights sum to −0.53.
 
 ---
 
@@ -513,25 +540,51 @@ Total                        9876            1
 ### Python
 
 ```python
-# pip install twowayfeweights  (install from the authors' repository)
+import pandas as pd
+import pyfixest as pf
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
+m3 = pf.feols(
+    "changeprestout ~ changedailies | styr",
+    data=df,
+    vcov={"CRV1": "cnty90"},
+    ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True),
+    fixef_rm="none"
+)
+m3.summary(digits=7)
+```
+
+```
+Dep. var.:      changeprestout
+Observations:   15627
+Fixed effects:  styr
+Cluster var:    cnty90
+--------------------------------------------------------------------------------
+Variable              Coefficient    Std. Err.          t      P>|t|                 [95% CI]
+--------------------------------------------------------------------------------
+changedailies           0.0025907    0.0009351       2.77     0.0057 [ 0.0007580,  0.0044234]
+--------------------------------------------------------------------------------
+```
+
+```python
 import pandas as pd
 from twowayfeweights import twowayfeweights, print_twowayfeweights
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
-# Generate state-year dummies (not pre-computed in the parquet)
-styr_dummies = pd.get_dummies(df["styr"], prefix="styr", prefix_sep="", dtype=int)
-styr_cols = list(styr_dummies.columns)
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
+# FD weight decomposition (fdTR type)
+styr_dummies = pd.get_dummies(df["styr"], prefix="styr", drop_first=False).astype(int)
 df = pd.concat([df, styr_dummies], axis=1)
+styr_cols = sorted(styr_dummies.columns.tolist())
 result3 = twowayfeweights(df, "changeprestout", "cnty90", "year",
                            "changedailies", type="fdTR", D0="numdailies",
                            controls=styr_cols)
 print_twowayfeweights(result3, D_name="changedailies", type="fdTR")
+
 ```
 
 ```
 Under the common trends assumption,
-beta estimates a weighted sum of 9876 ATTs.
+the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
 5371 ATTs receive a positive weight, and 4505 receive a negative weight.
-502 ATTs receive a weight equal to 0.
+10378 (g,t) cells receive the treatment, but the ATTs of 502 cells receive a weight equal to zero.
 ------------------------------------------------
 Treat. var: changedailies # ATTs     Σ weights
 ------------------------------------------------
@@ -593,18 +646,18 @@ RW_year -0.1674271 0.05101171 -3.282131  -0.0631614
 ### Python
 
 ```python
-# pip install twowayfeweights  (install from the authors' repository)
 import pandas as pd
 from twowayfeweights import twowayfeweights, print_twowayfeweights
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
-# Generate state-year dummies (not pre-computed in the parquet)
-styr_dummies = pd.get_dummies(df["styr"], prefix="styr", prefix_sep="", dtype=int)
-styr_cols = list(styr_dummies.columns)
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
+# Test random weights (year)
+styr_dummies = pd.get_dummies(df["styr"], prefix="styr", drop_first=False).astype(int)
 df = pd.concat([df, styr_dummies], axis=1)
+styr_cols = sorted(styr_dummies.columns.tolist())
 result3b = twowayfeweights(df, "changeprestout", "cnty90", "year",
                             "changedailies", type="fdTR", D0="numdailies",
                             controls=styr_cols, test_random_weights="year")
 print_twowayfeweights(result3b, D_name="changedailies", type="fdTR")
+
 ```
 
 ```
@@ -615,3 +668,9 @@ year   -0.1674271    0.0510117   -3.2821306   -0.0631614
 ```
 
 :::
+
+**Result (CQ#22):** According to this regression, one more newspaper increases turnout by 0.26 percentage points. The coefficient is significant at all conventional levels (s.e. = 0.0009).
+
+**Result (CQ#23):** The newspaper coefficient estimates a weighted combination of the effects of newspapers on turnout in 9876 county-election-year cells, where 5371 effects are weighted positively, while 4505 are weighted negatively, and where negative weights sum to −1.43.
+
+**Result (CQ#24):** The weights are negatively correlated with the election year, and the correlation is significant: the first-difference regression (FDR) is more likely to up-weight newspapers' effects in early elections, and to down-weight or weight negatively newspapers' effects in late elections. If the effect of newspapers diminishes over time, for instance because new means of communication, such as the radio, appear toward the end of the period, the negative correlation between the weights and the year variable could lead the FDR to overestimate the average effect of newspapers. Conversely, if the effect of newspapers increases over time, for instance because readership per newspaper increases as the literacy rate rises over the period, this negative correlation between the weights and the year variable could lead the FDR to underestimate the average effect of newspapers.
