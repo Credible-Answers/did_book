@@ -149,6 +149,7 @@ m1 = pf.feols(
     vcov={"CRV1": "cnty90"},
     ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True)
 )
+m1.summary(digits=7)
 ```
 
 ```
@@ -189,7 +190,7 @@ print_twowayfeweights(result, D_name="numdailies", type="feTR")
 
 ```
 Under the common trends assumption,
-beta estimates a weighted sum of 10378 ATTs.
+the TWFE coefficient beta, equal to 0.0029, estimates a weighted sum of 10378 ATTs.
 6180 ATTs receive a positive weight, and 4198 receive a negative weight.
 ------------------------------------------------
 Treat. var: numdailies  # ATTs      Σ weights
