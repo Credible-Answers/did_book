@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Chapter 8: General Designs – Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
+<title>Chapter 8: General Designs – Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -73,7 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -146,7 +146,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/ch08.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Chapter 8: General Designs</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/ch08.html"><span class="chapter-title">Chapter 8: General Designs</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -182,38 +182,32 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Chapter 3: The Classical DID Design</span></span></a>
+  <a href="../chapters/ch03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chapter 3: The Classical DID Design</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 4: Alternatives to Parallel Trends</span></span></a>
+  <a href="../chapters/ch04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chapter 4: Alternatives to Parallel Trends</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Chapter 5: TWFE Estimators Outside of the Classical Design</span></span></a>
+  <a href="../chapters/ch05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chapter 5: TWFE Estimators Outside of the Classical Design</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter 6: Designs with Variation in Treatment Timing</span></span></a>
+  <a href="../chapters/ch06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chapter 6: Designs with Variation in Treatment Timing</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></span></a>
+  <a href="../chapters/ch07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch08.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Chapter 8: General Designs</span></span></a>
+  <a href="../chapters/ch08.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Chapter 8: General Designs</span></a>
   </div>
 </li>
     </ul>
@@ -226,16 +220,16 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">6.1</span> Overview</a></li>
-  <li><a href="#cq40-distributed-lag-twfe-regression" id="toc-cq40-distributed-lag-twfe-regression" class="nav-link" data-scroll-target="#cq40-distributed-lag-twfe-regression"><span class="header-section-number">6.2</span> CQ#40: Distributed-Lag TWFE Regression</a></li>
-  <li><a href="#cq41-weight-decomposition-twowayfeweights" id="toc-cq41-weight-decomposition-twowayfeweights" class="nav-link" data-scroll-target="#cq41-weight-decomposition-twowayfeweights"><span class="header-section-number">6.3</span> CQ#41: Weight Decomposition (<code>twowayfeweights</code>)</a></li>
-  <li><a href="#cq42-non-normalized-event-study-effects-figure-8.1" id="toc-cq42-non-normalized-event-study-effects-figure-8.1" class="nav-link" data-scroll-target="#cq42-non-normalized-event-study-effects-figure-8.1"><span class="header-section-number">6.4</span> CQ#42: Non-Normalized Event-Study Effects (Figure 8.1)</a></li>
-  <li><a href="#cq4344-treatment-path-descriptions" id="toc-cq4344-treatment-path-descriptions" class="nav-link" data-scroll-target="#cq4344-treatment-path-descriptions"><span class="header-section-number">6.5</span> CQ#43–44: Treatment Path Descriptions</a></li>
-  <li><a href="#cq45-path-specific-event-study-effects-by_path" id="toc-cq45-path-specific-event-study-effects-by_path" class="nav-link" data-scroll-target="#cq45-path-specific-event-study-effects-by_path"><span class="header-section-number">6.6</span> CQ#45: Path-Specific Event-Study Effects (<code>by_path</code>)</a></li>
-  <li><a href="#cq4647-normalized-event-study-effects-figure-8.2" id="toc-cq4647-normalized-event-study-effects-figure-8.2" class="nav-link" data-scroll-target="#cq4647-normalized-event-study-effects-figure-8.2"><span class="header-section-number">6.7</span> CQ#46–47: Normalized Event-Study Effects (Figure 8.2)</a></li>
-  <li><a href="#cq48-joint-test-of-no-dynamic-effects" id="toc-cq48-joint-test-of-no-dynamic-effects" class="nav-link" data-scroll-target="#cq48-joint-test-of-no-dynamic-effects"><span class="header-section-number">6.8</span> CQ#48: Joint Test of No Dynamic Effects</a></li>
-  <li><a href="#cq49-ats-and-wats-estimators-did_multiplegt_stat" id="toc-cq49-ats-and-wats-estimators-did_multiplegt_stat" class="nav-link" data-scroll-target="#cq49-ats-and-wats-estimators-did_multiplegt_stat"><span class="header-section-number">6.9</span> CQ#49: ATS and WATS Estimators (<code>did_multiplegt_stat</code>)</a></li>
-  <li><a href="#summary-of-results" id="toc-summary-of-results" class="nav-link" data-scroll-target="#summary-of-results"><span class="header-section-number">6.10</span> Summary of Results</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#cq40-distributed-lag-twfe-regression" id="toc-cq40-distributed-lag-twfe-regression" class="nav-link" data-scroll-target="#cq40-distributed-lag-twfe-regression">CQ#40: Distributed-Lag TWFE Regression</a></li>
+  <li><a href="#cq41-weight-decomposition-twowayfeweights" id="toc-cq41-weight-decomposition-twowayfeweights" class="nav-link" data-scroll-target="#cq41-weight-decomposition-twowayfeweights">CQ#41: Weight Decomposition (<code>twowayfeweights</code>)</a></li>
+  <li><a href="#cq42-non-normalized-event-study-effects-figure-8.1" id="toc-cq42-non-normalized-event-study-effects-figure-8.1" class="nav-link" data-scroll-target="#cq42-non-normalized-event-study-effects-figure-8.1">CQ#42: Non-Normalized Event-Study Effects (Figure 8.1)</a></li>
+  <li><a href="#cq4344-treatment-path-descriptions" id="toc-cq4344-treatment-path-descriptions" class="nav-link" data-scroll-target="#cq4344-treatment-path-descriptions">CQ#43–44: Treatment Path Descriptions</a></li>
+  <li><a href="#cq45-path-specific-event-study-effects-by_path" id="toc-cq45-path-specific-event-study-effects-by_path" class="nav-link" data-scroll-target="#cq45-path-specific-event-study-effects-by_path">CQ#45: Path-Specific Event-Study Effects (<code>by_path</code>)</a></li>
+  <li><a href="#cq4647-normalized-event-study-effects-figure-8.2" id="toc-cq4647-normalized-event-study-effects-figure-8.2" class="nav-link" data-scroll-target="#cq4647-normalized-event-study-effects-figure-8.2">CQ#46–47: Normalized Event-Study Effects (Figure 8.2)</a></li>
+  <li><a href="#cq48-joint-test-of-no-dynamic-effects" id="toc-cq48-joint-test-of-no-dynamic-effects" class="nav-link" data-scroll-target="#cq48-joint-test-of-no-dynamic-effects">CQ#48: Joint Test of No Dynamic Effects</a></li>
+  <li><a href="#cq49-ats-and-wats-estimators-did_multiplegt_stat" id="toc-cq49-ats-and-wats-estimators-did_multiplegt_stat" class="nav-link" data-scroll-target="#cq49-ats-and-wats-estimators-did_multiplegt_stat">CQ#49: ATS and WATS Estimators (<code>did_multiplegt_stat</code>)</a></li>
+  <li><a href="#summary-of-results" id="toc-summary-of-results" class="nav-link" data-scroll-target="#summary-of-results">Summary of Results</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Credible-Answers/did_book/edit/main/chapters/ch08.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Credible-Answers/did_book/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -244,7 +238,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Chapter 8: General Designs</span></h1>
+<h1 class="title"><span class="chapter-title">Chapter 8: General Designs</span></h1>
 </div>
 
 
@@ -261,8 +255,8 @@ window.Quarto = {
 </header>
 
 
-<section id="overview" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">6.1</span> Overview</h2>
+<section id="overview" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
 <p>Dataset: <strong>Gentzkow, Shapiro &amp; Sinkinson (2011)</strong> — <code>gentzkowetal_didtextbook.dta (Stata), gentzkowetal_didtextbook.RData (R), gentzkowetal_didtextbook.parquet (Python)</code> (16,872 observations, 1,195 counties, 16 election years 1868–1928)</p>
 <p>This chapter studies <strong>general designs</strong> where the treatment may be non-binary (taking values 0, 1, 2, …) and/or non-absorbing (groups can enter and exit treatment), and where treatment lags may affect the outcome. The running example measures the effect of the number of daily newspapers (<code>numdailies</code>) on presidential voter turnout (<code>prestout</code>).</p>
 <p>Key topics: static TWFE decompositions with multiple treatments (<code>twowayfeweights</code>), non-normalized and normalized event-study estimators (<code>did_multiplegt_dyn</code>), treatment-path descriptions (<code>design</code> option), and heterogeneity-robust estimators ruling out dynamic effects (<code>did_multiplegt_stat</code>).</p>
@@ -326,8 +320,8 @@ window.Quarto = {
 <p><strong>Note on cross-platform differences:</strong> CQ40–CQ43 and CQ45 match exactly between Stata and R to 7 decimals. CQ49 (<code>did_multiplegt_stat</code>) shows small differences between Stata, R, and Python due to internal implementation variations.. N, switchers, and stayers counts are identical across all three.</p>
 <hr>
 </section>
-<section id="cq40-distributed-lag-twfe-regression" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="cq40-distributed-lag-twfe-regression"><span class="header-section-number">6.2</span> CQ#40: Distributed-Lag TWFE Regression</h2>
+<section id="cq40-distributed-lag-twfe-regression" class="level2">
+<h2 class="anchored" data-anchor-id="cq40-distributed-lag-twfe-regression">CQ#40: Distributed-Lag TWFE Regression</h2>
 <blockquote class="blockquote">
 <p>Regress turnout on the number of newspapers and its lag, with county and year FEs, clustering standard errors at the county level. Interpret the results.</p>
 </blockquote>
@@ -374,8 +368,8 @@ N = 15,629</code></pre>
 <p><strong>Interpretation:</strong> The distributed-lag TWFE regression gives <span class="math inline">\(\hat\beta_0^{dl} = -0.0007962\)</span> (insignificant) and <span class="math inline">\(\hat\beta_1^{dl} = 0.0050348\)</span> (significant). The contemporaneous effect of newspapers on turnout is small and insignificant, while the lagged effect is positive and significant.</p>
 <hr>
 </section>
-<section id="cq41-weight-decomposition-twowayfeweights" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="cq41-weight-decomposition-twowayfeweights"><span class="header-section-number">6.3</span> CQ#41: Weight Decomposition (<code>twowayfeweights</code>)</h2>
+<section id="cq41-weight-decomposition-twowayfeweights" class="level2">
+<h2 class="anchored" data-anchor-id="cq41-weight-decomposition-twowayfeweights">CQ#41: Weight Decomposition (<code>twowayfeweights</code>)</h2>
 <blockquote class="blockquote">
 <p>Use the <code>twowayfeweights</code> command and the <code>other_treatments</code> option to decompose <span class="math inline">\(\hat\beta_0^{dl}\)</span> and <span class="math inline">\(\hat\beta_1^{dl}\)</span>, and interpret the results.</p>
 </blockquote>
@@ -437,8 +431,8 @@ Other treat (numdailies): 4933 pos (1.3558) | 5123 neg (-1.3558)</code></pre>
 <p><strong>Interpretation:</strong> Both coefficients are severely contaminated: the positive weights sum to 1.85, the negative weights to <span class="math inline">\(-0.85\)</span>, and the cross-contamination from the other treatment sums to <span class="math inline">\(\pm 1.21\)</span>. This means neither coefficient can be interpreted as a convex combination of causal effects.</p>
 <hr>
 </section>
-<section id="cq42-non-normalized-event-study-effects-figure-8.1" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="cq42-non-normalized-event-study-effects-figure-8.1"><span class="header-section-number">6.4</span> CQ#42: Non-Normalized Event-Study Effects (Figure 8.1)</h2>
+<section id="cq42-non-normalized-event-study-effects-figure-8.1" class="level2">
+<h2 class="anchored" data-anchor-id="cq42-non-normalized-event-study-effects-figure-8.1">CQ#42: Non-Normalized Event-Study Effects (Figure 8.1)</h2>
 <blockquote class="blockquote">
 <p>Use <code>did_multiplegt_dyn</code> to compute, for <span class="math inline">\(\ell \in \{1, \ldots, 4\}\)</span>, non-normalized event-study estimates <span class="math inline">\(\widehat{AVSQ}_\ell\)</span> of the effect of being exposed to a weakly larger number of newspapers for <span class="math inline">\(\ell\)</span> election cycles on turnout, as well as a test that effects are all equal using the <code>effects_equal</code> option. Also compute the pre-trend estimates <span class="math inline">\(\widehat{AVSQ}_{-\ell}\)</span> for <span class="math inline">\(\ell \in \{1, \ldots, 4\}\)</span>.</p>
 </blockquote>
@@ -559,8 +553,8 @@ Test of joint nullity of the placebos : p-value = 0.992198</code></pre>
 <p><em>Figure 8.1: Non-normalized DID estimates of the effect of being exposed to a weakly larger number of newspapers for</em> <span class="math inline">\(\ell\)</span> periods on turnout. Standard errors clustered at the county level. 95% confidence intervals shown in red.</p>
 <hr>
 </section>
-<section id="cq4344-treatment-path-descriptions" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="cq4344-treatment-path-descriptions"><span class="header-section-number">6.5</span> CQ#43–44: Treatment Path Descriptions</h2>
+<section id="cq4344-treatment-path-descriptions" class="level2">
+<h2 class="anchored" data-anchor-id="cq4344-treatment-path-descriptions">CQ#43–44: Treatment Path Descriptions</h2>
 <blockquote class="blockquote">
 <p>Rerun <code>did_multiplegt_dyn</code> with <code>design(0.8,console)</code> for <span class="math inline">\(\ell = 1, 2, 4\)</span>. What are the three most common “actual-versus-status-quo” comparisons averaged in <span class="math inline">\(AVSQ_\ell\)</span>?</p>
 </blockquote>
@@ -1065,8 +1059,8 @@ ERC REALLYCREDIBLE - GA N. 101043899</code></pre>
 <p><strong>Interpretation:</strong> At <span class="math inline">\(\ell = 1\)</span>, most switchers transition from 0 to 1 newspaper (64%). As <span class="math inline">\(\ell\)</span> increases, the treatment paths become more heterogeneous: by <span class="math inline">\(\ell = 4\)</span>, the top 3 paths account for only about 34% of all effects. Some counties gain newspapers and keep them, others gain and lose them. This heterogeneity complicates interpretation of <span class="math inline">\(AVSQ_\ell\)</span> at longer horizons.</p>
 <hr>
 </section>
-<section id="cq45-path-specific-event-study-effects-by_path" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="cq45-path-specific-event-study-effects-by_path"><span class="header-section-number">6.6</span> CQ#45: Path-Specific Event-Study Effects (<code>by_path</code>)</h2>
+<section id="cq45-path-specific-event-study-effects-by_path" class="level2">
+<h2 class="anchored" data-anchor-id="cq45-path-specific-event-study-effects-by_path">CQ#45: Path-Specific Event-Study Effects (<code>by_path</code>)</h2>
 <blockquote class="blockquote">
 <p>Estimate the first two event-study effects separately for the three most common <span class="math inline">\((D_{g,F_g-1}, D_{g,F_g}, D_{g,F_g+1})\)</span> paths shared by more than 100 counties, using <code>by_path(3)</code>.</p>
 </blockquote>
@@ -1134,8 +1128,8 @@ directly comparable. Use Stata or R for by_path analysis.</code></pre>
 <p><strong>Interpretation:</strong> Event-study effects are insignificant for the <span class="math inline">\((D_{g,F_g-1}, D_{g,F_g}, D_{g,F_g+1}) = (0, 1, 1)\)</span> and <span class="math inline">\((0, 1, 0)\)</span> paths, and significant for the <span class="math inline">\((0, 1, 2)\)</span> path. This might suggest that sustained exposure to an increasing number of newspapers is necessary to generate an effect, though event-study effects are noisy and may not significantly differ across paths.</p>
 <hr>
 </section>
-<section id="cq4647-normalized-event-study-effects-figure-8.2" class="level2" data-number="6.7">
-<h2 data-number="6.7" class="anchored" data-anchor-id="cq4647-normalized-event-study-effects-figure-8.2"><span class="header-section-number">6.7</span> CQ#46–47: Normalized Event-Study Effects (Figure 8.2)</h2>
+<section id="cq4647-normalized-event-study-effects-figure-8.2" class="level2">
+<h2 class="anchored" data-anchor-id="cq4647-normalized-event-study-effects-figure-8.2">CQ#46–47: Normalized Event-Study Effects (Figure 8.2)</h2>
 <blockquote class="blockquote">
 <p>Compute normalized event-study estimates <span class="math inline">\(\widehat{AVSQ}^n_\ell\)</span> for <span class="math inline">\(\ell \in \{1, \ldots, 4\}\)</span> and normalized pre-trends. Test whether all normalized effects are equal. Produce Figure 8.2.</p>
 </blockquote>
@@ -1264,8 +1258,8 @@ Equality of effects : p = 0.165258</code></pre>
 <p><em>Figure 8.2: Normalized DID estimates of effects of newspapers on turnout. Standard errors clustered at the county level. 95% confidence intervals shown in red.</em></p>
 <hr>
 </section>
-<section id="cq48-joint-test-of-no-dynamic-effects" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="cq48-joint-test-of-no-dynamic-effects"><span class="header-section-number">6.8</span> CQ#48: Joint Test of No Dynamic Effects</h2>
+<section id="cq48-joint-test-of-no-dynamic-effects" class="level2">
+<h2 class="anchored" data-anchor-id="cq48-joint-test-of-no-dynamic-effects">CQ#48: Joint Test of No Dynamic Effects</h2>
 <blockquote class="blockquote">
 <p>Restrict to counties whose treatment does not change between <span class="math inline">\(F_g\)</span> and <span class="math inline">\(F_g + 1\)</span>, and test whether the first and second non-normalized effects are equal.</p>
 </blockquote>
@@ -1353,8 +1347,8 @@ ERC REALLYCREDIBLE - GA N. 101043899</code></pre>
 <p><strong>Interpretation:</strong> In the subsample of 512 counties whose treatment does not change between <span class="math inline">\(F_g\)</span> and <span class="math inline">\(F_g + 1\)</span>, the first and second event-study effects are very close (0.015 vs 0.016) and not significantly different (<span class="math inline">\(p = 0.83\)</span>). This is consistent with the joint null that the first lag of newspapers does not affect turnout and that treatment effects are constant over time.</p>
 <hr>
 </section>
-<section id="cq49-ats-and-wats-estimators-did_multiplegt_stat" class="level2" data-number="6.9">
-<h2 data-number="6.9" class="anchored" data-anchor-id="cq49-ats-and-wats-estimators-did_multiplegt_stat"><span class="header-section-number">6.9</span> CQ#49: ATS and WATS Estimators (<code>did_multiplegt_stat</code>)</h2>
+<section id="cq49-ats-and-wats-estimators-did_multiplegt_stat" class="level2">
+<h2 class="anchored" data-anchor-id="cq49-ats-and-wats-estimators-did_multiplegt_stat">CQ#49: ATS and WATS Estimators (<code>did_multiplegt_stat</code>)</h2>
 <blockquote class="blockquote">
 <p>Using <code>did_multiplegt_stat</code>, compute the ATS and WATS estimators with <code>exact_match</code> and one placebo. Compare to the normalized event-study effects.</p>
 </blockquote>
@@ -1404,8 +1398,8 @@ WAOSS -0.0000123 0.0022931 -0.0045067 0.0044821 2,349   7,764
 <p><strong>Interpretation:</strong> The ATS (<span class="math inline">\(\approx 0.006\)</span>) and WATS (<span class="math inline">\(\approx 0.006\)</span>) are significant and positive. The placebo estimates are small and insignificant, supporting the parallel-trends assumption. These estimates are roughly half the magnitude of <span class="math inline">\(\widehat{AVSQ}^n_1 = 0.012\)</span>, which suggests a non-linear treatment response.</p>
 <hr>
 </section>
-<section id="summary-of-results" class="level2" data-number="6.10">
-<h2 data-number="6.10" class="anchored" data-anchor-id="summary-of-results"><span class="header-section-number">6.10</span> Summary of Results</h2>
+<section id="summary-of-results" class="level2">
+<h2 class="anchored" data-anchor-id="summary-of-results">Summary of Results</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 35%">
@@ -1860,7 +1854,7 @@ WAOSS -0.0000123 0.0022931 -0.0045067 0.0044821 2,349   7,764
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/ch07.html" class="pagination-link" aria-label="Chapter 7: Designs with Variation in Treatment Dose">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Chapter 7: Designs with Variation in Treatment Dose</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

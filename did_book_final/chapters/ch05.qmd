@@ -14,9 +14,9 @@ No event-study plots in this chapter — only numerical outputs from regressions
 
 ---
 
-## CQ#18–19: Basic TWFE Regression & Weight Decomposition
+## CQ#18: Basic TWFE Regression
 
-Regress turnout on number of newspapers and county and year FEs, clustering standard errors at the county level. Then decompose $\hat{\beta}^{fe}$ using `twowayfeweights`.
+Regress turnout on number of newspapers and county and year FEs, clustering standard errors at the county level. Interpret the results.
 
 ::: {.panel-tabset}
 
@@ -64,27 +64,6 @@ Absorbed variable: cnty90                           No. of categories =  1,195
 ------------------------------------------------------------------------------
 ```
 
-```stata
-* ssc install twowayfeweights, replace
-copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
-use "gentzkowetal_didtextbook.dta", clear
-twowayfeweights prestout cnty90 year numdailies, type(feTR)
-```
-
-```
-Under the common trends assumption,
-the TWFE coefficient beta, equal to 0.0029, estimates a weighted sum of 10378 ATTs.
-6180 ATTs receive a positive weight, and 4198 receive a negative weight.
-------------------------------------------------
-Treat. var: numdailies  # ATTs      Σ weights
-------------------------------------------------
-Positive weights        6180        1.4740
-Negative weights        4198        -0.4740
-------------------------------------------------
-Total                   10378       1.0000
-------------------------------------------------
-```
-
 ### R
 
 ```r
@@ -117,24 +96,6 @@ year::1920                  -0.1519845    0.0108909     -13.96      0.000   -0.1
 year::1924                  -0.1649369    0.0109407     -15.08      0.000   -0.1864020   -0.1434718
 year::1928                  -0.1102546    0.0108236     -10.19      0.000   -0.1314900   -0.0890193
 ------------------------------------------------------------------------------------------
-```
-
-```r
-library(haven); library(TwoWayFEWeights)
-load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
-decomp1 <- twowayfeweights(df, "prestout", "cnty90", "year",
-                            "numdailies", type = "feTR")
-```
-
-```
-Under the common trends assumption,
-the TWFE coefficient beta, equal to 0.0029, estimates a weighted sum of 10378 ATTs.
-6180 ATTs receive a positive weight, and 4198 receive a negative weight.
-
-Treat. var: numdailies     ATTs    Σ weights
-Positive weights           6180        1.474
-Negative weights           4198       -0.474
-Total                     10378            1
 ```
 
 ### Python
@@ -178,6 +139,61 @@ year::1928             -0.1102546    0.0108236     -10.19      0.000 [-0.1314688
 --------------------------------------------------------------------------------
 ```
 
+:::
+
+---
+
+## CQ#19: Weight Decomposition of the TWFE Coefficient
+
+Use the `twowayfeweights` command to decompose $\hat{\beta}^{fe}$, and interpret the results.
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+* ssc install twowayfeweights, replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
+use "gentzkowetal_didtextbook.dta", clear
+twowayfeweights prestout cnty90 year numdailies, type(feTR)
+```
+
+```
+Under the common trends assumption,
+the TWFE coefficient beta, equal to 0.0029, estimates a weighted sum of 10378 ATTs.
+6180 ATTs receive a positive weight, and 4198 receive a negative weight.
+------------------------------------------------
+Treat. var: numdailies  # ATTs      Σ weights
+------------------------------------------------
+Positive weights        6180        1.4740
+Negative weights        4198        -0.4740
+------------------------------------------------
+Total                   10378       1.0000
+------------------------------------------------
+```
+
+### R
+
+```r
+library(haven); library(TwoWayFEWeights)
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
+decomp1 <- twowayfeweights(df, "prestout", "cnty90", "year",
+                            "numdailies", type = "feTR")
+```
+
+```
+Under the common trends assumption,
+the TWFE coefficient beta, equal to 0.0029, estimates a weighted sum of 10378 ATTs.
+6180 ATTs receive a positive weight, and 4198 receive a negative weight.
+
+Treat. var: numdailies     ATTs    Σ weights
+Positive weights           6180        1.474
+Negative weights           4198       -0.474
+Total                     10378            1
+```
+
+### Python
+
 ```python
 import pandas as pd
 from twowayfeweights import twowayfeweights, print_twowayfeweights
@@ -205,9 +221,9 @@ Total                   10378       1.0000
 
 ---
 
-## CQ#20–21: TWFE Regression with State-Year FEs & Weight Decomposition
+## CQ#20: TWFE Regression with State–Year FEs
 
-Regress turnout on number of newspapers and county, year, and state-year FEs. Then decompose using `twowayfeweights` with the controls option.
+Regress turnout on number of newspapers and county, year, and state–year FEs, clustering standard errors at the county level. Interpret the results.
 
 ::: {.panel-tabset}
 
@@ -224,6 +240,51 @@ display "numdailies:  coef = " %12.7f _b[numdailies] "  se = " %12.7f _se[numdai
 ```
 numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
 ```
+
+### R
+
+```r
+library(haven); library(fixest)
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
+model2 <- feols(prestout ~ numdailies + i(year) + i(styr) | cnty90,
+                data = df, cluster = ~cnty90,
+                ssc = ssc(fixef.K = "full"))
+```
+
+```
+numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
+```
+
+### Python
+
+```python
+import pandas as pd
+import pyfixest as pf
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
+m2 = pf.feols(
+    "prestout ~ numdailies + C(year) + C(styr) | cnty90",
+    data=df,
+    vcov={"CRV1": "cnty90"},
+    ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True)
+)
+```
+
+```
+numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
+(year and state-year FEs absorbed, not shown)
+```
+
+:::
+
+---
+
+## CQ#21: Weight Decomposition with State–Year FEs
+
+Use the `twowayfeweights` command to decompose the newspaper coefficient in this regression, and interpret the results. As the regression controls for state–year FEs, you need to create those FEs and input them into the command's `controls` option (for instance, in Stata you can run `qui tab styr, gen(styr)`).
+
+::: {.panel-tabset}
+
+### Stata
 
 ```stata
 * ssc install twowayfeweights, replace
@@ -251,18 +312,6 @@ Total                   10342       1.0000
 ### R
 
 ```r
-library(haven); library(fixest)
-load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
-model2 <- feols(prestout ~ numdailies + i(year) + i(styr) | cnty90,
-                data = df, cluster = ~cnty90,
-                ssc = ssc(fixef.K = "full"))
-```
-
-```
-numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
-```
-
-```r
 library(haven); library(TwoWayFEWeights)
 load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
 styr_dummies <- model.matrix(~ factor(styr) - 1, data = df)
@@ -287,23 +336,6 @@ Total                     10342            1
 ```
 
 ### Python
-
-```python
-import pandas as pd
-import pyfixest as pf
-df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
-m2 = pf.feols(
-    "prestout ~ numdailies + C(year) + C(styr) | cnty90",
-    data=df,
-    vcov={"CRV1": "cnty90"},
-    ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True)
-)
-```
-
-```
-numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
-(year and state-year FEs absorbed, not shown)
-```
 
 ```python
 # pip install twowayfeweights  (install from the authors' repository)
@@ -338,9 +370,9 @@ Total                   10342       1.0000
 
 ---
 
-## CQ#22–24: FD Regression, Weight Decomposition & Random Weights Test
+## CQ#22: First-Difference Regression
 
-Regress the change in turnout on the change in number of newspapers and state-year FEs. Decompose using `twowayfeweights` with `type(fdTR)`, and test if weights are correlated with the year variable.
+Regress the change in turnout on the change in the number of newspapers and state–year FEs, clustering standard errors at the county level. Interpret the results.
 
 ::: {.panel-tabset}
 
@@ -371,44 +403,6 @@ changedailies |   .0025907   .0009351     2.77   0.006     .0007561    .0044252
 -------------------------------------------------------------------------------
 ```
 
-```stata
-* ssc install twowayfeweights, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
-use "gentzkowetal_didtextbook.dta", clear
-qui tab styr, gen(styr)
-twowayfeweights changeprestout cnty90 year changedailies numdailies, type(fdTR) controls(styr1-styr683)
-```
-
-```
-Under the common trends assumption,
-the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
-5371 ATTs receive a positive weight, and 4505 receive a negative weight.
-10378 (g,t) cells receive the treatment, but the ATTs of 502 cells receive a weight equal to zero.
-------------------------------------------------
-Treat. var: changedailies  # ATTs      Σ weights
-------------------------------------------------
-Positive weights           5371        2.4271
-Negative weights           4505        -1.4271
-------------------------------------------------
-Total                      9876        1.0000
-------------------------------------------------
-```
-
-```stata
-* ssc install twowayfeweights, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
-use "gentzkowetal_didtextbook.dta", clear
-qui tab styr, gen(styr)
-twowayfeweights changeprestout cnty90 year changedailies numdailies, type(fdTR) controls(styr1-styr683) test_random_weights(year)
-```
-
-```
-Regression of variables possibly correlated with the treatment effect on the weights
-
-             Coef           SE       t-stat  Correlation
-year    -.1674271    .05101171   -3.2821307    -.0631614
-```
-
 ### R
 
 ```r
@@ -426,49 +420,6 @@ Variable                   Coefficient    Std. Err.    t value   Pr(>|t|)       
 ------------------------------------------------------------------------------------------
 changedailies                0.0025907    0.0009345       2.77     0.0057    0.0007573    0.0044241
 ------------------------------------------------------------------------------------------
-```
-
-```r
-library(haven); library(TwoWayFEWeights)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
-styr_dummies <- model.matrix(~ factor(styr) - 1, data = df)
-colnames(styr_dummies) <- paste0("styr", 1:ncol(styr_dummies))
-df <- cbind(df, styr_dummies)
-styr_cols <- paste0("styr", 1:ncol(styr_dummies))
-decomp3 <- twowayfeweights(df, "changeprestout", "cnty90", "year",
-                            "changedailies", D0 = "numdailies",
-                            type = "fdTR", controls = styr_cols)
-```
-
-```
-Under the common trends assumption,
-the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
-5371 ATTs receive a positive weight, and 4505 receive a negative weight.
-10378 (g,t) cells receive the treatment, but the ATTs of 502 cells receive a weight equal to zero.
-
-Treat. var: changedailies    ATTs    Σ weights
-Positive weights             5371       2.4271
-Negative weights             4505      -1.4271
-Total                        9876            1
-```
-
-```r
-library(haven); library(TwoWayFEWeights)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
-styr_dummies <- model.matrix(~ factor(styr) - 1, data = df)
-colnames(styr_dummies) <- paste0("styr", 1:ncol(styr_dummies))
-df <- cbind(df, styr_dummies)
-styr_cols <- paste0("styr", 1:ncol(styr_dummies))
-decomp3_test <- twowayfeweights(df, "changeprestout", "cnty90", "year",
-                                 "changedailies", D0 = "numdailies",
-                                 type = "fdTR", controls = styr_cols,
-                                 test_random_weights = "year")
-```
-
-```
-Regression of variables possibly correlated with the treatment effect on the weights:
-              Coef         SE    t-stat Correlation
-RW_year -0.1674271 0.05101171 -3.282131  -0.0631614
 ```
 
 ### Python
@@ -497,6 +448,69 @@ Variable              Coefficient    Std. Err.          t      P>|t|            
 changedailies           0.0025907    0.0009351       2.77     0.0057 [ 0.0007580,  0.0044234]
 --------------------------------------------------------------------------------
 ```
+
+:::
+
+---
+
+## CQ#23: Weight Decomposition of the FD Coefficient
+
+Use the `twowayfeweights` command to decompose the newspaper coefficient in this regression, and interpret the results. You need to use the command's syntax for an FDR rather than a TWFER.
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+* ssc install twowayfeweights, replace
+copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
+use "gentzkowetal_didtextbook.dta", clear
+qui tab styr, gen(styr)
+twowayfeweights changeprestout cnty90 year changedailies numdailies, type(fdTR) controls(styr1-styr683)
+```
+
+```
+Under the common trends assumption,
+the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
+5371 ATTs receive a positive weight, and 4505 receive a negative weight.
+10378 (g,t) cells receive the treatment, but the ATTs of 502 cells receive a weight equal to zero.
+------------------------------------------------
+Treat. var: changedailies  # ATTs      Σ weights
+------------------------------------------------
+Positive weights           5371        2.4271
+Negative weights           4505        -1.4271
+------------------------------------------------
+Total                      9876        1.0000
+------------------------------------------------
+```
+
+### R
+
+```r
+library(haven); library(TwoWayFEWeights)
+load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
+styr_dummies <- model.matrix(~ factor(styr) - 1, data = df)
+colnames(styr_dummies) <- paste0("styr", 1:ncol(styr_dummies))
+df <- cbind(df, styr_dummies)
+styr_cols <- paste0("styr", 1:ncol(styr_dummies))
+decomp3 <- twowayfeweights(df, "changeprestout", "cnty90", "year",
+                            "changedailies", D0 = "numdailies",
+                            type = "fdTR", controls = styr_cols)
+```
+
+```
+Under the common trends assumption,
+the TWFE coefficient beta, equal to 0.0026, estimates a weighted sum of 9876 ATTs.
+5371 ATTs receive a positive weight, and 4505 receive a negative weight.
+10378 (g,t) cells receive the treatment, but the ATTs of 502 cells receive a weight equal to zero.
+
+Treat. var: changedailies    ATTs    Σ weights
+Positive weights             5371       2.4271
+Negative weights             4505      -1.4271
+Total                        9876            1
+```
+
+### Python
 
 ```python
 # pip install twowayfeweights  (install from the authors' repository)
@@ -527,6 +541,56 @@ Negative weights        4505        -1.4271
 Total                   9876        1.0000
 ------------------------------------------------
 ```
+
+:::
+
+---
+
+## CQ#24: Are the Weights Correlated with Year?
+
+Assess if the weights are correlated with the year variable. Interpret the results.
+
+::: {.panel-tabset}
+
+### Stata
+
+```stata
+* ssc install twowayfeweights, replace
+copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
+use "gentzkowetal_didtextbook.dta", clear
+qui tab styr, gen(styr)
+twowayfeweights changeprestout cnty90 year changedailies numdailies, type(fdTR) controls(styr1-styr683) test_random_weights(year)
+```
+
+```
+Regression of variables possibly correlated with the treatment effect on the weights
+
+             Coef           SE       t-stat  Correlation
+year    -.1674271    .05101171   -3.2821307    -.0631614
+```
+
+### R
+
+```r
+library(haven); library(TwoWayFEWeights)
+load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
+styr_dummies <- model.matrix(~ factor(styr) - 1, data = df)
+colnames(styr_dummies) <- paste0("styr", 1:ncol(styr_dummies))
+df <- cbind(df, styr_dummies)
+styr_cols <- paste0("styr", 1:ncol(styr_dummies))
+decomp3_test <- twowayfeweights(df, "changeprestout", "cnty90", "year",
+                                 "changedailies", D0 = "numdailies",
+                                 type = "fdTR", controls = styr_cols,
+                                 test_random_weights = "year")
+```
+
+```
+Regression of variables possibly correlated with the treatment effect on the weights:
+              Coef         SE    t-stat Correlation
+RW_year -0.1674271 0.05101171 -3.282131  -0.0631614
+```
+
+### Python
 
 ```python
 # pip install twowayfeweights  (install from the authors' repository)
