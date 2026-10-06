@@ -48,7 +48,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from matplotlib.patches import Patch
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 states_sorted = (df.groupby("state")["cohort"]
                  .first().sort_values(ascending=False).index)
 state_idx = {s: i for i, s in enumerate(states_sorted)}
@@ -130,10 +130,11 @@ N = 1631  |  R-sq = 0.9305
 ``` python
 import pandas as pd
 import pyfixest as pf
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 m1 = pf.feols('div_rate ~ udl + i(year) | state',
               data=df, weights='stpop', vcov={'CRV1': 'state'},
               ssc=pf.ssc(adj=True, fixef_k='full', cluster_adj=True))
+m1.summary(digits=7)
 ```
 
 ```         
@@ -213,7 +214,7 @@ RW_exposurelength -8.288361 0.2136059 -38.80212  -0.7325324
 ``` python
 import pandas as pd
 from twowayfeweights import twowayfeweights
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 result = twowayfeweights(df, "div_rate", "state", "year", "udl",
                           type="feTR", weights="stpop",
                           test_random_weights="exposurelength")
@@ -294,11 +295,12 @@ N = 611  |  R-sq = 0.1707
 
 ``` python
 import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df3 = df[(df['cohort'] != 1956) & (df['year'] <= 1968)].copy()
 m3 = pf.feols('div_rate ~ C(early_late_never)',
               data=df3, weights='stpop', vcov={'CRV1': 'state'},
               ssc=pf.ssc(adj=True, fixef_k='full', cluster_adj=True))
+m3.summary(digits=7)
 ```
 
 ```         
@@ -417,7 +419,7 @@ Wald test: stat = 0.506103, p-value = 0.870968, on 9 and 1,523 DoF
 
 ``` python
 import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 rt_pos = [c for c in df.columns if c.startswith("rel_time") and "minus" not in c]
 rt_neg = [c for c in df.columns if "rel_timeminus" in c]
 fml = "div_rate ~ " + " + ".join(rt_pos + rt_neg) + " + i(year) | state"
@@ -888,7 +890,7 @@ The development of this package was funded by the European Union (ERC, REALLYCRE
 import pandas as pd
 from twowayfeweights import twowayfeweights
 import re
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 rel_time_vars = [c for c in df.columns if c.startswith("rel_time")]
 other_rel_times = [c for c in rel_time_vars if c != "rel_time1"]
 other_treatments = [c for c in other_rel_times
@@ -1186,7 +1188,7 @@ abline(h = 0, lty = 2, col = "gray60"); abline(v = 0, lty = 2, col = "gray60")
 
 ``` python
 import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 fig, ax = plt.subplots(figsize=(10, 6))
 ax.errorbar(rt, coefs, yerr=1.96*ses, fmt='o-', color='navy',
             ecolor='maroon', capsize=3, markersize=5)
@@ -1462,7 +1464,7 @@ Overall ATT =   -0.1035032  SE =    0.0921859
 import pandas as pd
 from csdid.att_gt import ATTgt
 import io, contextlib
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df7 = df.copy()
 df7['cohort_cs'] = df7['cohort'].replace({0: 0})
 df7['state_id'] = df7['state'].astype(str).factorize()[0] + 1
@@ -1679,7 +1681,7 @@ Test of joint nullity of the placebos : p-value = 0.5254
 import pandas as pd
 import polars as pl
 from did_multiplegt_dyn.did_multiplegt_dyn import did_multiplegt_main
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df_dyn = df[['div_rate', 'state', 'year', 'udl', 'stpop']].copy().dropna()
 df_dyn['state_num'] = df_dyn['state'].astype(str).factorize()[0] + 1
 df_pl = pl.from_pandas(df_dyn[['div_rate', 'state_num', 'year', 'udl', 'stpop']])
@@ -1843,7 +1845,7 @@ import pandas as pd
 import numpy as np
 from did_imputation import did_imputation
 
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df['gname'] = df['cohort'].replace(0, np.nan)
 result = did_imputation(
     data=df, yname='div_rate', gname='gname',
@@ -1927,7 +1929,7 @@ dev.off()
 
 ``` python
 import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 es_plot(axes[0, 0], rt_fig62, co_fig62, lo_fig62, hi_fig62, "TWFE estimates", xlim=(-9.5, 16.5))
 es_plot(axes[0, 1], sa_rt, sa_co, sa_lo, sa_hi, "Sun & Abraham")

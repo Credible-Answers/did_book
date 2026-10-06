@@ -141,7 +141,8 @@ year::1928             -0.1102546    0.0108236     -10.19      0.000 [-0.1314688
 ```
 
 :::
-**Result (CQ#18):** $\hat{\beta}^{fe} = 0.0029$: according to this regression, one more newspaper increases turnout by 0.29 percentage points. The coefficient is marginally insignificant at the 5% level (s.e. = 0.0016).
+
+**Result:** $\hat{\beta}^{fe} = 0.0029$: according to this regression, one more newspaper increases turnout by 0.29 percentage points. The coefficient is marginally insignificant at the 5% level (s.e. = 0.0016).
 
 ---
 
@@ -221,8 +222,7 @@ Total                   10378       1.0000
 
 :::
 
-
-**Result (CQ#19):** Under the parallel trends assumption, $\hat{\beta}^{fe}$ estimates a weighted combination of the effects of newspapers on turnout in 10,378 county-election-year cells, where 6180 effects are weighted positively, while 4198 are weighted negatively, and where negative weights sum to −0.47. Accordingly, $\hat{\beta}^{fe}$ is far from estimating a convex combination of effects.
+**Result:** Under the parallel trends assumption, $\hat{\beta}^{fe}$ estimates a weighted combination of the effects of newspapers on turnout in 10,378 county-election-year cells, where 6180 effects are weighted positively, while 4198 are weighted negatively, and where negative weights sum to −0.47. Accordingly, $\hat{\beta}^{fe}$ is far from estimating a convex combination of effects.
 
 ---
 
@@ -280,6 +280,8 @@ numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
 ```
 
 :::
+
+**Result:** According to this regression, one more newspaper reduces turnout by 0.12 percentage points. The coefficient is insignificant (s.e. = 0.0011).
 
 ---
 
@@ -391,9 +393,7 @@ Total                   10342       1.0000
 
 :::
 
-**Result (CQ#20):** According to this regression, one more newspaper reduces turnout by 0.12 percentage points. The coefficient is insignificant (s.e. = 0.0011).
-
-**Result (CQ#21):** The newspaper coefficient estimates a weighted combination of the effects of newspapers on turnout in 10,342 county-election-year cells, where 6195 effects are weighted positively, while 4147 are weighted negatively, and where negative weights sum to −0.53.
+**Result:** The newspaper coefficient estimates a weighted combination of the effects of newspapers on turnout in 10,342 county-election-year cells, where 6195 effects are weighted positively, while 4147 are weighted negatively, and where negative weights sum to −0.53.
 
 ---
 
@@ -477,6 +477,8 @@ changedailies           0.0025907    0.0009351       2.77     0.0057 [ 0.0007580
 ```
 
 :::
+
+**Result:** According to this regression, one more newspaper increases turnout by 0.26 percentage points. The coefficient is significant at all conventional levels (s.e. = 0.0009).
 
 ---
 
@@ -597,6 +599,8 @@ Total                   9876        1.0000
 
 :::
 
+**Result:** The newspaper coefficient estimates a weighted combination of the effects of newspapers on turnout in 9876 county-election-year cells, where 5371 effects are weighted positively, while 4505 are weighted negatively, and where negative weights sum to −1.43.
+
 ---
 
 ## CQ#24: Are the Weights Correlated with Year?
@@ -669,8 +673,4 @@ year   -0.1674271    0.0510117   -3.2821306   -0.0631614
 
 :::
 
-**Result (CQ#22):** According to this regression, one more newspaper increases turnout by 0.26 percentage points. The coefficient is significant at all conventional levels (s.e. = 0.0009).
-
-**Result (CQ#23):** The newspaper coefficient estimates a weighted combination of the effects of newspapers on turnout in 9876 county-election-year cells, where 5371 effects are weighted positively, while 4505 are weighted negatively, and where negative weights sum to −1.43.
-
-**Result (CQ#24):** The weights are negatively correlated with the election year, and the correlation is significant: the first-difference regression (FDR) is more likely to up-weight newspapers' effects in early elections, and to down-weight or weight negatively newspapers' effects in late elections. If the effect of newspapers diminishes over time, for instance because new means of communication, such as the radio, appear toward the end of the period, the negative correlation between the weights and the year variable could lead the FDR to overestimate the average effect of newspapers. Conversely, if the effect of newspapers increases over time, for instance because readership per newspaper increases as the literacy rate rises over the period, this negative correlation between the weights and the year variable could lead the FDR to underestimate the average effect of newspapers.
+**Result:** The weights are negatively correlated with the election year, and the correlation is significant: the first-difference regression (FDR) is more likely to up-weight newspapers' effects in early elections, and to down-weight or weight negatively newspapers' effects in late elections. If the effect of newspapers diminishes over time, for instance because new means of communication, such as the radio, appear toward the end of the period, the negative correlation between the weights and the year variable could lead the FDR to overestimate the average effect of newspapers. Conversely, if the effect of newspapers increases over time, for instance because readership per newspaper increases as the literacy rate rises over the period, this negative correlation between the weights and the year variable could lead the FDR to underestimate the average effect of newspapers.
