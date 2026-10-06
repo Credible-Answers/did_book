@@ -303,6 +303,8 @@ m2 = pf.feols(
     vcov={"CRV1": "cnty90"},
     ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True)
 )
+b, se, t = m2.coef()["numdailies"], m2.se()["numdailies"], m2.tstat()["numdailies"]
+print(f"numdailies:  coef = {b:12.7f}  se = {se:12.7f}  t = {t:10.5f}")
 ```
 
 ```
@@ -311,14 +313,13 @@ numdailies:  coef =   -0.0012122  se =    0.0010962  t =   -1.10578
 ```
 
 ```python
-# pip install twowayfeweights  (install from the authors' repository)
 import pandas as pd
 from twowayfeweights import twowayfeweights, print_twowayfeweights
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
-# Generate state-year dummies (not pre-computed in the parquet)
-styr_dummies = pd.get_dummies(df["styr"], prefix="styr", prefix_sep="", dtype=int)
-styr_cols = list(styr_dummies.columns)
+# Decomposition with state-year controls
+styr_dummies = pd.get_dummies(df["styr"], prefix="styr", drop_first=False).astype(int)
 df = pd.concat([df, styr_dummies], axis=1)
+styr_cols = sorted(styr_dummies.columns.tolist())
 result = twowayfeweights(df, "prestout", "cnty90", "year", "numdailies",
                           type="feTR", controls=styr_cols)
 print_twowayfeweights(result, D_name="numdailies", type="feTR")
@@ -326,9 +327,9 @@ print_twowayfeweights(result, D_name="numdailies", type="feTR")
 
 ```
 Under the common trends assumption,
-beta estimates a weighted sum of 10342 ATTs.
+the TWFE coefficient beta, equal to -0.0012, estimates a weighted sum of 10342 ATTs.
 6195 ATTs receive a positive weight, and 4147 receive a negative weight.
-36 ATTs receive a weight equal to 0.
+10378 (g,t) cells receive the treatment, but the ATTs of 36 cells receive a weight equal to zero.
 ------------------------------------------------
 Treat. var: numdailies  # ATTs      Σ weights
 ------------------------------------------------
