@@ -21,7 +21,7 @@ Key topics: decomposition of the static TWFE estimator, event-study TWFE, and fo
 
 ``` stata
 * ssc install panelview, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 panelview div_rate udl, i(state) t(year) type(treat) title("Treatment Status: Wolfers (2006)") legend(label(1 "No UDL") label(2 "UDL adopted"))
 ```
@@ -30,10 +30,17 @@ panelview div_rate udl, i(state) t(year) type(treat) title("Treatment Status: Wo
 
 ``` r
 library(panelView)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+df <- haven::zap_labels(df)
+df <- as.data.frame(df)
+
+p <- panelview(div_rate ~ udl, data = df, index = c("state", "year"), type = "treat",
+               main = "Wolfers (2006)", ylab = "")
+print(p)   # lo muestra en Plots
+
+dir.create("figures", showWarnings = FALSE)
 png("figures/ch06_panelview_R.png", width = 1000, height = 600)
-panelview(div_rate ~ udl, data = df, index = c("state", "year"), type = "treat",
-          main = "Wolfers (2006)", ylab = "")
+print(p)   
 dev.off()
 ```
 
@@ -88,7 +95,7 @@ plt.savefig(FIGDIR / "ch06_panelview_Python.png", dpi=150)
 ### Stata
 
 ``` stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 reg div_rate udl i.state i.year [w=stpop], vce(cluster state)
 ```
@@ -111,7 +118,7 @@ Linear regression                               Number of obs     =      1,631
 
 ``` r
 library(haven); library(fixest)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 m1 <- feols(div_rate ~ udl + i(year) | state,
             data = df, weights = ~stpop, cluster = ~state,
             ssc = ssc(fixef.K = "full"))
@@ -146,7 +153,7 @@ N = 1631  |  R-sq = 0.9305
 ```
 :::
 
-**Interpretation:** $\hat{\beta}_{fe} = -0.055$ (s.e. = 0.15, p = 0.72). The coefficient is small and insignificant — according to this regression, UDLs do not affect divorce rates.
+**Interpretation:** $\hat{\beta}_{fe} = -0.055$ (s.e. = 0.15, p = 0.72). The coefficient is small and insignificant. According to this regression, UDLs do not affect divorce rates.
 
 ------------------------------------------------------------------------
 
@@ -159,7 +166,7 @@ N = 1631  |  R-sq = 0.9305
 
 ``` stata
 * ssc install twowayfeweights, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 twowayfeweights div_rate state year udl, type(feTR) test_random_weights(exposurelength) weight(stpop)
 ```
@@ -187,7 +194,7 @@ exposurele~h   -8.2883613    .21360588    -38.80212   -.73253245
 
 ``` r
 library(haven); library(TwoWayFEWeights)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 decomp2 <- twowayfeweights(df, "div_rate", "state", "year", "udl",
                             type = "feTR",
                             test_random_weights = "exposurelength",
@@ -234,7 +241,7 @@ exposurelength   -8.288361     0.213606    -38.8021   -0.732532
 ```
 :::
 
-**Interpretation:** Under parallel trends, $\hat{\beta}_{fe}$ estimates a weighted sum of ATTs. The vast majority receive positive weights (sum ≈ 1.026) and 32 receive negative weights (sum ≈ −0.026) — an "almost convex" combination. However, weights are strongly negatively correlated with exposure length (corr = −0.73, t = −38.8): $\hat{\beta}_{fe}$ heavily downweights long-run effects. It could differ from the ATT if treatment effects vary with length of exposure.
+**Interpretation:** Under parallel trends, $\hat{\beta}_{fe}$ estimates a weighted sum of ATTs. The vast majority receive positive weights (sum ≈ 1.026) and 32 receive negative weights (sum ≈ −0.026), an "almost convex" combination. However, weights are strongly negatively correlated with exposure length (corr = −0.73, t = −38.8): $\hat{\beta}_{fe}$ heavily downweights long-run effects. It could differ from the ATT if treatment effects vary with length of exposure.
 
 ------------------------------------------------------------------------
 
@@ -246,7 +253,7 @@ exposurelength   -8.288361     0.213606    -38.8021   -0.732532
 ### Stata
 
 ``` stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 reg div_rate i.early_late_never if cohort!=1956 & year<=1968 [w=stpop], vce(cluster state)
 ```
@@ -274,7 +281,8 @@ early_late_never |
 
 ``` r
 library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+library(dplyr)
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df3 <- df %>% filter(cohort != 1956, year <= 1968)
 m3 <- feols(div_rate ~ i(early_late_never),
             data = df3, weights = ~stpop, cluster = ~state,
@@ -318,6 +326,116 @@ N = 611  |  R-sq = 0.1707
 
 ------------------------------------------------------------------------
 
+
+
+## TWFE event-study graph
+
+Let's now depict Figure 6.2: the TWFE event-study estimates of the effect of unilateral divorce laws on the divorce rate, by years relative to the year before the law was passed. It shows the pre-period coefficients (`rel_timeminus9`–`rel_timeminus1`) and the post-period coefficients (`rel_time1`–`rel_time16`), with 95% confidence intervals. We will use this graph as input to answer CQ#28 and CQ#32 in detail.
+
+::: panel-tabset
+### Stata
+
+![TWFE Event-Study (Stata)](../figures/ch06_fig62_twfe_es.png)
+
+``` stata
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+use "wolfers2006_didtextbook.dta", clear
+* Run the regression
+reg div_rate rel_time* i.state i.year [w=stpop], vce(cluster state)
+
+* Pull coefficients and CIs into a postfile
+tempname pf
+tempfile coefs
+postfile `pf' rel_time coef ci_lo ci_hi using `coefs'
+
+* Post-period coefficients: rel_time1 ... rel_time16
+forvalues t = 1/16 {
+    local b  = _b[rel_time`t']
+    local se = _se[rel_time`t']
+    local lo = `b' - 1.96 * `se'
+    local hi = `b' + 1.96 * `se'
+    post `pf' (`t') (`b') (`lo') (`hi')
+}
+
+* Pre-period coefficients: rel_timeminus1 ... rel_timeminus9 (negative event time)
+forvalues t = 1/9 {
+    local b  = _b[rel_timeminus`t']
+    local se = _se[rel_timeminus`t']
+    local lo = `b' - 1.96 * `se'
+    local hi = `b' + 1.96 * `se'
+    post `pf' (-`t') (`b') (`lo') (`hi')
+}
+
+* Add the reference period (rel_time = 0) as a zero point
+post `pf' (0) (0) (0) (0)
+
+postclose `pf'
+
+* Load the coefficient dataset
+preserve
+use `coefs', clear
+sort rel_time
+
+* Plot
+twoway (scatter coef rel_time, msize(medlarge) msymbol(o) mcolor(navy) legend(off)) ///
+       (line coef rel_time, lcolor(navy)) ///
+       (rcap ci_hi ci_lo rel_time, lcolor(maroon)), ///
+       title("TWFE estimates") ///
+       xtitle("Relative time to year before law") ///
+       ytitle("Effect") ///
+       ylabel(-1(.5)0.5) yscale(range(-1.1 0.8)) ///
+       xlabel(-9(3)15) ///
+       xline(0, lcolor(gs10) lpattern(dash)) ///
+       yline(0, lcolor(gs10) lpattern(dash)) ///
+       legend(off)
+
+graph export "figures/ch06_fig62_twfe_es.png", replace width(1200)
+restore
+```
+
+### R
+
+![TWFE Event-Study (R)](../figures/ch06_fig62_twfe_es_R.png)
+
+``` r
+library(haven)
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+es_coefs <- data.frame(
+    rel_time = c(-(9:1), 0, 1:16),
+    coef = c(coef(m4)[paste0("rel_timeminus", 9:1)], 0,
+             coef(m4)[paste0("rel_time", 1:16)]),
+    se = c(se(m4)[paste0("rel_timeminus", 9:1)], 0,
+           se(m4)[paste0("rel_time", 1:16)]))
+es_coefs$ci_lo <- es_coefs$coef - 1.96 * es_coefs$se
+es_coefs$ci_hi <- es_coefs$coef + 1.96 * es_coefs$se
+
+plot(es_coefs$rel_time, es_coefs$coef, type = "b", pch = 19, col = "navy",
+     xlab = "Relative time to year before law", ylab = "Effect",
+     main = "TWFE estimates", ylim = c(-1.1, 0.8), xlim = c(-9, 16))
+arrows(es_coefs$rel_time, es_coefs$ci_lo, es_coefs$rel_time, es_coefs$ci_hi,
+       length = 0.03, angle = 90, code = 3, col = "maroon")
+abline(h = 0, lty = 2, col = "gray60"); abline(v = 0, lty = 2, col = "gray60")
+```
+
+### Python
+
+![TWFE Event-Study (Python)](../figures/ch06_fig62_twfe_es_Python.png)
+
+``` python
+import pandas as pd
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.errorbar(rt, coefs, yerr=1.96*ses, fmt='o-', color='navy',
+            ecolor='maroon', capsize=3, markersize=5)
+ax.axhline(0, color='gray', linestyle='--')
+ax.axvline(0, color='gray', linestyle='--')
+ax.set_xlabel("Relative time to year before law")
+ax.set_ylabel("Effect"); ax.set_title("TWFE estimates")
+plt.tight_layout()
+plt.savefig(FIGDIR / "ch06_fig62_twfe_es_Python.png", dpi=150)
+```
+:::
+
 ## CQ#28: Event-Study TWFE Regression
 
 > Run the event-study TWFE regression with `rel_time` indicators. Test pre-trends jointly.
@@ -326,7 +444,7 @@ N = 611  |  R-sq = 0.1707
 ### Stata
 
 ``` stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 reg div_rate rel_time* i.state i.year [w=stpop], vce(cluster state)
 test rel_timeminus1-rel_timeminus9
@@ -372,14 +490,17 @@ rel_timeminus9 |   .0558855   .1600016     0.35   0.728    -.2654871    .3772581
 ### R
 
 ``` r
+library(fixest)
 library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
-rt_vars <- c(paste0("rel_time", 1:16), paste0("rel_timeminus", 1:9))
-rt_formula <- as.formula(paste("div_rate ~", paste(rt_vars, collapse = " + "),
-                               "+ i(year) | state"))
-m4 <- feols(rt_formula, data = df, weights = ~stpop, cluster = ~state,
-            ssc = ssc(fixef.K = "full"))
-wald(m4, keep = paste0("rel_timeminus", 1:9))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+df <- as.data.frame(zap_labels(df))
+
+rel_time_vars <- names(df)[grepl("^rel_time", names(df))]
+rel_time_formula <- paste("div_rate ~", paste(rel_time_vars, collapse = " + "),
+                          "+ i(state) + i(year)")
+event_study_twfe <- feols(as.formula(rel_time_formula), data = df,
+                          weights = ~stpop, cluster = ~state)
+wald(event_study_twfe, keep = "rel_timeminus")
 ```
 
 ```         
@@ -464,16 +585,16 @@ N = 1631  |  R-sq = 0.9351
 
 ------------------------------------------------------------------------
 
-## CQ#29–30: Decompose $\hat{\beta}_1^{fe}$
+## CQ#29: Decompose $\hat{\beta}_1^{fe}$
 
-> Decompose the first event-study coefficient $\hat{\beta}_1^{fe}$ using `twowayfeweights` with other treatments and controls.
+> Use `twowayfeweights` to decompose $\hat{\beta}_1^{fe}$, and compute the correlation between the weights and the `year` variable.
 
 ::: panel-tabset
 ### Stata
 
 ``` stata
 * ssc install twowayfeweights, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 twowayfeweights div_rate state year rel_time1, type(feTR) test_random_weights(year) weight(stpop) other_treatments(rel_time2-rel_time16) controls(rel_timeminus1-rel_timeminus9)
 ```
@@ -668,7 +789,7 @@ year   -15.333901    13.428752   -1.1418709   -.23224592
 
 ``` r
 library(haven); library(TwoWayFEWeights)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 rel_time_vars <- names(df)[grepl("^rel_time", names(df))]
 other_rel_times <- rel_time_vars[rel_time_vars != "rel_time1"]
 other_treatments <- other_rel_times[grepl("^rel_time[2-9]$|^rel_time1[0-6]$", other_rel_times)]
@@ -1091,129 +1212,52 @@ year   -15.333901    13.428752   -1.1418709   -0.2322459
 ```
 :::
 
-**Interpretation:** All 27 ATTs for `rel_time1` receive positive weights — $\hat{\beta}_1^{fe}$ estimates a convex combination of first-year effects. Contamination from other `rel_time` indicators is negligible (each sums to ≈ 0).
+------------------------------------------------------------------------
+
+## CQ#30: Interpret the decomposition
+
+> Interpret the results.
+
+**Interpretation:** $\hat{\beta}_1^{fe}$ can be decomposed as the sum of two terms.
+
+The first term is a convex combination of the effects of having been exposed to a UDL for one year, across 27 states: all the weights in this first term are positive. The weights are negatively correlated with `year` (correlation $= -0.232$), so this term upweights effects in states that passed a law early. It could therefore differ from $ATT_1$, the average effect of one year of exposure across all states, if that effect varies between early- and late-adopting states.
+
+The second term is a zero-sum-weight combination of the effects of being exposed to a UDL for more than one year. For instance, 29 effects of two years of exposure enter this term, 16 with a positive weight and 13 with a negative weight, summing respectively to 0.012 and $-0.012$. Effects of three, four, ..., 15, and 16 or more years of exposure also enter this term. In total, the positive and negative contamination weights sum respectively to 0.064 and $-0.064$. If UDLs' effects vary across states, this second term may not be zero, further biasing $\hat{\beta}_1^{fe}$ relative to $ATT_1$. However, the contamination weights are small, so this bias is likely small.
+
+Overall, $\hat{\beta}_1^{fe}$ does not put negative weights on the effects of one year of exposure, nor large weights on the effects of other exposure lengths. This may be because many states are never treated in this application. Decomposition of the other coefficients $\hat{\beta}_\ell^{fe}$ for $\ell \geq 2$ give similar results.
 
 ------------------------------------------------------------------------
 
-## Figure 6.2: TWFE Event-Study
-
-::: panel-tabset
-### Stata
-
-![TWFE Event-Study (Stata)](../figures/ch06_fig62_twfe_es.png)
-
-``` stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
-use "wolfers2006_didtextbook.dta", clear
-* Run the regression
-reg div_rate rel_time* i.state i.year [w=stpop], vce(cluster state)
-
-* Pull coefficients and CIs into a postfile
-tempname pf
-tempfile coefs
-postfile `pf' rel_time coef ci_lo ci_hi using `coefs'
-
-* Post-period coefficients: rel_time1 ... rel_time16
-forvalues t = 1/16 {
-    local b  = _b[rel_time`t']
-    local se = _se[rel_time`t']
-    local lo = `b' - 1.96 * `se'
-    local hi = `b' + 1.96 * `se'
-    post `pf' (`t') (`b') (`lo') (`hi')
-}
-
-* Pre-period coefficients: rel_timeminus1 ... rel_timeminus9 (negative event time)
-forvalues t = 1/9 {
-    local b  = _b[rel_timeminus`t']
-    local se = _se[rel_timeminus`t']
-    local lo = `b' - 1.96 * `se'
-    local hi = `b' + 1.96 * `se'
-    post `pf' (-`t') (`b') (`lo') (`hi')
-}
-
-* Add the reference period (rel_time = 0) as a zero point
-post `pf' (0) (0) (0) (0)
-
-postclose `pf'
-
-* Load the coefficient dataset
-preserve
-use `coefs', clear
-sort rel_time
-
-* Plot
-twoway (scatter coef rel_time, msize(medlarge) msymbol(o) mcolor(navy) legend(off)) ///
-       (line coef rel_time, lcolor(navy)) ///
-       (rcap ci_hi ci_lo rel_time, lcolor(maroon)), ///
-       title("TWFE estimates") ///
-       xtitle("Relative time to year before law") ///
-       ytitle("Effect") ///
-       ylabel(-1(.5)0.5) yscale(range(-1.1 0.8)) ///
-       xlabel(-9(3)15) ///
-       xline(0, lcolor(gs10) lpattern(dash)) ///
-       yline(0, lcolor(gs10) lpattern(dash)) ///
-       legend(off)
-
-graph export "figures/ch06_fig62_twfe_es.png", replace width(1200)
-restore
-```
-
-### R
-
-![TWFE Event-Study (R)](../figures/ch06_fig62_twfe_es_R.png)
-
-``` r
-library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
-es_coefs <- data.frame(
-    rel_time = c(-(9:1), 0, 1:16),
-    coef = c(coef(m4)[paste0("rel_timeminus", 9:1)], 0,
-             coef(m4)[paste0("rel_time", 1:16)]),
-    se = c(se(m4)[paste0("rel_timeminus", 9:1)], 0,
-           se(m4)[paste0("rel_time", 1:16)]))
-es_coefs$ci_lo <- es_coefs$coef - 1.96 * es_coefs$se
-es_coefs$ci_hi <- es_coefs$coef + 1.96 * es_coefs$se
-
-plot(es_coefs$rel_time, es_coefs$coef, type = "b", pch = 19, col = "navy",
-     xlab = "Relative time to year before law", ylab = "Effect",
-     main = "TWFE estimates", ylim = c(-1.1, 0.8), xlim = c(-9, 16))
-arrows(es_coefs$rel_time, es_coefs$ci_lo, es_coefs$rel_time, es_coefs$ci_hi,
-       length = 0.03, angle = 90, code = 3, col = "maroon")
-abline(h = 0, lty = 2, col = "gray60"); abline(v = 0, lty = 2, col = "gray60")
-```
-
-### Python
-
-![TWFE Event-Study (Python)](../figures/ch06_fig62_twfe_es_Python.png)
-
-``` python
-import pandas as pd
-df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.errorbar(rt, coefs, yerr=1.96*ses, fmt='o-', color='navy',
-            ecolor='maroon', capsize=3, markersize=5)
-ax.axhline(0, color='gray', linestyle='--')
-ax.axvline(0, color='gray', linestyle='--')
-ax.set_xlabel("Relative time to year before law")
-ax.set_ylabel("Effect"); ax.set_title("TWFE estimates")
-plt.tight_layout()
-plt.savefig(FIGDIR / "ch06_fig62_twfe_es_Python.png", dpi=150)
-```
-:::
 
 ------------------------------------------------------------------------
 
-## CQ#31–32: Sun & Abraham Estimators
+## CQ#31: Sun & Abraham event-study estimates
 
-> Estimate IW (interaction-weighted) event-study effects using Sun & Abraham (2021), dropping always-treated states.
+> Compute 13 event-study and pre-trend estimates using `eventstudyinteract`, with the never treated as the control group, weighting the estimation by `stpop`. Before running the command: set `cohort` to missing for the never-treated groups; redefine `rel_timeminus9` as an indicator for $t = F_g - 1 - 9$; create `rel_timeminus10` to `rel_timeminus12` as indicators for $t = F_g - 1 - 10, 11, 12$, and `rel_timeminus13` for $t \leq F_g - 1 - 13$; drop `rel_time14` to `rel_time16` and redefine `rel_time13` as an indicator for $t \geq F_g - 1 + 13$; and drop always-treated groups.
 
 ::: panel-tabset
 ### Stata
 
 ``` stata
 * ssc install eventstudyinteract, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
+
+* Drop always-treated states
+drop if cohort == 1956
+
+* Bin the leads at -13 and the lags at 13 (treated states only)
+replace rel_timeminus9 = (year == cohort - 1 - 9) & cohort > 0
+forvalues k = 10/12 {
+    gen rel_timeminus`k' = (year == cohort - 1 - `k') & cohort > 0
+}
+gen rel_timeminus13 = (year <= cohort - 1 - 13) & cohort > 0
+drop rel_time14 rel_time15 rel_time16
+replace rel_time13 = (year >= cohort - 1 + 13) & cohort > 0
+
+* Never treated: cohort missing
+replace cohort = . if cohort == 0
+
 eventstudyinteract div_rate rel_time* [aweight=stpop], absorb(i.state i.year) cohort(cohort) control_cohort(controlgroup) vce(cluster state)
 ```
 
@@ -1257,13 +1301,13 @@ rel_timeminus13 |  -.0118369   .1649912    -0.07   0.943    -.343574    .3199001
 
 ``` r
 library(haven); library(fixest); library(dplyr)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df6 <- df %>%
     filter(cohort != 1956) %>%
     mutate(cohort_sa = ifelse(cohort == 0, 10000, cohort))
 df_treated <- df6 %>% filter(cohort > 0)
-min_rel <- min(df_treated$year - (df_treated$cohort - 1))
-max_rel <- max(df_treated$year - (df_treated$cohort - 1))
+min_rel <- min(df_treated$year - df_treated$cohort)
+max_rel <- max(df_treated$year - df_treated$cohort)
 m6 <- feols(div_rate ~ sunab(cohort_sa, year, ref.p = -1,
             bin.rel = list("-14" = min_rel:-14, "12" = 12:max_rel)) | state + year,
             data = df6, weights = ~stpop, vcov = ~state,
@@ -1274,41 +1318,51 @@ summary(m6)
 ```         
 OLS estimation, Dep. Var.: div_rate
 Observations: 1,565
+Weights: stpop
 Fixed-effects: state: 49,  year: 33
-Standard-errors: Clustered (state)
-           Estimate Std. Error   t value   Pr(>|t|)
-year::-14 -0.012960   0.157842 -0.082105 0.93490431
-year::-13 -0.135399   0.120245 -1.126026 0.26575288
-year::-12 -0.050180   0.123418 -0.406585 0.68611989
-year::-11  0.024293   0.143259  0.169572 0.86605909
-year::-10  0.065799   0.137636  0.478067 0.63477293
-year::-9   0.028236   0.120220  0.234870 0.81530884
-year::-8   0.015769   0.111107  0.141924 0.88773422
-year::-7  -0.022465   0.112049 -0.200494 0.84194122
-year::-6  -0.001855   0.116118 -0.015977 0.98731867
-year::-5   0.092535   0.093432  0.990403 0.32694387
-year::-4   0.097375   0.084287  1.155277 0.25369558
-year::-3   0.056949   0.068634  0.829753 0.41078607
-year::-2   0.058533   0.049270  1.188005 0.24067665
-year::0    0.292720   0.076917  3.805652 0.00040068
-year::1    0.298150   0.070828  4.209509 0.00011160
-year::2    0.261017   0.079519  3.282439 0.00192339
-year::3    0.147670   0.096505  1.530173 0.13253835
-year::4    0.114623   0.102637  1.116785 0.26964543
-year::5    0.167692   0.118194  1.418791 0.16242077
-year::6    0.172182   0.136046  1.265623 0.21175714
-year::7    0.110115   0.123389  0.892422 0.37661919
-year::8   -0.078563   0.127365 -0.616835 0.54025871
-year::9   -0.206175   0.142363 -1.448236 0.15405210
-year::10  -0.249190   0.149231 -1.669829 0.10146303
-year::11  -0.441498   0.157482 -2.803475 0.00727345
-year::12  -0.526894   0.189981 -2.773404 0.00787668
+Standard-errors: Clustered (state) 
+           Estimate Std. Error   t value   Pr(>|t|)    
+year::-14 -0.011837   0.155534 -0.076105 0.93965159    
+year::-13 -0.135404   0.118663 -1.141076 0.25949925    
+year::-12 -0.050181   0.121810 -0.411960 0.68220253    
+year::-11  0.024293   0.141397  0.171808 0.86431100    
+year::-10  0.065800   0.135849  0.484363 0.63033109    
+year::-9   0.028238   0.118661  0.237973 0.81291467    
+year::-8   0.015771   0.109665  0.143809 0.88625361    
+year::-7  -0.022463   0.110594 -0.203115 0.83990408    
+year::-6  -0.001853   0.114608 -0.016170 0.98716563    
+year::-5   0.092537   0.092215  1.003488 0.32065738    
+year::-4   0.097377   0.083189  1.170558 0.24755541    
+year::-3   0.056950   0.067738  0.840740 0.40466224    
+year::-2   0.058534   0.048628  1.203706 0.23460587    
+year::0    0.292720   0.075917  3.855793 0.00034288 
+year::1    0.298148   0.069907  4.264945 0.00009328 
+year::2    0.261015   0.078485  3.325668 0.00169679  
+year::3    0.147668   0.095248  1.550350 0.12762640    
+year::4    0.114621   0.101299  1.131509 0.26346235    
+year::5    0.167690   0.116656  1.437477 0.15706990    
+year::6    0.172180   0.134275  1.282292 0.20589860    
+year::7    0.110113   0.121781  0.904190 0.37041071    
+year::8   -0.078565   0.125702 -0.625009 0.53492496    
+year::9   -0.206177   0.140504 -1.467407 0.14878757    
+year::10  -0.249192   0.147282 -1.691933 0.09714179   
+year::11  -0.441500   0.155425 -2.840591 0.00658789 
+year::12  -0.526897   0.187497 -2.810155 0.00714538 
 
 N = 1565  |  Clusters = 49
 ```
 :::
 
-**Interpretation:** Sun & Abraham estimates are very similar to TWFE event-study but slightly attenuated for long-run effects. All pre-treatment placebos are individually insignificant. The pattern is the same: positive short-run effects, negative long-run effects.
+------------------------------------------------------------------------
+
+## CQ#32: Comparison with the TWFE event study
+
+> Are the results you get very different from those you obtained with the ES-TWFER?
+
+
+**Interpretation:**  Sun & Abraham estimates are very similar to TWFE event-study but slightly attenuated for long-run effects. All pre-treatment placebos are individually insignificant. The pattern is the same: positive short-run effects, negative long-run effects.
+
+------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
@@ -1321,7 +1375,7 @@ N = 1565  |  Clusters = 49
 
 ``` stata
 * ssc install csdid, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 csdid div_rate [weight=stpop], ivar(state) time(year) gvar(cohort) notyet agg(event)
 ```
@@ -1392,7 +1446,7 @@ Control: Not yet Treated
 
 ``` r
 library(haven); library(did)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df7 <- df %>% mutate(cohort_cs = ifelse(is.na(cohort) | cohort == 0, 0, cohort))
 cs_out <- att_gt(yname = "div_rate", gname = "cohort_cs",
                   idname = "state", tname = "year",
@@ -1402,6 +1456,8 @@ cs_out <- att_gt(yname = "div_rate", gname = "cohort_cs",
                   clustervars = "state")
 cs_es <- aggte(cs_out, type = "dynamic")
 ```
+
+
 
 ```         
 Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
@@ -1552,7 +1608,7 @@ estimates differ from Stata/R which use regression adjustment with iweights.
 
 ``` stata
 * ssc install did_multiplegt_dyn, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 did_multiplegt_dyn div_rate state year udl, effects(13) placebo(13) weight(stpop) graph_off
 ```
@@ -1618,7 +1674,7 @@ Test of joint nullity of the placebos : p-value = .52543032
 
 ``` r
 library(haven); library(DIDmultiplegtDYN)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 dcdh_results <- did_multiplegt_dyn(
     df = df, outcome = "div_rate", group = "state",
     time = "year", treatment = "udl",
@@ -1747,7 +1803,7 @@ Placebo_13  0.0256646  0.1832985 -0.3335925  0.3849217  160.0      24.0
 
 ``` stata
 * ssc install did_imputation, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 replace cohort=. if cohort==0
 did_imputation div_rate state year cohort [aweight=stpop], horizons(0/12) autosample minn(0) pre(13)
@@ -1794,7 +1850,7 @@ FE could not be imputed: tau0 tau1 tau2 ... tau12.
 
 ``` r
 library(haven); library(didimputation)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df9 <- df %>% mutate(gname = ifelse(cohort == 0, NA, cohort))
 bjs_out <- did_imputation(
     data = as.data.frame(df9),
@@ -1899,7 +1955,7 @@ for _, row in result.iterrows():
 ![Four-Panel Comparison (Stata)](../figures/ch06_fig63_4panel.png)
 
 ``` stata
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 graph combine fig62 g1 g2 g4, cols(2) title("Effects of Unilateral Divorce Laws") note("95% CIs shown in red. Weighted by state population. SEs clustered at state level.")
 ```
@@ -1910,7 +1966,7 @@ graph combine fig62 g1 g2 g4, cols(2) title("Effects of Unilateral Divorce Laws"
 
 ``` r
 library(haven)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 png(file.path(FIGDIR, "ch06_fig63_4panel_R.png"), width = 1600, height = 1200, res = 150)
 par(mfrow = c(2, 2), mar = c(4, 4, 3, 1), oma = c(3, 0, 3, 0))
 es_plot(rt_all, co_all, lo_all, hi_all, "TWFE estimates", xlim = c(-9, 16))

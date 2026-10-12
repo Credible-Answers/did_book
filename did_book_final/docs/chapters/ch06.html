@@ -226,10 +226,12 @@ window.Quarto = {
   <li><a href="#cq25-static-twfe-regression" id="toc-cq25-static-twfe-regression" class="nav-link" data-scroll-target="#cq25-static-twfe-regression">CQ#25: Static TWFE Regression</a></li>
   <li><a href="#cq26-decompose-static-twfe" id="toc-cq26-decompose-static-twfe" class="nav-link" data-scroll-target="#cq26-decompose-static-twfe">CQ#26: Decompose Static TWFE</a></li>
   <li><a href="#cq27-test-randomized-treatment-timing" id="toc-cq27-test-randomized-treatment-timing" class="nav-link" data-scroll-target="#cq27-test-randomized-treatment-timing">CQ#27: Test Randomized Treatment Timing</a></li>
+  <li><a href="#twfe-event-study-graph" id="toc-twfe-event-study-graph" class="nav-link" data-scroll-target="#twfe-event-study-graph">TWFE event-study graph</a></li>
   <li><a href="#cq28-event-study-twfe-regression" id="toc-cq28-event-study-twfe-regression" class="nav-link" data-scroll-target="#cq28-event-study-twfe-regression">CQ#28: Event-Study TWFE Regression</a></li>
-  <li><a href="#cq2930-decompose-hatbeta_1fe" id="toc-cq2930-decompose-hatbeta_1fe" class="nav-link" data-scroll-target="#cq2930-decompose-hatbeta_1fe">CQ#29–30: Decompose <span class="math inline">\(\hat{\beta}_1^{fe}\)</span></a></li>
-  <li><a href="#figure-6.2-twfe-event-study" id="toc-figure-6.2-twfe-event-study" class="nav-link" data-scroll-target="#figure-6.2-twfe-event-study">Figure 6.2: TWFE Event-Study</a></li>
-  <li><a href="#cq3132-sun-abraham-estimators" id="toc-cq3132-sun-abraham-estimators" class="nav-link" data-scroll-target="#cq3132-sun-abraham-estimators">CQ#31–32: Sun &amp; Abraham Estimators</a></li>
+  <li><a href="#cq29-decompose-hatbeta_1fe" id="toc-cq29-decompose-hatbeta_1fe" class="nav-link" data-scroll-target="#cq29-decompose-hatbeta_1fe">CQ#29: Decompose <span class="math inline">\(\hat{\beta}_1^{fe}\)</span></a></li>
+  <li><a href="#cq30-interpret-the-decomposition" id="toc-cq30-interpret-the-decomposition" class="nav-link" data-scroll-target="#cq30-interpret-the-decomposition">CQ#30: Interpret the decomposition</a></li>
+  <li><a href="#cq31-sun-abraham-event-study-estimates" id="toc-cq31-sun-abraham-event-study-estimates" class="nav-link" data-scroll-target="#cq31-sun-abraham-event-study-estimates">CQ#31: Sun &amp; Abraham event-study estimates</a></li>
+  <li><a href="#cq32-comparison-with-the-twfe-event-study" id="toc-cq32-comparison-with-the-twfe-event-study" class="nav-link" data-scroll-target="#cq32-comparison-with-the-twfe-event-study">CQ#32: Comparison with the TWFE event study</a></li>
   <li><a href="#cq33-callaway-santanna-estimators" id="toc-cq33-callaway-santanna-estimators" class="nav-link" data-scroll-target="#cq33-callaway-santanna-estimators">CQ#33: Callaway &amp; Sant’Anna Estimators</a></li>
   <li><a href="#cq34-de-chaisemartin-dhaultfœuille-estimators" id="toc-cq34-de-chaisemartin-dhaultfœuille-estimators" class="nav-link" data-scroll-target="#cq34-de-chaisemartin-dhaultfœuille-estimators">CQ#34: de Chaisemartin &amp; D’Haultfœuille Estimators</a></li>
   <li><a href="#cq35-borusyak-jaravel-spiess-estimators" id="toc-cq35-borusyak-jaravel-spiess-estimators" class="nav-link" data-scroll-target="#cq35-borusyak-jaravel-spiess-estimators">CQ#35: Borusyak, Jaravel &amp; Spiess Estimators</a></li>
@@ -279,17 +281,24 @@ window.Quarto = {
 </figure>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install panelview, <span class="kw">replace</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>panelview div_rate udl, i(state) t(<span class="fu">year</span>) <span class="dv">type</span>(treat) <span class="bn">title</span>(<span class="st">"Treatment Status: Wolfers (2006)"</span>) <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">"No UDL"</span>) <span class="kw">label</span>(2 <span class="st">"UDL adopted"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(panelView)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/ch06_panelview_R.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">panelview</span>(div_rate <span class="sc">~</span> udl, <span class="at">data =</span> df, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"year"</span>), <span class="at">type =</span> <span class="st">"treat"</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="st">"Wolfers (2006)"</span>, <span class="at">ylab =</span> <span class="st">""</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">zap_labels</span>(df)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">panelview</span>(div_rate <span class="sc">~</span> udl, <span class="at">data =</span> df, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"year"</span>), <span class="at">type =</span> <span class="st">"treat"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">main =</span> <span class="st">"Wolfers (2006)"</span>, <span class="at">ylab =</span> <span class="st">""</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p)   <span class="co"># lo muestra en Plots</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/ch06_panelview_R.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p)   </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../figures/ch06_panelview_R.png" class="img-fluid figure-img"></p>
@@ -349,7 +358,7 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate udl i.state i.<span class="fu">year</span> [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Linear regression                               Number of obs     =      1,631
@@ -366,7 +375,7 @@ window.Quarto = {
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(fixest)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">feols</span>(div_rate <span class="sc">~</span> udl <span class="sc">+</span> <span class="fu">i</span>(year) <span class="sc">|</span> state,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df, <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state,</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">ssc =</span> <span class="fu">ssc</span>(<span class="at">fixef.K =</span> <span class="st">"full"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -392,7 +401,7 @@ N = 1631  |  R-sq = 0.9305</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> <span class="math inline">\(\hat{\beta}_{fe} = -0.055\)</span> (s.e. = 0.15, p = 0.72). The coefficient is small and insignificant — according to this regression, UDLs do not affect divorce rates.</p>
+<p><strong>Interpretation:</strong> <span class="math inline">\(\hat{\beta}_{fe} = -0.055\)</span> (s.e. = 0.15, p = 0.72). The coefficient is small and insignificant. According to this regression, UDLs do not affect divorce rates.</p>
 <hr>
 </section>
 <section id="cq26-decompose-static-twfe" class="level2">
@@ -405,7 +414,7 @@ N = 1631  |  R-sq = 0.9305</code></pre>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install twowayfeweights, <span class="kw">replace</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>twowayfeweights div_rate state <span class="fu">year</span> udl, <span class="dv">type</span>(feTR) test_random_weights(exposurelength) <span class="kw">weight</span>(stpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
@@ -427,7 +436,7 @@ exposurele~h   -8.2883613    .21360588    -38.80212   -.73253245</code></pre>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>decomp2 <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"udl"</span>,</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">type =</span> <span class="st">"feTR"</span>,</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">test_random_weights =</span> <span class="st">"exposurelength"</span>,</span>
@@ -465,7 +474,7 @@ exposurelength   -8.288361     0.213606    -38.8021   -0.732532</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> Under parallel trends, <span class="math inline">\(\hat{\beta}_{fe}\)</span> estimates a weighted sum of ATTs. The vast majority receive positive weights (sum ≈ 1.026) and 32 receive negative weights (sum ≈ −0.026) — an “almost convex” combination. However, weights are strongly negatively correlated with exposure length (corr = −0.73, t = −38.8): <span class="math inline">\(\hat{\beta}_{fe}\)</span> heavily downweights long-run effects. It could differ from the ATT if treatment effects vary with length of exposure.</p>
+<p><strong>Interpretation:</strong> Under parallel trends, <span class="math inline">\(\hat{\beta}_{fe}\)</span> estimates a weighted sum of ATTs. The vast majority receive positive weights (sum ≈ 1.026) and 32 receive negative weights (sum ≈ −0.026), an “almost convex” combination. However, weights are strongly negatively correlated with exposure length (corr = −0.73, t = −38.8): <span class="math inline">\(\hat{\beta}_{fe}\)</span> heavily downweights long-run effects. It could differ from the ATT if treatment effects vary with length of exposure.</p>
 <hr>
 </section>
 <section id="cq27-test-randomized-treatment-timing" class="level2">
@@ -477,7 +486,7 @@ exposurelength   -8.288361     0.213606    -38.8021   -0.732532</code></pre>
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate i.early_late_never <span class="kw">if</span> cohort!=1956 &amp; <span class="fu">year</span>&lt;=1968 [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Linear regression                               Number of obs     =        611
@@ -499,11 +508,12 @@ early_late_never |
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(cohort <span class="sc">!=</span> <span class="dv">1956</span>, year <span class="sc">&lt;=</span> <span class="dv">1968</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">feols</span>(div_rate <span class="sc">~</span> <span class="fu">i</span>(early_late_never),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df3, <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">ssc =</span> <span class="fu">ssc</span>(<span class="at">fixef.K =</span> <span class="st">"full"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(cohort <span class="sc">!=</span> <span class="dv">1956</span>, year <span class="sc">&lt;=</span> <span class="dv">1968</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">feols</span>(div_rate <span class="sc">~</span> <span class="fu">i</span>(early_late_never),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df3, <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">ssc =</span> <span class="fu">ssc</span>(<span class="at">fixef.K =</span> <span class="st">"full"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
 ------------------------------------------------------------------------------------------
 (Intercept)             3.0548909      0.2584305      11.82   [   2.5483670,    3.5614147]
@@ -533,19 +543,133 @@ N = 611  |  R-sq = 0.1707</code></pre>
 <p><strong>Interpretation:</strong> F-test p-value = 0.0015 — we reject that pre-treatment outcomes are the same across groups. Treatment timing is not randomly assigned: never-adopters have significantly lower divorce rates before any state adopts a UDL.</p>
 <hr>
 </section>
+<section id="twfe-event-study-graph" class="level2">
+<h2 class="anchored" data-anchor-id="twfe-event-study-graph">TWFE event-study graph</h2>
+<p>Let’s now depict Figure 6.2: the TWFE event-study estimates of the effect of unilateral divorce laws on the divorce rate, by years relative to the year before the law was passed. It shows the pre-period coefficients (<code>rel_timeminus9</code>–<code>rel_timeminus1</code>) and the post-period coefficients (<code>rel_time1</code>–<code>rel_time16</code>), with 95% confidence intervals. We will use this graph as input to answer CQ#28 and CQ#32 in detail.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch06_fig62_twfe_es.png" class="img-fluid figure-img"></p>
+<figcaption>TWFE Event-Study (Stata)</figcaption>
+</figure>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>* Run the regression</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate rel_time* i.state i.<span class="fu">year</span> [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>* Pull coefficients and CIs into a <span class="kw">postfile</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="kw">tempname</span> pf</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="kw">tempfile</span> coefs</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="kw">postfile</span> <span class="ot">`pf'</span> rel_time coef ci_lo ci_hi <span class="kw">using</span> <span class="ot">`coefs'</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>* Post-period coefficients: rel_time1 ... rel_time16</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/16 {</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[rel_time<span class="ot">`t'</span>]</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[rel_time<span class="ot">`t'</span>]</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> lo = <span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> hi = <span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`lo'</span>) (<span class="ot">`hi'</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>* Pre-period coefficients: rel_timeminus1 ... rel_timeminus9 (negative event time)</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/9 {</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[rel_timeminus<span class="ot">`t'</span>]</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[rel_timeminus<span class="ot">`t'</span>]</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> lo = <span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> hi = <span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (-<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`lo'</span>) (<span class="ot">`hi'</span>)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>* Add the reference period (rel_time = 0) <span class="kw">as</span> a <span class="bn">zero</span> point</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a><span class="kw">post</span> <span class="ot">`pf'</span> (0) (0) (0) (0)</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="kw">postclose</span> <span class="ot">`pf'</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>* Load the coefficient dataset</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="ot">`coefs'</span>, <span class="kw">clear</span></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> rel_time</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>* Plot</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">scatter</span> coef rel_time, msize(medlarge) <span class="bn">msymbol</span>(o) mcolor(<span class="bn">navy</span>) <span class="bn">legend</span>(<span class="kw">off</span>)) <span class="co">///</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>       (<span class="kw">line</span> coef rel_time, lcolor(<span class="bn">navy</span>)) <span class="co">///</span></span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>       (rcap ci_hi ci_lo rel_time, lcolor(<span class="bn">maroon</span>)), <span class="co">///</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">"TWFE estimates"</span>) <span class="co">///</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">"Relative time to year before law"</span>) <span class="co">///</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>       <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="co">///</span></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>       <span class="kw">ylabel</span>(-1(.5)0.5) <span class="bn">yscale</span>(<span class="kw">range</span>(-1.1 0.8)) <span class="co">///</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>       <span class="kw">xlabel</span>(-9(3)15) <span class="co">///</span></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>       <span class="bn">xline</span>(0, lcolor(gs10) lpattern(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>       <span class="kw">yline</span>(0, lcolor(gs10) lpattern(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">off</span>)</span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch06_fig62_twfe_es.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch06_fig62_twfe_es_R.png" class="img-fluid figure-img"></p>
+<figcaption>TWFE Event-Study (R)</figcaption>
+</figure>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>es_coefs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel_time =</span> <span class="fu">c</span>(<span class="sc">-</span>(<span class="dv">9</span><span class="sc">:</span><span class="dv">1</span>), <span class="dv">0</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">coef =</span> <span class="fu">c</span>(<span class="fu">coef</span>(m4)[<span class="fu">paste0</span>(<span class="st">"rel_timeminus"</span>, <span class="dv">9</span><span class="sc">:</span><span class="dv">1</span>)], <span class="dv">0</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>             <span class="fu">coef</span>(m4)[<span class="fu">paste0</span>(<span class="st">"rel_time"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>)]),</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="fu">c</span>(<span class="fu">se</span>(m4)[<span class="fu">paste0</span>(<span class="st">"rel_timeminus"</span>, <span class="dv">9</span><span class="sc">:</span><span class="dv">1</span>)], <span class="dv">0</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">se</span>(m4)[<span class="fu">paste0</span>(<span class="st">"rel_time"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>)]))</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>es_coefs<span class="sc">$</span>ci_lo <span class="ot">&lt;-</span> es_coefs<span class="sc">$</span>coef <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> es_coefs<span class="sc">$</span>se</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>es_coefs<span class="sc">$</span>ci_hi <span class="ot">&lt;-</span> es_coefs<span class="sc">$</span>coef <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> es_coefs<span class="sc">$</span>se</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(es_coefs<span class="sc">$</span>rel_time, es_coefs<span class="sc">$</span>coef, <span class="at">type =</span> <span class="st">"b"</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"navy"</span>,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Relative time to year before law"</span>, <span class="at">ylab =</span> <span class="st">"Effect"</span>,</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"TWFE estimates"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.1</span>, <span class="fl">0.8</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">9</span>, <span class="dv">16</span>))</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(es_coefs<span class="sc">$</span>rel_time, es_coefs<span class="sc">$</span>ci_lo, es_coefs<span class="sc">$</span>rel_time, es_coefs<span class="sc">$</span>ci_hi,</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">length =</span> <span class="fl">0.03</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"maroon"</span>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray60"</span>); <span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray60"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/ch06_fig62_twfe_es_Python.png" class="img-fluid figure-img"></p>
+<figcaption>TWFE Event-Study (Python)</figcaption>
+</figure>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>ax.errorbar(rt, coefs, yerr<span class="op">=</span><span class="fl">1.96</span><span class="op">*</span>ses, fmt<span class="op">=</span><span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'navy'</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>            ecolor<span class="op">=</span><span class="st">'maroon'</span>, capsize<span class="op">=</span><span class="dv">3</span>, markersize<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Relative time to year before law"</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Effect"</span>)<span class="op">;</span> ax.set_title(<span class="st">"TWFE estimates"</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>plt.savefig(FIGDIR <span class="op">/</span> <span class="st">"ch06_fig62_twfe_es_Python.png"</span>, dpi<span class="op">=</span><span class="dv">150</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</section>
 <section id="cq28-event-study-twfe-regression" class="level2">
 <h2 class="anchored" data-anchor-id="cq28-event-study-twfe-regression">CQ#28: Event-Study TWFE Regression</h2>
 <blockquote class="blockquote">
 <p>Run the event-study TWFE regression with <code>rel_time</code> indicators. Test pre-trends jointly.</p>
 </blockquote>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Python</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content">
-<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate rel_time* i.state i.<span class="fu">year</span> [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">test</span> rel_timeminus1-rel_timeminus9</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate rel_time* i.state i.<span class="fu">year</span> [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="kw">test</span> rel_timeminus1-rel_timeminus9</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>                                   (Std. err. adjusted for 51 clusters in state)
 --------------------------------------------------------------------------------
                |               Robust
@@ -581,15 +705,18 @@ rel_timeminus9 |   .0558855   .1600016     0.35   0.728    -.2654871    .3772581
        F(  9,    50) =    0.51
             Prob &gt; F =    0.8631</code></pre>
 </div>
-<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>rt_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"rel_time"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>), <span class="fu">paste0</span>(<span class="st">"rel_timeminus"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>))</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>rt_formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"div_rate ~"</span>, <span class="fu">paste</span>(rt_vars, <span class="at">collapse =</span> <span class="st">" + "</span>),</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"+ i(year) | state"</span>))</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> <span class="fu">feols</span>(rt_formula, <span class="at">data =</span> df, <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state,</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">ssc =</span> <span class="fu">ssc</span>(<span class="at">fixef.K =</span> <span class="st">"full"</span>))</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">wald</span>(m4, <span class="at">keep =</span> <span class="fu">paste0</span>(<span class="st">"rel_timeminus"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fixest)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">zap_labels</span>(df))</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>rel_time_vars <span class="ot">&lt;-</span> <span class="fu">names</span>(df)[<span class="fu">grepl</span>(<span class="st">"^rel_time"</span>, <span class="fu">names</span>(df))]</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>rel_time_formula <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"div_rate ~"</span>, <span class="fu">paste</span>(rel_time_vars, <span class="at">collapse =</span> <span class="st">" + "</span>),</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"+ i(state) + i(year)"</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>event_study_twfe <span class="ot">&lt;-</span> <span class="fu">feols</span>(<span class="fu">as.formula</span>(rel_time_formula), <span class="at">data =</span> df,</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>                          <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">cluster =</span> <span class="sc">~</span>state)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="fu">wald</span>(event_study_twfe, <span class="at">keep =</span> <span class="st">"rel_timeminus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
 ------------------------------------------------------------------------------------------
 rel_time1               0.2891561      0.2054259       1.41   [  -0.1134786,    0.6917908]
@@ -621,14 +748,14 @@ rel_timeminus9          0.0558855      0.1600016       0.35   [  -0.2577175,    
 N = 1631  |  R-sq = 0.9351
 Wald test: stat = 0.506103, p-value = 0.870968, on 9 and 1,523 DoF</code></pre>
 </div>
-<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>rt_pos <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c.startswith(<span class="st">"rel_time"</span>) <span class="kw">and</span> <span class="st">"minus"</span> <span class="kw">not</span> <span class="kw">in</span> c]</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>rt_neg <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> <span class="st">"rel_timeminus"</span> <span class="kw">in</span> c]</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>fml <span class="op">=</span> <span class="st">"div_rate ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(rt_pos <span class="op">+</span> rt_neg) <span class="op">+</span> <span class="st">" + i(year) | state"</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>m4 <span class="op">=</span> pf.feols(fml, data<span class="op">=</span>df, weights<span class="op">=</span><span class="st">'stpop'</span>, vcov<span class="op">=</span>{<span class="st">'CRV1'</span>: <span class="st">'state'</span>},</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>              ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">'full'</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>rt_pos <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c.startswith(<span class="st">"rel_time"</span>) <span class="kw">and</span> <span class="st">"minus"</span> <span class="kw">not</span> <span class="kw">in</span> c]</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rt_neg <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> <span class="st">"rel_timeminus"</span> <span class="kw">in</span> c]</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>fml <span class="op">=</span> <span class="st">"div_rate ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(rt_pos <span class="op">+</span> rt_neg) <span class="op">+</span> <span class="st">" + i(year) | state"</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>m4 <span class="op">=</span> pf.feols(fml, data<span class="op">=</span>df, weights<span class="op">=</span><span class="st">'stpop'</span>, vcov<span class="op">=</span>{<span class="st">'CRV1'</span>: <span class="st">'state'</span>},</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>              ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">'full'</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
 ------------------------------------------------------------------------------------------
 rel_time1               0.2891561      0.2054259       1.41   [  -0.1134786,    0.6917908]
@@ -664,19 +791,19 @@ N = 1631  |  R-sq = 0.9351</code></pre>
 <p><strong>Interpretation:</strong> Pre-trends are individually and jointly insignificant (F(9, 50) = 0.51, p = 0.86). Post-treatment effects are positive for the first ~8 years, then turn negative after year 9.</p>
 <hr>
 </section>
-<section id="cq2930-decompose-hatbeta_1fe" class="level2">
-<h2 class="anchored" data-anchor-id="cq2930-decompose-hatbeta_1fe">CQ#29–30: Decompose <span class="math inline">\(\hat{\beta}_1^{fe}\)</span></h2>
+<section id="cq29-decompose-hatbeta_1fe" class="level2">
+<h2 class="anchored" data-anchor-id="cq29-decompose-hatbeta_1fe">CQ#29: Decompose <span class="math inline">\(\hat{\beta}_1^{fe}\)</span></h2>
 <blockquote class="blockquote">
-<p>Decompose the first event-study coefficient <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> using <code>twowayfeweights</code> with other treatments and controls.</p>
+<p>Use <code>twowayfeweights</code> to decompose <span class="math inline">\(\hat{\beta}_1^{fe}\)</span>, and compute the correlation between the weights and the <code>year</code> variable.</p>
 </blockquote>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href="">Python</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content">
-<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install twowayfeweights, <span class="kw">replace</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>twowayfeweights div_rate state <span class="fu">year</span> rel_time1, <span class="dv">type</span>(feTR) test_random_weights(<span class="fu">year</span>) <span class="kw">weight</span>(stpop) other_treatments(rel_time2-rel_time16) controls(rel_timeminus1-rel_timeminus9)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install twowayfeweights, <span class="kw">replace</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>twowayfeweights div_rate state <span class="fu">year</span> rel_time1, <span class="dv">type</span>(feTR) test_random_weights(<span class="fu">year</span>) <span class="kw">weight</span>(stpop) other_treatments(rel_time2-rel_time16) controls(rel_timeminus1-rel_timeminus9)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
 the TWFE coefficient beta, equal to 0.2892, estimates the sum of several terms.
 
@@ -861,18 +988,18 @@ Regression of variables on the weights attached to the treatment
              Coef           SE       t-stat  Correlation
 year   -15.333901    13.428752   -1.1418709   -.23224592</code></pre>
 </div>
-<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>rel_time_vars <span class="ot">&lt;-</span> <span class="fu">names</span>(df)[<span class="fu">grepl</span>(<span class="st">"^rel_time"</span>, <span class="fu">names</span>(df))]</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>other_rel_times <span class="ot">&lt;-</span> rel_time_vars[rel_time_vars <span class="sc">!=</span> <span class="st">"rel_time1"</span>]</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>other_treatments <span class="ot">&lt;-</span> other_rel_times[<span class="fu">grepl</span>(<span class="st">"^rel_time[2-9]$|^rel_time1[0-6]$"</span>, other_rel_times)]</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>controls <span class="ot">&lt;-</span> other_rel_times[<span class="fu">grepl</span>(<span class="st">"minus"</span>, other_rel_times)]</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>decomp5 <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"rel_time1"</span>,</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">type =</span> <span class="st">"feTR"</span>, <span class="at">test_random_weights =</span> <span class="st">"year"</span>,</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">weights =</span> df<span class="sc">$</span>stpop,</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">other_treatments =</span> other_treatments,</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">controls =</span> controls)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>rel_time_vars <span class="ot">&lt;-</span> <span class="fu">names</span>(df)[<span class="fu">grepl</span>(<span class="st">"^rel_time"</span>, <span class="fu">names</span>(df))]</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>other_rel_times <span class="ot">&lt;-</span> rel_time_vars[rel_time_vars <span class="sc">!=</span> <span class="st">"rel_time1"</span>]</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>other_treatments <span class="ot">&lt;-</span> other_rel_times[<span class="fu">grepl</span>(<span class="st">"^rel_time[2-9]$|^rel_time1[0-6]$"</span>, other_rel_times)]</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>controls <span class="ot">&lt;-</span> other_rel_times[<span class="fu">grepl</span>(<span class="st">"minus"</span>, other_rel_times)]</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>decomp5 <span class="ot">&lt;-</span> <span class="fu">twowayfeweights</span>(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"rel_time1"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">type =</span> <span class="st">"feTR"</span>, <span class="at">test_random_weights =</span> <span class="st">"year"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">weights =</span> df<span class="sc">$</span>stpop,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">other_treatments =</span> other_treatments,</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">controls =</span> controls)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
 the TWFE coefficient beta, equal to 0.2892, estimates the sum of several terms.
 
@@ -1075,22 +1202,22 @@ RW_year -15.33387 13.42876 -1.141868  -0.2322456
 
 The development of this package was funded by the European Union (ERC, REALLYCREDIBLE,GA N. 101043899).</code></pre>
 </div>
-<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>rel_time_vars <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c.startswith(<span class="st">"rel_time"</span>)]</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>other_rel_times <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> rel_time_vars <span class="cf">if</span> c <span class="op">!=</span> <span class="st">"rel_time1"</span>]</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>other_treatments <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> other_rel_times</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> re.match(<span class="vs">r"</span><span class="dv">^</span><span class="vs">rel_time</span><span class="pp">[2-9]</span><span class="dv">$</span><span class="cf">|</span><span class="dv">^</span><span class="vs">rel_time1</span><span class="pp">[0-6]</span><span class="dv">$</span><span class="vs">"</span>, c)]</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>controls <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> other_rel_times <span class="cf">if</span> <span class="st">"minus"</span> <span class="kw">in</span> c]</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>result5 <span class="op">=</span> twowayfeweights(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"rel_time1"</span>,</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>                           <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, test_random_weights<span class="op">=</span><span class="st">"year"</span>,</span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>                           weights<span class="op">=</span><span class="st">"stpop"</span>,</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>                           other_treatments<span class="op">=</span>other_treatments,</span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>                           controls<span class="op">=</span>controls)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> twowayfeweights <span class="im">import</span> twowayfeweights</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>rel_time_vars <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c.startswith(<span class="st">"rel_time"</span>)]</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>other_rel_times <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> rel_time_vars <span class="cf">if</span> c <span class="op">!=</span> <span class="st">"rel_time1"</span>]</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>other_treatments <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> other_rel_times</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> re.match(<span class="vs">r"</span><span class="dv">^</span><span class="vs">rel_time</span><span class="pp">[2-9]</span><span class="dv">$</span><span class="cf">|</span><span class="dv">^</span><span class="vs">rel_time1</span><span class="pp">[0-6]</span><span class="dv">$</span><span class="vs">"</span>, c)]</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>controls <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> other_rel_times <span class="cf">if</span> <span class="st">"minus"</span> <span class="kw">in</span> c]</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>result5 <span class="op">=</span> twowayfeweights(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"rel_time1"</span>,</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                           <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, test_random_weights<span class="op">=</span><span class="st">"year"</span>,</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>                           weights<span class="op">=</span><span class="st">"stpop"</span>,</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>                           other_treatments<span class="op">=</span>other_treatments,</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>                           controls<span class="op">=</span>controls)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
 the TWFE coefficient beta, equal to 0.2892, estimates the sum of several terms.
 
@@ -1277,136 +1404,49 @@ year   -15.333901    13.428752   -1.1418709   -0.2322459</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> All 27 ATTs for <code>rel_time1</code> receive positive weights — <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> estimates a convex combination of first-year effects. Contamination from other <code>rel_time</code> indicators is negligible (each sums to ≈ 0).</p>
 <hr>
 </section>
-<section id="figure-6.2-twfe-event-study" class="level2">
-<h2 class="anchored" data-anchor-id="figure-6.2-twfe-event-study">Figure 6.2: TWFE Event-Study</h2>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href="">Python</a></li></ul>
-<div class="tab-content">
-<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../figures/ch06_fig62_twfe_es.png" class="img-fluid figure-img"></p>
-<figcaption>TWFE Event-Study (Stata)</figcaption>
-</figure>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>* Run the regression</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate rel_time* i.state i.<span class="fu">year</span> [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>* Pull coefficients and CIs into a <span class="kw">postfile</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="kw">tempname</span> pf</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="kw">tempfile</span> coefs</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="kw">postfile</span> <span class="ot">`pf'</span> rel_time coef ci_lo ci_hi <span class="kw">using</span> <span class="ot">`coefs'</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>* Post-period coefficients: rel_time1 ... rel_time16</span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/16 {</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[rel_time<span class="ot">`t'</span>]</span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[rel_time<span class="ot">`t'</span>]</span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> lo = <span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span></span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> hi = <span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span></span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`lo'</span>) (<span class="ot">`hi'</span>)</span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>* Pre-period coefficients: rel_timeminus1 ... rel_timeminus9 (negative event time)</span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/9 {</span>
-<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[rel_timeminus<span class="ot">`t'</span>]</span>
-<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[rel_timeminus<span class="ot">`t'</span>]</span>
-<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> lo = <span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span></span>
-<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> hi = <span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span></span>
-<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (-<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`lo'</span>) (<span class="ot">`hi'</span>)</span>
-<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>* Add the reference period (rel_time = 0) <span class="kw">as</span> a <span class="bn">zero</span> point</span>
-<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a><span class="kw">post</span> <span class="ot">`pf'</span> (0) (0) (0) (0)</span>
-<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a><span class="kw">postclose</span> <span class="ot">`pf'</span></span>
-<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>* Load the coefficient dataset</span>
-<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a><span class="kw">preserve</span></span>
-<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="ot">`coefs'</span>, <span class="kw">clear</span></span>
-<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> rel_time</span>
-<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a>* Plot</span>
-<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">scatter</span> coef rel_time, msize(medlarge) <span class="bn">msymbol</span>(o) mcolor(<span class="bn">navy</span>) <span class="bn">legend</span>(<span class="kw">off</span>)) <span class="co">///</span></span>
-<span id="cb34-41"><a href="#cb34-41" aria-hidden="true" tabindex="-1"></a>       (<span class="kw">line</span> coef rel_time, lcolor(<span class="bn">navy</span>)) <span class="co">///</span></span>
-<span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a>       (rcap ci_hi ci_lo rel_time, lcolor(<span class="bn">maroon</span>)), <span class="co">///</span></span>
-<span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">"TWFE estimates"</span>) <span class="co">///</span></span>
-<span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">"Relative time to year before law"</span>) <span class="co">///</span></span>
-<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a>       <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="co">///</span></span>
-<span id="cb34-46"><a href="#cb34-46" aria-hidden="true" tabindex="-1"></a>       <span class="kw">ylabel</span>(-1(.5)0.5) <span class="bn">yscale</span>(<span class="kw">range</span>(-1.1 0.8)) <span class="co">///</span></span>
-<span id="cb34-47"><a href="#cb34-47" aria-hidden="true" tabindex="-1"></a>       <span class="kw">xlabel</span>(-9(3)15) <span class="co">///</span></span>
-<span id="cb34-48"><a href="#cb34-48" aria-hidden="true" tabindex="-1"></a>       <span class="bn">xline</span>(0, lcolor(gs10) lpattern(<span class="kw">dash</span>)) <span class="co">///</span></span>
-<span id="cb34-49"><a href="#cb34-49" aria-hidden="true" tabindex="-1"></a>       <span class="kw">yline</span>(0, lcolor(gs10) lpattern(<span class="kw">dash</span>)) <span class="co">///</span></span>
-<span id="cb34-50"><a href="#cb34-50" aria-hidden="true" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">off</span>)</span>
-<span id="cb34-51"><a href="#cb34-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-52"><a href="#cb34-52" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch06_fig62_twfe_es.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span>
-<span id="cb34-53"><a href="#cb34-53" aria-hidden="true" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../figures/ch06_fig62_twfe_es_R.png" class="img-fluid figure-img"></p>
-<figcaption>TWFE Event-Study (R)</figcaption>
-</figure>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>es_coefs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel_time =</span> <span class="fu">c</span>(<span class="sc">-</span>(<span class="dv">9</span><span class="sc">:</span><span class="dv">1</span>), <span class="dv">0</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>),</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">coef =</span> <span class="fu">c</span>(<span class="fu">coef</span>(m4)[<span class="fu">paste0</span>(<span class="st">"rel_timeminus"</span>, <span class="dv">9</span><span class="sc">:</span><span class="dv">1</span>)], <span class="dv">0</span>,</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>             <span class="fu">coef</span>(m4)[<span class="fu">paste0</span>(<span class="st">"rel_time"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>)]),</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="fu">c</span>(<span class="fu">se</span>(m4)[<span class="fu">paste0</span>(<span class="st">"rel_timeminus"</span>, <span class="dv">9</span><span class="sc">:</span><span class="dv">1</span>)], <span class="dv">0</span>,</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">se</span>(m4)[<span class="fu">paste0</span>(<span class="st">"rel_time"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>)]))</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>es_coefs<span class="sc">$</span>ci_lo <span class="ot">&lt;-</span> es_coefs<span class="sc">$</span>coef <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> es_coefs<span class="sc">$</span>se</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>es_coefs<span class="sc">$</span>ci_hi <span class="ot">&lt;-</span> es_coefs<span class="sc">$</span>coef <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> es_coefs<span class="sc">$</span>se</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(es_coefs<span class="sc">$</span>rel_time, es_coefs<span class="sc">$</span>coef, <span class="at">type =</span> <span class="st">"b"</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"navy"</span>,</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Relative time to year before law"</span>, <span class="at">ylab =</span> <span class="st">"Effect"</span>,</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"TWFE estimates"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.1</span>, <span class="fl">0.8</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">9</span>, <span class="dv">16</span>))</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(es_coefs<span class="sc">$</span>rel_time, es_coefs<span class="sc">$</span>ci_lo, es_coefs<span class="sc">$</span>rel_time, es_coefs<span class="sc">$</span>ci_hi,</span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">length =</span> <span class="fl">0.03</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"maroon"</span>)</span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray60"</span>); <span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray60"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../figures/ch06_fig62_twfe_es_Python.png" class="img-fluid figure-img"></p>
-<figcaption>TWFE Event-Study (Python)</figcaption>
-</figure>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>ax.errorbar(rt, coefs, yerr<span class="op">=</span><span class="fl">1.96</span><span class="op">*</span>ses, fmt<span class="op">=</span><span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'navy'</span>,</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>            ecolor<span class="op">=</span><span class="st">'maroon'</span>, capsize<span class="op">=</span><span class="dv">3</span>, markersize<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Relative time to year before law"</span>)</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Effect"</span>)<span class="op">;</span> ax.set_title(<span class="st">"TWFE estimates"</span>)</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>plt.savefig(FIGDIR <span class="op">/</span> <span class="st">"ch06_fig62_twfe_es_Python.png"</span>, dpi<span class="op">=</span><span class="dv">150</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<hr>
-</section>
-<section id="cq3132-sun-abraham-estimators" class="level2">
-<h2 class="anchored" data-anchor-id="cq3132-sun-abraham-estimators">CQ#31–32: Sun &amp; Abraham Estimators</h2>
+<section id="cq30-interpret-the-decomposition" class="level2">
+<h2 class="anchored" data-anchor-id="cq30-interpret-the-decomposition">CQ#30: Interpret the decomposition</h2>
 <blockquote class="blockquote">
-<p>Estimate IW (interaction-weighted) event-study effects using Sun &amp; Abraham (2021), dropping always-treated states.</p>
+<p>Interpret the results.</p>
+</blockquote>
+<p><strong>Interpretation:</strong> <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> can be decomposed as the sum of two terms.</p>
+<p>The first term is a convex combination of the effects of having been exposed to a UDL for one year, across 27 states: all the weights in this first term are positive. The weights are negatively correlated with <code>year</code> (correlation <span class="math inline">\(= -0.232\)</span>), so this term upweights effects in states that passed a law early. It could therefore differ from <span class="math inline">\(ATT_1\)</span>, the average effect of one year of exposure across all states, if that effect varies between early- and late-adopting states.</p>
+<p>The second term is a zero-sum-weight combination of the effects of being exposed to a UDL for more than one year. For instance, 29 effects of two years of exposure enter this term, 16 with a positive weight and 13 with a negative weight, summing respectively to 0.012 and <span class="math inline">\(-0.012\)</span>. Effects of three, four, …, 15, and 16 or more years of exposure also enter this term. In total, the positive and negative contamination weights sum respectively to 0.064 and <span class="math inline">\(-0.064\)</span>. If UDLs’ effects vary across states, this second term may not be zero, further biasing <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> relative to <span class="math inline">\(ATT_1\)</span>. However, the contamination weights are small, so this bias is likely small.</p>
+<p>Overall, <span class="math inline">\(\hat{\beta}_1^{fe}\)</span> does not put negative weights on the effects of one year of exposure, nor large weights on the effects of other exposure lengths. This may be because many states are never treated in this application. Decomposition of the other coefficients <span class="math inline">\(\hat{\beta}_\ell^{fe}\)</span> for <span class="math inline">\(\ell \geq 2\)</span> give similar results.</p>
+<hr>
+<hr>
+</section>
+<section id="cq31-sun-abraham-event-study-estimates" class="level2">
+<h2 class="anchored" data-anchor-id="cq31-sun-abraham-event-study-estimates">CQ#31: Sun &amp; Abraham event-study estimates</h2>
+<blockquote class="blockquote">
+<p>Compute 13 event-study and pre-trend estimates using <code>eventstudyinteract</code>, with the never treated as the control group, weighting the estimation by <code>stpop</code>. Before running the command: set <code>cohort</code> to missing for the never-treated groups; redefine <code>rel_timeminus9</code> as an indicator for <span class="math inline">\(t = F_g - 1 - 9\)</span>; create <code>rel_timeminus10</code> to <code>rel_timeminus12</code> as indicators for <span class="math inline">\(t = F_g - 1 - 10, 11, 12\)</span>, and <code>rel_timeminus13</code> for <span class="math inline">\(t \leq F_g - 1 - 13\)</span>; drop <code>rel_time14</code> to <code>rel_time16</code> and redefine <code>rel_time13</code> as an indicator for <span class="math inline">\(t \geq F_g - 1 + 13\)</span>; and drop always-treated groups.</p>
 </blockquote>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install eventstudyinteract, <span class="kw">replace</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>eventstudyinteract div_rate rel_time* [<span class="kw">aweight</span>=stpop], absorb(i.state i.<span class="fu">year</span>) cohort(cohort) control_cohort(controlgroup) <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>* Drop always-treated states</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="kw">drop</span> <span class="kw">if</span> cohort == 1956</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>* Bin the leads <span class="fu">at</span> -13 and the lags <span class="fu">at</span> 13 (treated states only)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> rel_timeminus9 = (<span class="fu">year</span> == cohort - 1 - 9) &amp; cohort &gt; 0</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="kw">k</span> = 10/12 {</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> rel_timeminus<span class="ot">`k'</span> = (<span class="fu">year</span> == cohort - 1 - <span class="ot">`k'</span>) &amp; cohort &gt; 0</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus13 = (<span class="fu">year</span> &lt;= cohort - 1 - 13) &amp; cohort &gt; 0</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="kw">drop</span> rel_time14 rel_time15 rel_time16</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> rel_time13 = (<span class="fu">year</span> &gt;= cohort - 1 + 13) &amp; cohort &gt; 0</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>* Never treated: cohort <span class="fu">missing</span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> cohort = . <span class="kw">if</span> cohort == 0</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>eventstudyinteract div_rate rel_time* [<span class="kw">aweight</span>=stpop], absorb(i.state i.<span class="fu">year</span>) cohort(cohort) control_cohort(controlgroup) <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>IW estimates for dynamic effects                        Number of obs =  1,565
                                     (Std. err. adjusted for 49 clusters in state)
 ---------------------------------------------------------------------------------
@@ -1443,13 +1483,13 @@ rel_timeminus13 |  -.0118369   .1649912    -0.07   0.943    -.343574    .3199001
 </div>
 <div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(fixest); <span class="fu">library</span>(dplyr)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>df6 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(cohort <span class="sc">!=</span> <span class="dv">1956</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">cohort_sa =</span> <span class="fu">ifelse</span>(cohort <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">10000</span>, cohort))</span>
 <span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>df_treated <span class="ot">&lt;-</span> df6 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(cohort <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>min_rel <span class="ot">&lt;-</span> <span class="fu">min</span>(df_treated<span class="sc">$</span>year <span class="sc">-</span> (df_treated<span class="sc">$</span>cohort <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>max_rel <span class="ot">&lt;-</span> <span class="fu">max</span>(df_treated<span class="sc">$</span>year <span class="sc">-</span> (df_treated<span class="sc">$</span>cohort <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>min_rel <span class="ot">&lt;-</span> <span class="fu">min</span>(df_treated<span class="sc">$</span>year <span class="sc">-</span> df_treated<span class="sc">$</span>cohort)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>max_rel <span class="ot">&lt;-</span> <span class="fu">max</span>(df_treated<span class="sc">$</span>year <span class="sc">-</span> df_treated<span class="sc">$</span>cohort)</span>
 <span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>m6 <span class="ot">&lt;-</span> <span class="fu">feols</span>(div_rate <span class="sc">~</span> <span class="fu">sunab</span>(cohort_sa, year, <span class="at">ref.p =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
 <span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">bin.rel =</span> <span class="fu">list</span>(<span class="st">"-14"</span> <span class="ot">=</span> min_rel<span class="sc">:-</span><span class="dv">14</span>, <span class="st">"12"</span> <span class="ot">=</span> <span class="dv">12</span><span class="sc">:</span>max_rel)) <span class="sc">|</span> state <span class="sc">+</span> year,</span>
 <span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df6, <span class="at">weights =</span> <span class="sc">~</span>stpop, <span class="at">vcov =</span> <span class="sc">~</span>state,</span>
@@ -1457,41 +1497,50 @@ rel_timeminus13 |  -.0118369   .1649912    -0.07   0.943    -.343574    .3199001
 <span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>OLS estimation, Dep. Var.: div_rate
 Observations: 1,565
+Weights: stpop
 Fixed-effects: state: 49,  year: 33
-Standard-errors: Clustered (state)
-           Estimate Std. Error   t value   Pr(&gt;|t|)
-year::-14 -0.012960   0.157842 -0.082105 0.93490431
-year::-13 -0.135399   0.120245 -1.126026 0.26575288
-year::-12 -0.050180   0.123418 -0.406585 0.68611989
-year::-11  0.024293   0.143259  0.169572 0.86605909
-year::-10  0.065799   0.137636  0.478067 0.63477293
-year::-9   0.028236   0.120220  0.234870 0.81530884
-year::-8   0.015769   0.111107  0.141924 0.88773422
-year::-7  -0.022465   0.112049 -0.200494 0.84194122
-year::-6  -0.001855   0.116118 -0.015977 0.98731867
-year::-5   0.092535   0.093432  0.990403 0.32694387
-year::-4   0.097375   0.084287  1.155277 0.25369558
-year::-3   0.056949   0.068634  0.829753 0.41078607
-year::-2   0.058533   0.049270  1.188005 0.24067665
-year::0    0.292720   0.076917  3.805652 0.00040068
-year::1    0.298150   0.070828  4.209509 0.00011160
-year::2    0.261017   0.079519  3.282439 0.00192339
-year::3    0.147670   0.096505  1.530173 0.13253835
-year::4    0.114623   0.102637  1.116785 0.26964543
-year::5    0.167692   0.118194  1.418791 0.16242077
-year::6    0.172182   0.136046  1.265623 0.21175714
-year::7    0.110115   0.123389  0.892422 0.37661919
-year::8   -0.078563   0.127365 -0.616835 0.54025871
-year::9   -0.206175   0.142363 -1.448236 0.15405210
-year::10  -0.249190   0.149231 -1.669829 0.10146303
-year::11  -0.441498   0.157482 -2.803475 0.00727345
-year::12  -0.526894   0.189981 -2.773404 0.00787668
+Standard-errors: Clustered (state) 
+           Estimate Std. Error   t value   Pr(&gt;|t|)    
+year::-14 -0.011837   0.155534 -0.076105 0.93965159    
+year::-13 -0.135404   0.118663 -1.141076 0.25949925    
+year::-12 -0.050181   0.121810 -0.411960 0.68220253    
+year::-11  0.024293   0.141397  0.171808 0.86431100    
+year::-10  0.065800   0.135849  0.484363 0.63033109    
+year::-9   0.028238   0.118661  0.237973 0.81291467    
+year::-8   0.015771   0.109665  0.143809 0.88625361    
+year::-7  -0.022463   0.110594 -0.203115 0.83990408    
+year::-6  -0.001853   0.114608 -0.016170 0.98716563    
+year::-5   0.092537   0.092215  1.003488 0.32065738    
+year::-4   0.097377   0.083189  1.170558 0.24755541    
+year::-3   0.056950   0.067738  0.840740 0.40466224    
+year::-2   0.058534   0.048628  1.203706 0.23460587    
+year::0    0.292720   0.075917  3.855793 0.00034288 
+year::1    0.298148   0.069907  4.264945 0.00009328 
+year::2    0.261015   0.078485  3.325668 0.00169679  
+year::3    0.147668   0.095248  1.550350 0.12762640    
+year::4    0.114621   0.101299  1.131509 0.26346235    
+year::5    0.167690   0.116656  1.437477 0.15706990    
+year::6    0.172180   0.134275  1.282292 0.20589860    
+year::7    0.110113   0.121781  0.904190 0.37041071    
+year::8   -0.078565   0.125702 -0.625009 0.53492496    
+year::9   -0.206177   0.140504 -1.467407 0.14878757    
+year::10  -0.249192   0.147282 -1.691933 0.09714179   
+year::11  -0.441500   0.155425 -2.840591 0.00658789 
+year::12  -0.526897   0.187497 -2.810155 0.00714538 
 
 N = 1565  |  Clusters = 49</code></pre>
 </div>
 </div>
 </div>
+<hr>
+</section>
+<section id="cq32-comparison-with-the-twfe-event-study" class="level2">
+<h2 class="anchored" data-anchor-id="cq32-comparison-with-the-twfe-event-study">CQ#32: Comparison with the TWFE event study</h2>
+<blockquote class="blockquote">
+<p>Are the results you get very different from those you obtained with the ES-TWFER?</p>
+</blockquote>
 <p><strong>Interpretation:</strong> Sun &amp; Abraham estimates are very similar to TWFE event-study but slightly attenuated for long-run effects. All pre-treatment placebos are individually insignificant. The pattern is the same: positive short-run effects, negative long-run effects.</p>
+<hr>
 <hr>
 </section>
 <section id="cq33-callaway-santanna-estimators" class="level2">
@@ -1504,7 +1553,7 @@ N = 1565  |  Clusters = 49</code></pre>
 <div class="tab-content">
 <div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install csdid, <span class="kw">replace</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>csdid div_rate [<span class="kw">weight</span>=stpop], ivar(state) time(<span class="fu">year</span>) gvar(cohort) notyet agg(event)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Difference-in-difference with Multiple Time Periods
@@ -1569,7 +1618,7 @@ Control: Not yet Treated</code></pre>
 </div>
 <div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(did)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>df7 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">cohort_cs =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(cohort) <span class="sc">|</span> cohort <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">0</span>, cohort))</span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>cs_out <span class="ot">&lt;-</span> <span class="fu">att_gt</span>(<span class="at">yname =</span> <span class="st">"div_rate"</span>, <span class="at">gname =</span> <span class="st">"cohort_cs"</span>,</span>
 <span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">idname =</span> <span class="st">"state"</span>, <span class="at">tname =</span> <span class="st">"year"</span>,</span>
@@ -1720,7 +1769,7 @@ estimates differ from Stata/R which use regression adjustment with iweights.</co
 <div class="tab-content">
 <div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install did_multiplegt_dyn, <span class="kw">replace</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn div_rate state <span class="fu">year</span> udl, <span class="kw">effects</span>(13) placebo(13) <span class="kw">weight</span>(stpop) graph_off</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>--------------------------------------------------------------------------------
@@ -1780,7 +1829,7 @@ Test of joint nullity of the placebos : p-value = .52543032</code></pre>
 </div>
 <div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(DIDmultiplegtDYN)</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>dcdh_results <span class="ot">&lt;-</span> <span class="fu">did_multiplegt_dyn</span>(</span>
 <span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">df =</span> df, <span class="at">outcome =</span> <span class="st">"div_rate"</span>, <span class="at">group =</span> <span class="st">"state"</span>,</span>
 <span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">time =</span> <span class="st">"year"</span>, <span class="at">treatment =</span> <span class="st">"udl"</span>,</span>
@@ -1900,7 +1949,7 @@ Placebo_13  0.0256646  0.1832985 -0.3335925  0.3849217  160.0      24.0</code></
 <div class="tab-content">
 <div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install did_imputation, <span class="kw">replace</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> cohort=. <span class="kw">if</span> cohort==0</span>
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>did_imputation div_rate state <span class="fu">year</span> cohort [<span class="kw">aweight</span>=stpop], horizons(0/12) autosample minn(0) pre(13)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1941,7 +1990,7 @@ FE could not be imputed: tau0 tau1 tau2 ... tau12.
 </div>
 <div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(didimputation)</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>df9 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">gname =</span> <span class="fu">ifelse</span>(cohort <span class="sc">==</span> <span class="dv">0</span>, <span class="cn">NA</span>, cohort))</span>
 <span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>bjs_out <span class="ot">&lt;-</span> <span class="fu">did_imputation</span>(</span>
 <span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">as.data.frame</span>(df9),</span>
@@ -2043,7 +2092,7 @@ FE could not be imputed: tau0 tau1 tau2 ... tau12.
 <figcaption>Four-Panel Comparison (Stata)</figcaption>
 </figure>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb59"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb59"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="bn">combine</span> fig62 g1 g2 g4, <span class="bn">cols</span>(2) <span class="bn">title</span>(<span class="st">"Effects of Unilateral Divorce Laws"</span>) <span class="kw">note</span>(<span class="st">"95% CIs shown in red. Weighted by state population. SEs clustered at state level."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -2055,7 +2104,7 @@ FE could not be imputed: tau0 tau1 tau2 ... tau12.
 </figure>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"</span>))</span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="fu">file.path</span>(FIGDIR, <span class="st">"ch06_fig63_4panel_R.png"</span>), <span class="at">width =</span> <span class="dv">1600</span>, <span class="at">height =</span> <span class="dv">1200</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
 <span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">1</span>), <span class="at">oma =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>))</span>
 <span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="fu">es_plot</span>(rt_all, co_all, lo_all, hi_all, <span class="st">"TWFE estimates"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">9</span>, <span class="dv">16</span>))</span>
