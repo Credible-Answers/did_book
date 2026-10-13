@@ -1445,7 +1445,7 @@ Control: Not yet Treated
 ### R
 
 ``` r
-library(haven); library(did)
+library(haven); library(did);library(dplyr)
 load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.RData"))
 df7 <- df %>% mutate(cohort_cs = ifelse(is.na(cohort) | cohort == 0, 0, cohort))
 cs_out <- att_gt(yname = "div_rate", gname = "cohort_cs",
@@ -1662,7 +1662,7 @@ Average number of time periods over which a treatment's effect is accumulated = 
    Placebo_7 |  .0181658   .1033329  -.1843629   .2206946        209         26
    Placebo_8 |   .073694   .1259978  -.1732571   .3206451        207         26
    Placebo_9 |  .0983373   .1380443  -.1722246   .3688992        205         26
-  Placebo_10 |  .0397753   .1524889  -.2591  .3386506        205         26
+  Placebo_10 |  .0397753   .1524889  -.2591      .3386506        205         26
   Placebo_11 |  .0396775   .1616889  -.2772288   .3565838        203         26
   Placebo_12 |  .0539247   .1697544  -.2787899   .3866393        181         25
   Placebo_13 |  .0256646   .1832985  -.3335925   .3849217        160         24
@@ -1707,8 +1707,8 @@ Test of joint nullity of the effects : p-value = 0.0000
     Average cumulative (total) effect per treatment unit
 ----------------------------------------------------------------------
      Estimate     SE         LB CI      UB CI       N
-     -0.05310  0.10473   -0.25836    0.15216     903
-Average number of time periods: 6.2285
+     -0.01511  0.09874     -0.20864    0.17843     837
+Average number of time periods: 6.9296
 
 ----------------------------------------------------------------------
      Testing the parallel trends and no anticipation assumptions
@@ -1723,12 +1723,12 @@ Placebo_6    0.00629  0.10010 -0.18990 0.20247 213 26
 Placebo_7    0.01817  0.10333 -0.18436 0.22069 209 26
 Placebo_8    0.07369  0.12600 -0.17326 0.32065 207 26
 Placebo_9    0.09834  0.13804 -0.17222 0.36890 205 26
-Placebo_10   0.03978  0.15249 -0.25910 0.33865 205 26
-Placebo_11   0.03968  0.16169 -0.27723 0.35658 203 26
-Placebo_12   0.05392  0.16975 -0.27879 0.38664 181 25
-Placebo_13   0.02566  0.18330 -0.33359 0.38492 160 24
+Placebo_10   0.04206  0.15274 -0.25730 0.34141 204 26
+Placebo_11   -0.01215 0.13266 -0.27216 0.24786 199 26
+Placebo_12   -0.05783 0.14225 -0.33665 0.22098 194 26
+Placebo_13   0.02566  0.18330 -0.33359 0.38492 151 23
 
-Test of joint nullity of the placebos : p-value = 0.5254
+Test of joint nullity of the placebos : p-value = 0.0000
 ```
 
 ### Python
@@ -1790,7 +1790,7 @@ Placebo_13  0.0256646  0.1832985 -0.3335925  0.3849217  160.0      24.0
 ```
 :::
 
-**Interpretation:** All three implementations produce identical estimates. Effects are positive for 1–8 years post-treatment, turning negative from year 9 onward. Average total effect = −0.053 (p \> 0.10). All 13 placebos are insignificant (joint test p = 0.53), supporting parallel trends.
+**Interpretation:** Effects are positive for 1–8 years post-treatment, turning negative from year 9 onward. Average total effect = −0.015 (p > 0.10). All 13 placebos are individually insignificant, but the joint test rejects (p < 0.01).
 
 ------------------------------------------------------------------------
 
@@ -1945,9 +1945,9 @@ for _, row in result.iterrows():
 
 **Interpretation:** The R (`didimputation`), Python (`did_imputation.py`), and Stata (`did_imputation`) implementations produce identical event-study effects (tau0–tau12) and pretrend estimates when weights are properly specified (`wname = "stpop"` in R/Python, `[aweight=stpop]` in Stata) and `cohort` is set to missing for never-treated groups. The pre-trend estimates computed by `did_imputation` are coefficients on treatment leads in a TWFER estimated on untreated cells, and as such are not directly comparable to the pre-trend estimates from other estimators.
 
-## Figure 6.3: Four-Panel Comparison
+## Four-Panel Comparison
 
-> > This plot combines the event-study estimates from the four estimators computed in the previous sections (CQ#28: TWFE, CQ#31–32: Sun & Abraham, CQ#33: Callaway & Sant'Anna, CQ#35: Borusyak, Jaravel & Spiess). You must run all previous sections before generating this figure.
+> > This plot (figure 6.3) combines the event-study estimates from the four estimators computed in the previous sections (CQ#28: TWFE, CQ#31–32: Sun & Abraham, CQ#33: Callaway & Sant'Anna, CQ#35: Borusyak, Jaravel & Spiess). You must run all previous sections before generating this figure.
 
 ::: panel-tabset
 ### Stata
