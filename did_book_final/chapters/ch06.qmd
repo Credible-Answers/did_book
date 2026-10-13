@@ -1741,7 +1741,9 @@ Test of joint nullity of the placebos : p-value = 0.5254
 ``` python
 import pandas as pd
 import polars as pl
+from math import erfc, sqrt
 from did_multiplegt_dyn.did_multiplegt_dyn import did_multiplegt_main
+
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df_dyn = df[['div_rate', 'state', 'year', 'udl', 'stpop']].copy().dropna()
 df_dyn['state_num'] = df_dyn['state'].astype(str).factorize()[0] + 1
@@ -1756,42 +1758,63 @@ result = did_multiplegt_main(
 dmd = result['did_multiplegt_dyn']
 print("\nEffects:")
 print(dmd['Effects'][['Estimate', 'SE', 'LB CI', 'UB CI', 'N', 'Switchers']].to_string())
+
+ate = dmd['ATE'].iloc[0]
+z = ate['Estimate'] / ate['SE']
+p_ate = erfc(abs(z) / sqrt(2))
+print("\nAverage total effect per treatment unit:")
+print(dmd['ATE'][['Estimate', 'SE', 'LB CI', 'UB CI', 'N', 'Switchers']].to_string())
+print(f"z = {z:.4f}, p-value = {p_ate:.4f}")
+print(f"Average number of time periods over which a treatment's effect is accumulated = {dmd['delta_D_avg_total']:.4f}")
+print(f"\nTest of joint nullity of the effects: p-value = {dmd['p_jointeffects']:.4g}")
+
 print("\nPlacebos:")
 print(dmd['Placebos'][['Estimate', 'SE', 'LB CI', 'UB CI', 'N', 'Switchers']].to_string())
+print(f"\nTest of joint nullity of the placebos: p-value = {dmd['p_jointplacebo']:.4g}")
 ```
 
 ```         
 Effects:
-            Estimate        SE     LB CI     UB CI      N  Switchers
-Effect_1   0.3009668  0.0875908  0.1292921  0.4726416  320.0      27.0
-Effect_2   0.3035895  0.0727610  0.1609806  0.4461984  294.0      27.0
-Effect_3   0.2683828  0.0758296  0.1197596  0.4170061  271.0      27.0
-Effect_4   0.1816435  0.0848985  0.0152454  0.3480415  255.0      27.0
-Effect_5   0.1192688  0.1007013 -0.0781021  0.3166398  220.0      26.0
-Effect_6   0.1148243  0.1107215 -0.1021858  0.3318343  215.0      26.0
-Effect_7   0.1225242  0.1306844 -0.1336126  0.3786610  212.0      26.0
-Effect_8   0.0653645  0.1164027 -0.1627805  0.2935095  209.0      26.0
-Effect_9  -0.0758406  0.1196254 -0.3103020  0.1586208  206.0      26.0
-Effect_10 -0.2138813  0.1334247 -0.4753890  0.0476264  205.0      26.0
-Effect_11 -0.2581056  0.1376535 -0.5279015  0.0116903  205.0      26.0
-Effect_12 -0.4385846  0.1438404 -0.7205066 -0.1566625  203.0      26.0
-Effect_13 -0.5012723  0.1654563 -0.8255606 -0.1769838  181.0      25.0
+           Estimate        SE     LB CI     UB CI      N  Switchers
+Effect_1   0.300967  0.087591  0.129292  0.472642  320.0       27.0
+Effect_2   0.303590  0.072761  0.160981  0.446198  294.0       27.0
+Effect_3   0.268383  0.075830  0.119760  0.417006  271.0       27.0
+Effect_4   0.181643  0.084899  0.015245  0.348042  255.0       27.0
+Effect_5   0.119269  0.100701 -0.078102  0.316640  220.0       26.0
+Effect_6   0.114824  0.110721 -0.102186  0.331834  215.0       26.0
+Effect_7   0.122524  0.130684 -0.133613  0.378661  212.0       26.0
+Effect_8   0.065365  0.116403 -0.162780  0.293510  209.0       26.0
+Effect_9  -0.075841  0.119625 -0.310302  0.158621  206.0       26.0
+Effect_10 -0.213881  0.133425 -0.475389  0.047626  205.0       26.0
+Effect_11 -0.258106  0.137653 -0.527902  0.011690  205.0       26.0
+Effect_12 -0.438585  0.143840 -0.720507 -0.156663  203.0       26.0
+Effect_13 -0.501272  0.165456 -0.825561 -0.176984  181.0       25.0
+
+Average total effect per treatment unit:
+                      Estimate        SE     LB CI     UB CI      N  Switchers
+Average_Total_Effect -0.015107  0.098745 -0.208642  0.178429  837.0      341.0
+z = -0.1530, p-value = 0.8784
+Average number of time periods over which a treatment's effect is accumulated = 6.9296
+
+Test of joint nullity of the effects: p-value = 6.739e-12
 
 Placebos:
-             Estimate        SE     LB CI     UB CI      N  Switchers
-Placebo_1   0.0468044  0.0493928 -0.0500037  0.1436124  319.0      27.0
-Placebo_2   0.0578159  0.0600959 -0.0599699  0.1756017  293.0      27.0
-Placebo_3   0.0978812  0.0763021 -0.0516681  0.2474305  270.0      27.0
-Placebo_4   0.0522300  0.0838890 -0.1121895  0.2166495  254.0      27.0
-Placebo_5   0.0567550  0.0989039 -0.1370931  0.2506030  219.0      26.0
-Placebo_6   0.0062875  0.1000968 -0.1898987  0.2024737  213.0      26.0
-Placebo_7   0.0181658  0.1033329 -0.1843629  0.2206946  209.0      26.0
-Placebo_8   0.0736940  0.1259978 -0.1732571  0.3206451  207.0      26.0
-Placebo_9   0.0983373  0.1380443 -0.1722246  0.3688992  205.0      26.0
-Placebo_10  0.0397753  0.1524889 -0.2591000  0.3386506  205.0      26.0
-Placebo_11  0.0396775  0.1616889 -0.2772288  0.3565838  203.0      26.0
-Placebo_12  0.0539247  0.1697544 -0.2787899  0.3866393  181.0      25.0
-Placebo_13  0.0256646  0.1832985 -0.3335925  0.3849217  160.0      24.0
+            Estimate        SE     LB CI     UB CI      N  Switchers
+Placebo_1   0.046804  0.049393 -0.050004  0.143612  319.0       27.0
+Placebo_2   0.057816  0.060096 -0.059970  0.175602  293.0       27.0
+Placebo_3   0.097881  0.076302 -0.051668  0.247430  270.0       27.0
+Placebo_4   0.052230  0.083889 -0.112189  0.216649  254.0       27.0
+Placebo_5   0.056755  0.098904 -0.137093  0.250603  219.0       26.0
+Placebo_6   0.006288  0.100097 -0.189899  0.202474  213.0       26.0
+Placebo_7   0.018166  0.103333 -0.184363  0.220695  209.0       26.0
+Placebo_8   0.073694  0.125998 -0.173257  0.320645  207.0       26.0
+Placebo_9   0.098337  0.138044 -0.172225  0.368899  205.0       26.0
+Placebo_10  0.042055  0.152737 -0.257304  0.341415  204.0       26.0
+Placebo_11 -0.012151  0.132660 -0.272159  0.247857  199.0       26.0
+Placebo_12 -0.057835  0.142255 -0.336649  0.220980  194.0       26.0
+Placebo_13  0.025665  0.183299 -0.333594  0.384923  151.0       23.0
+
+Test of joint nullity of the placebos: p-value = 1.226e-06
 ```
 :::
 
