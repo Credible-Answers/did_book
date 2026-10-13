@@ -469,7 +469,7 @@ plt.savefig("figures/ch06_fig62_twfe_es_Python.png", dpi=150)
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 reg div_rate rel_time* i.state i.year [w=stpop], vce(cluster state)
-test rel_timeminus1-rel_timeminus9
+test rel_timeminus1 rel_timeminus2 rel_timeminus3 rel_timeminus4 rel_timeminus5 rel_timeminus6 rel_timeminus7 rel_timeminus8 rel_timeminus9
 ```
 
 ```         
@@ -1268,20 +1268,19 @@ Overall, $\hat{\beta}_1^{fe}$ does not put negative weights on the effects of on
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
 
-* Drop always-treated states
-drop if cohort == 1956
+replace cohort=. if controlgroup==1
+drop if cohort==1956 //drop Always Treated 
 
-* Bin the leads at -13 and the lags at 13 (treated states only)
-replace rel_timeminus9 = (year == cohort - 1 - 9) & cohort > 0
-forvalues k = 10/12 {
-    gen rel_timeminus`k' = (year == cohort - 1 - `k') & cohort > 0
-}
-gen rel_timeminus13 = (year <= cohort - 1 - 13) & cohort > 0
-drop rel_time14 rel_time15 rel_time16
-replace rel_time13 = (year >= cohort - 1 + 13) & cohort > 0
+*Pre-treatment 
+replace rel_timeminus9=(year==cohort-1-9)
+gen rel_timeminus10=(year==cohort-1-10)
+gen rel_timeminus11=(year==cohort-1-11)
+gen rel_timeminus12=(year==cohort-1-12)
+gen rel_timeminus13=(year<=cohort-1-13)	//Bin event time -13 
 
-* Never treated: cohort missing
-replace cohort = . if cohort == 0
+*Post-treatment
+replace rel_time13=(year>=cohort-1+13)  //Bin event time +13
+cap drop rel_time14 rel_time15 rel_time16
 
 eventstudyinteract div_rate rel_time* [aweight=stpop], absorb(i.state i.year) cohort(cohort) control_cohort(controlgroup) vce(cluster state)
 ```
@@ -1665,7 +1664,7 @@ Test of joint nullity of the effects : p-value = 0
 
              |  Estimate         SE      LB CI      UB CI          N
 -------------+--------------------------------------------------------------
-  Av_tot_eff | -.0530975   .1047252  -.2583552   .1521601        903
+  Av_tot_eff | -.0151066   .0987446  -.2086425   .1784293        837
 --------------------------------------------------------------------------------
 Average number of time periods over which a treatment's effect is accumulated = 6.2285012
 
@@ -1997,12 +1996,159 @@ for _, row in result.iterrows():
 ::: panel-tabset
 ### Stata
 
-![Four-Panel Comparison (Stata)](../figures/ch06_fig63_4panel.png)
+![Four-Panel Comparison (Stata)](../figures/ch06_fig63_4panel_stata.png)
 
 ``` stata
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta" "wolfers2006_didtextbook.dta", replace
 use "wolfers2006_didtextbook.dta", clear
-graph combine fig62 g1 g2 g4, cols(2) title("Effects of Unilateral Divorce Laws") note("95% CIs shown in red. Weighted by state population. SEs clustered at state level.")
+
+* Panel 1: eventstudyinteract (g1)
+use "wolfers2006_didtextbook.dta", clear
+replace cohort=. if controlgroup==1
+drop if cohort==1956
+replace rel_timeminus9=(year==cohort-1-9)
+gen rel_timeminus10=(year==cohort-1-10)
+gen rel_timeminus11=(year==cohort-1-11)
+gen rel_timeminus12=(year==cohort-1-12)
+gen rel_timeminus13=(year<=cohort-1-13)
+replace rel_time13=(year>=cohort-1+13)
+cap drop rel_time14 rel_time15 rel_time16
+qui eventstudyinteract div_rate rel_time* [aweight=stpop], absorb(i.state i.year) cohort(cohort) control_cohort(controlgroup) vce(cluster state)
+
+* eventstudyinteract stores its estimates in e(b_iw) and e(V_iw)
+matrix b = e(b_iw)
+matrix V = e(V_iw)
+
+tempname pf
+tempfile coefs
+postfile `pf' rel_time coef ci_lo ci_hi using `coefs'
+forvalues t = 1/13 {
+    local b  = b[1, "rel_time`t'"]
+    local se = sqrt(V["rel_time`t'", "rel_time`t'"])
+    post `pf' (`t') (`b') (`b' - 1.96 * `se') (`b' + 1.96 * `se')
+}
+forvalues t = 1/13 {
+    local b  = b[1, "rel_timeminus`t'"]
+    local se = sqrt(V["rel_timeminus`t'", "rel_timeminus`t'"])
+    post `pf' (-`t') (`b') (`b' - 1.96 * `se') (`b' + 1.96 * `se')
+}
+post `pf' (0) (0) (.) (.)
+postclose `pf'
+
+use `coefs', clear
+sort rel_time
+twoway (rcap ci_hi ci_lo rel_time, lcolor(black)) ///
+       (connected coef rel_time, mcolor(black) lcolor(black) msymbol(O)), ///
+       title("eventstudyinteract") ///
+       xtitle("Relative time to year before law") ///
+       ytitle("Effect") ///
+       xlabel(-13(2)13) ylabel(-1(.5).5, angle(0)) yscale(range(-1.15 0.8)) ///
+       graphregion(color(white)) legend(off) ///
+       name(g1, replace)
+graph export "figures/ch06_fig63_panel1_eventstudyinteract.png", replace width(1200)
+
+* Panel 2: csdid (g2)
+use "wolfers2006_didtextbook.dta", clear
+qui csdid div_rate [weight=stpop], ivar(state) time(year) gvar(cohort) notyet agg(event)
+
+tempname pf
+tempfile coefs
+postfile `pf' rel_time coef ci_lo ci_hi using `coefs'
+* Tp0 is the first year of the law, i.e. rel_time = 1
+forvalues t = 0/12 {
+    local b  = _b[Tp`t']
+    local se = _se[Tp`t']
+    post `pf' (`t' + 1) (`b') (`b' - 1.96 * `se') (`b' + 1.96 * `se')
+}
+forvalues t = 1/13 {
+    local b  = _b[Tm`t']
+    local se = _se[Tm`t']
+    post `pf' (-`t') (`b') (`b' - 1.96 * `se') (`b' + 1.96 * `se')
+}
+post `pf' (0) (0) (.) (.)
+postclose `pf'
+
+use `coefs', clear
+sort rel_time
+twoway (rcap ci_hi ci_lo rel_time, lcolor(black)) ///
+       (connected coef rel_time, mcolor(black) lcolor(black) msymbol(O)), ///
+       title("csdid") ///
+       xtitle("Relative time to year before law") ///
+       ytitle("Effect") ///
+       xlabel(-13(2)13) ylabel(-1(.5).5, angle(0)) yscale(range(-1.15 0.8)) ///
+       graphregion(color(white)) legend(off) ///
+       name(g2, replace)
+graph export "figures/ch06_fig63_panel2_csdid.png", replace width(1200)
+
+* Panel 3: did_multiplegt_dyn (g3)
+use "wolfers2006_didtextbook.dta", clear
+qui did_multiplegt_dyn div_rate state year udl, effects(13) placebo(13) weight(stpop) graph_off
+
+tempname pf
+tempfile coefs
+postfile `pf' rel_time coef ci_lo ci_hi using `coefs'
+forvalues t = 1/13 {
+    local b  = _b[Effect_`t']
+    local se = _se[Effect_`t']
+    post `pf' (`t') (`b') (`b' - 1.96 * `se') (`b' + 1.96 * `se')
+}
+forvalues t = 1/13 {
+    local b  = _b[Placebo_`t']
+    local se = _se[Placebo_`t']
+    post `pf' (-`t') (`b') (`b' - 1.96 * `se') (`b' + 1.96 * `se')
+}
+post `pf' (0) (0) (.) (.)
+postclose `pf'
+
+use `coefs', clear
+sort rel_time
+twoway (rcap ci_hi ci_lo rel_time, lcolor(black)) ///
+       (connected coef rel_time, mcolor(black) lcolor(black) msymbol(O)), ///
+       title("did_multiplegt_dyn") ///
+       xtitle("Relative time to year before law") ///
+       ytitle("Effect") ///
+       xlabel(-13(2)13) ylabel(-1(.5).5, angle(0)) yscale(range(-1.15 0.8)) ///
+       graphregion(color(white)) legend(off) ///
+       name(g3, replace)
+graph export "figures/ch06_fig63_panel3_did_multiplegt_dyn.png", replace width(1200)
+
+* Panel 4: did_imputation (g4)
+use "wolfers2006_didtextbook.dta", clear
+replace cohort=. if cohort==0
+qui did_imputation div_rate state year cohort [aweight=stpop], horizons(0/12) autosample minn(0) pre(13)
+
+tempname pf
+tempfile coefs
+postfile `pf' rel_time coef ci_lo ci_hi using `coefs'
+* tau0 is the first year of the law, i.e. rel_time = 1
+forvalues t = 0/12 {
+    local b  = _b[tau`t']
+    local se = _se[tau`t']
+    post `pf' (`t' + 1) (`b') (`b' - 1.96 * `se') (`b' + 1.96 * `se')
+}
+forvalues t = 1/13 {
+    local b  = _b[pre`t']
+    local se = _se[pre`t']
+    post `pf' (-`t') (`b') (`b' - 1.96 * `se') (`b' + 1.96 * `se')
+}
+post `pf' (0) (0) (.) (.)
+postclose `pf'
+
+use `coefs', clear
+sort rel_time
+twoway (rcap ci_hi ci_lo rel_time, lcolor(black)) ///
+       (connected coef rel_time, mcolor(black) lcolor(black) msymbol(O)), ///
+       title("did_imputation") ///
+       xtitle("Relative time to year before law") ///
+       ytitle("Effect") ///
+       xlabel(-13(2)13) ylabel(-1(.5).5, angle(0)) yscale(range(-1.15 0.8)) ///
+       graphregion(color(white)) legend(off) ///
+       name(g4, replace)
+graph export "figures/ch06_fig63_panel4_did_imputation.png", replace width(1200)
+
+* Combine the four panels
+graph combine g1 g2 g3 g4, cols(2) graphregion(color(white)) name(fig63, replace)
+graph export "figures/ch06_fig63_4panel_stata.png", name(fig63) replace width(1600)
 ```
 
 ### R

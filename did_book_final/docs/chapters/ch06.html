@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Chapter 6: Designs with Variation in Treatment Timing – Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -69,15 +75,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch05.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -107,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -393,11 +398,11 @@ N = 1631  |  R-sq = 0.9305</code></pre>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>              data<span class="op">=</span>df, weights<span class="op">=</span><span class="st">'stpop'</span>, vcov<span class="op">=</span>{<span class="st">'CRV1'</span>: <span class="st">'state'</span>},</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>              ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">'full'</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>m1.summary(digits<span class="op">=</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
-------------------------------------------------------------------------------------------
-udl                    -0.0548378      0.1507695      -0.36   [  -0.3503461,    0.2406705]
+<pre><code>| Coefficient   |   Estimate |   Std. Error |    t value |   Pr(&gt;|t|) |       2.5% |      97.5% |
+|:--------------|-----------:|-------------:|-----------:|-----------:|-----------:|-----------:|
+| udl           | -0.0548378 |    0.1507695 | -0.3637192 |  0.7176012 | -0.3576673 |  0.2479917 |
 
-N = 1631  |  R-sq = 0.9305</code></pre>
+RMSE: 1031.4486884 R2: 0.9304837 R2 Within: 0.8298766 </code></pre>
 </div>
 </div>
 </div>
@@ -460,7 +465,8 @@ RW_exposurelength -8.288361 0.2136059 -38.80212  -0.7325324</code></pre>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> twowayfeweights(df, <span class="st">"div_rate"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="st">"udl"</span>,</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                          <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, weights<span class="op">=</span><span class="st">"stpop"</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                          test_random_weights<span class="op">=</span><span class="st">"exposurelength"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                          test_random_weights<span class="op">=</span><span class="st">"exposurelength"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
 beta estimates a weighted sum of 522 ATTs.
 490 ATTs receive a positive weight, and 32 receive a negative weight.
@@ -524,19 +530,20 @@ N = 611  |  R-sq = 0.1707</code></pre>
 </div>
 <div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> df[(df[<span class="st">'cohort'</span>] <span class="op">!=</span> <span class="dv">1956</span>) <span class="op">&amp;</span> (df[<span class="st">'year'</span>] <span class="op">&lt;=</span> <span class="dv">1968</span>)].copy()</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="op">=</span> pf.feols(<span class="st">'div_rate ~ C(early_late_never)'</span>,</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>              data<span class="op">=</span>df3, weights<span class="op">=</span><span class="st">'stpop'</span>, vcov<span class="op">=</span>{<span class="st">'CRV1'</span>: <span class="st">'state'</span>},</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>              ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">'full'</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>m3.summary(digits<span class="op">=</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
-------------------------------------------------------------------------------------------
-Intercept               3.0548909      0.2584305      11.82   [   2.5483670,    3.5614147]
-C(early_late_never)[T.2.0]   -0.0457088      0.4927483      -0.09   [  -1.0114954,    0.9200777]
-C(early_late_never)[T.3.0]   -1.3633981      0.3751166      -3.63   [  -2.0986266,   -0.6281697]
-
-N = 611  |  R-sq = 0.1707</code></pre>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyfixest <span class="im">as</span> pf</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> df[(df[<span class="st">'cohort'</span>] <span class="op">!=</span> <span class="dv">1956</span>) <span class="op">&amp;</span> (df[<span class="st">'year'</span>] <span class="op">&lt;=</span> <span class="dv">1968</span>)].copy()</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>m3 <span class="op">=</span> pf.feols(<span class="st">'div_rate ~ C(early_late_never)'</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>              data<span class="op">=</span>df3, weights<span class="op">=</span><span class="st">'stpop'</span>, vcov<span class="op">=</span>{<span class="st">'CRV1'</span>: <span class="st">'state'</span>},</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>              ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">'full'</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>m3.summary(digits<span class="op">=</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>| Coefficient                |   Estimate |   Std. Error |    t value |   Pr(&gt;|t|) |       2.5% |      97.5% |
+|:---------------------------|-----------:|-------------:|-----------:|-----------:|-----------:|-----------:|
+| Intercept                  |  3.0548909 |    0.2584305 | 11.8209361 |  0.0000000 |  2.5349957 |  3.5747861 |
+| C(early_late_never)[T.2.0] | -0.0457088 |    0.4927483 | -0.0927630 |  0.9264861 | -1.0369904 |  0.9455728 |
+| C(early_late_never)[T.3.0] | -1.3633981 |    0.3751166 | -3.6345987 |  0.0006881 | -2.1180353 | -0.6087610 |
+---
+RMSE: 2836.5163952 R2: 0.1707435 </code></pre>
 </div>
 </div>
 </div>
@@ -643,16 +650,36 @@ N = 611  |  R-sq = 0.1707</code></pre>
 </figure>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>ax.errorbar(rt, coefs, yerr<span class="op">=</span><span class="fl">1.96</span><span class="op">*</span>ses, fmt<span class="op">=</span><span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'navy'</span>,</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>            ecolor<span class="op">=</span><span class="st">'maroon'</span>, capsize<span class="op">=</span><span class="dv">3</span>, markersize<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Relative time to year before law"</span>)</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Effect"</span>)<span class="op">;</span> ax.set_title(<span class="st">"TWFE estimates"</span>)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>plt.savefig(FIGDIR <span class="op">/</span> <span class="st">"ch06_fig62_twfe_es_Python.png"</span>, dpi<span class="op">=</span><span class="dv">150</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyfixest <span class="im">as</span> pf</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>rt_pos <span class="op">=</span> [<span class="ss">f"rel_time</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">17</span>)]</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>rt_neg <span class="op">=</span> [<span class="ss">f"rel_timeminus</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">9</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>)]</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>fml <span class="op">=</span> <span class="st">"div_rate ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(rt_pos <span class="op">+</span> rt_neg) <span class="op">+</span> <span class="st">" + i(year) | state"</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>m4 <span class="op">=</span> pf.feols(fml, data<span class="op">=</span>df, weights<span class="op">=</span><span class="st">"stpop"</span>, vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"state"</span>},</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>              ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"full"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>rt <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="op">-</span><span class="dv">9</span>, <span class="dv">0</span>)) <span class="op">+</span> [<span class="dv">0</span>] <span class="op">+</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">17</span>))</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> rt_neg <span class="op">+</span> [<span class="va">None</span>] <span class="op">+</span> rt_pos</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>coefs <span class="op">=</span> [m4.coef()[n] <span class="cf">if</span> n <span class="cf">else</span> <span class="fl">0.0</span> <span class="cf">for</span> n <span class="kw">in</span> names]</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>ses <span class="op">=</span> [m4.se()[n] <span class="cf">if</span> n <span class="cf">else</span> <span class="fl">0.0</span> <span class="cf">for</span> n <span class="kw">in</span> names]</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>ax.errorbar(rt, coefs, yerr<span class="op">=</span>[<span class="fl">1.96</span> <span class="op">*</span> s <span class="cf">for</span> s <span class="kw">in</span> ses], fmt<span class="op">=</span><span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'navy'</span>,</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>            ecolor<span class="op">=</span><span class="st">'maroon'</span>, capsize<span class="op">=</span><span class="dv">3</span>, markersize<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(<span class="bu">range</span>(<span class="op">-</span><span class="dv">9</span>, <span class="dv">16</span>, <span class="dv">3</span>))</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="op">-</span><span class="fl">1.1</span>, <span class="fl">0.8</span>)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Relative time to year before law"</span>)</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Effect"</span>)</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"TWFE estimates"</span>)</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">"figures"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">"figures/ch06_fig62_twfe_es_Python.png"</span>, dpi<span class="op">=</span><span class="dv">150</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -669,7 +696,7 @@ N = 611  |  R-sq = 0.1707</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">reg</span> div_rate rel_time* i.state i.<span class="fu">year</span> [<span class="fu">w</span>=stpop], <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="kw">test</span> rel_timeminus1-rel_timeminus9</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="kw">test</span> rel_timeminus1 rel_timeminus2 rel_timeminus3 rel_timeminus4 rel_timeminus5 rel_timeminus6 rel_timeminus7 rel_timeminus8 rel_timeminus9</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>                                   (Std. err. adjusted for 51 clusters in state)
 --------------------------------------------------------------------------------
                |               Robust
@@ -750,41 +777,43 @@ Wald test: stat = 0.506103, p-value = 0.870968, on 9 and 1,523 DoF</code></pre>
 </div>
 <div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>rt_pos <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c.startswith(<span class="st">"rel_time"</span>) <span class="kw">and</span> <span class="st">"minus"</span> <span class="kw">not</span> <span class="kw">in</span> c]</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rt_neg <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> <span class="st">"rel_timeminus"</span> <span class="kw">in</span> c]</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>fml <span class="op">=</span> <span class="st">"div_rate ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(rt_pos <span class="op">+</span> rt_neg) <span class="op">+</span> <span class="st">" + i(year) | state"</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>m4 <span class="op">=</span> pf.feols(fml, data<span class="op">=</span>df, weights<span class="op">=</span><span class="st">'stpop'</span>, vcov<span class="op">=</span>{<span class="st">'CRV1'</span>: <span class="st">'state'</span>},</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>              ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">'full'</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
-------------------------------------------------------------------------------------------
-rel_time1               0.2891561      0.2054259       1.41   [  -0.1134786,    0.6917908]
-rel_time2               0.3358503      0.1024966       3.28   [   0.1349569,    0.5367437]
-rel_time3               0.3037197      0.0958368       3.17   [   0.1158795,    0.4915599]
-rel_time4               0.2162947      0.1100871       1.96   [   0.0005240,    0.4320654]
-rel_time5               0.1824478      0.1135503       1.61   [  -0.0401109,    0.4050064]
-rel_time6               0.2469589      0.1235802       2.00   [   0.0047418,    0.4891760]
-rel_time7               0.2521922      0.1354015       1.86   [  -0.0131948,    0.5175791]
-rel_time8               0.1684823      0.1324744       1.27   [  -0.0911675,    0.4281321]
-rel_time9              -0.0076860      0.1224421      -0.06   [  -0.2476726,    0.2323006]
-rel_time10             -0.1312296      0.1355820      -0.97   [  -0.3969703,    0.1345111]
-rel_time11             -0.1795675      0.1618587      -1.11   [  -0.4968107,    0.1376756]
-rel_time12             -0.3662379      0.1654420      -2.21   [  -0.6905043,   -0.0419716]
-rel_time13             -0.3894262      0.1685244      -2.31   [  -0.7197342,   -0.0591183]
-rel_time14             -0.4421197      0.1949527      -2.27   [  -0.8242270,   -0.0600124]
-rel_time15             -0.3402803      0.1710816      -1.99   [  -0.6756002,   -0.0049604]
-rel_time16             -0.5268950      0.2602054      -2.02   [  -1.0368975,   -0.0168925]
-rel_timeminus1          0.0401147      0.0525088       0.76   [  -0.0628025,    0.1430319]
-rel_timeminus2          0.0377587      0.0585560       0.64   [  -0.0770112,    0.1525285]
-rel_timeminus3          0.0997316      0.0674681       1.48   [  -0.0325059,    0.2319691]
-rel_timeminus4          0.0988424      0.0897758       1.10   [  -0.0771182,    0.2748030]
-rel_timeminus5          0.0208620      0.1099841       0.19   [  -0.1947069,    0.2364309]
-rel_timeminus6          0.0183927      0.1151678       0.16   [  -0.2073362,    0.2441217]
-rel_timeminus7          0.0602846      0.1119554       0.54   [  -0.1591481,    0.2797173]
-rel_timeminus8          0.0808726      0.1471298       0.55   [  -0.2075017,    0.3692470]
-rel_timeminus9          0.0558855      0.1600016       0.35   [  -0.2577175,    0.3694885]
-
-N = 1631  |  R-sq = 0.9351</code></pre>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyfixest <span class="im">as</span> pf</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rt_pos <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c.startswith(<span class="st">"rel_time"</span>) <span class="kw">and</span> <span class="st">"minus"</span> <span class="kw">not</span> <span class="kw">in</span> c]</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>rt_neg <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> <span class="st">"rel_timeminus"</span> <span class="kw">in</span> c]</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>fml <span class="op">=</span> <span class="st">"div_rate ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(rt_pos <span class="op">+</span> rt_neg) <span class="op">+</span> <span class="st">" + i(year) | state"</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>m4 <span class="op">=</span> pf.feols(fml, data<span class="op">=</span>df, weights<span class="op">=</span><span class="st">'stpop'</span>, vcov<span class="op">=</span>{<span class="st">'CRV1'</span>: <span class="st">'state'</span>},</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>              ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">'full'</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>m4.summary(digits<span class="op">=</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>| Coefficient    |   Estimate |   Std. Error |    t value |   Pr(&gt;|t|) |       2.5% |      97.5% |
+|:---------------|-----------:|-------------:|-----------:|-----------:|-----------:|-----------:|
+| rel_time1      |  0.2891561 |    0.2054259 |  1.4075935 |  0.1654383 | -0.1234539 |  0.7017661 |
+| rel_time2      |  0.3358503 |    0.1024966 |  3.2766963 |  0.0019131 |  0.1299798 |  0.5417208 |
+| rel_time3      |  0.3037197 |    0.0958368 |  3.1691339 |  0.0026089 |  0.1112258 |  0.4962136 |
+| rel_time4      |  0.2162947 |    0.1100871 |  1.9647595 |  0.0550112 | -0.0048218 |  0.4374112 |
+| rel_time5      |  0.1824478 |    0.1135503 |  1.6067569 |  0.1144054 | -0.0456248 |  0.4105203 |
+| rel_time6      |  0.2469589 |    0.1235802 |  1.9983700 |  0.0511292 | -0.0012592 |  0.4951769 |
+| rel_time7      |  0.2521922 |    0.1354015 |  1.8625505 |  0.0684062 | -0.0197698 |  0.5241541 |
+| rel_time8      |  0.1684823 |    0.1324744 |  1.2718102 |  0.2093244 | -0.0976004 |  0.4345650 |
+| rel_time9      | -0.0076860 |    0.1224421 | -0.0627724 |  0.9501980 | -0.2536183 |  0.2382463 |
+| rel_time10     | -0.1312296 |    0.1355820 | -0.9678986 |  0.3377537 | -0.4035541 |  0.1410948 |
+| rel_time11     | -0.1795675 |    0.1618587 | -1.1094090 |  0.2725613 | -0.5046704 |  0.1455353 |
+| rel_time12     | -0.3662379 |    0.1654420 | -2.2136937 |  0.0314401 | -0.6985380 | -0.0339379 |
+| rel_time13     | -0.3894262 |    0.1685244 | -2.3107998 |  0.0250068 | -0.7279175 | -0.0509349 |
+| rel_time14     | -0.4421197 |    0.1949527 | -2.2678308 |  0.0276929 | -0.8336937 | -0.0505457 |
+| rel_time15     | -0.3402803 |    0.1710816 | -1.9889943 |  0.0521876 | -0.6839078 |  0.0033472 |
+| rel_time16     | -0.5268950 |    0.2602054 | -2.0249201 |  0.0482319 | -1.0495329 | -0.0042572 |
+| rel_timeminus1 |  0.0401147 |    0.0525088 |  0.7639626 |  0.4484798 | -0.0653522 |  0.1455817 |
+| rel_timeminus2 |  0.0377587 |    0.0585560 |  0.6448295 |  0.5219854 | -0.0798546 |  0.1553719 |
+| rel_timeminus3 |  0.0997316 |    0.0674681 |  1.4782031 |  0.1456257 | -0.0357821 |  0.2352453 |
+| rel_timeminus4 |  0.0988424 |    0.0897758 |  1.1009911 |  0.2761727 | -0.0814777 |  0.2791625 |
+| rel_timeminus5 |  0.0208620 |    0.1099841 |  0.1896817 |  0.8503265 | -0.2000476 |  0.2417716 |
+| rel_timeminus6 |  0.0183927 |    0.1151678 |  0.1597037 |  0.8737579 | -0.2129287 |  0.2497141 |
+| rel_timeminus7 |  0.0602846 |    0.1119554 |  0.5384695 |  0.5926422 | -0.1645845 |  0.2851537 |
+| rel_timeminus8 |  0.0808726 |    0.1471298 |  0.5496688 |  0.5849935 | -0.2146462 |  0.3763915 |
+| rel_timeminus9 |  0.0558855 |    0.1600016 |  0.3492810 |  0.7283452 | -0.2654871 |  0.3772581 |
+---
+RMSE: 996.6048219 R2: 0.9351011 R2 Within: 0.8411765 </code></pre>
 </div>
 </div>
 </div>
@@ -1217,7 +1246,8 @@ The development of this package was funded by the European Union (ERC, REALLYCRE
 <span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                           <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, test_random_weights<span class="op">=</span><span class="st">"year"</span>,</span>
 <span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>                           weights<span class="op">=</span><span class="st">"stpop"</span>,</span>
 <span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>                           other_treatments<span class="op">=</span>other_treatments,</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>                           controls<span class="op">=</span>controls)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>                           controls<span class="op">=</span>controls)</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Under the common trends assumption,
 the TWFE coefficient beta, equal to 0.2892, estimates the sum of several terms.
 
@@ -1431,22 +1461,21 @@ year   -15.333901    13.428752   -1.1418709   -0.2322459</code></pre>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>* Drop always-treated states</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="kw">drop</span> <span class="kw">if</span> cohort == 1956</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> cohort=. <span class="kw">if</span> controlgroup==1</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="kw">drop</span> <span class="kw">if</span> cohort==1956 <span class="co">//drop Always Treated </span></span>
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>* Bin the leads <span class="fu">at</span> -13 and the lags <span class="fu">at</span> 13 (treated states only)</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> rel_timeminus9 = (<span class="fu">year</span> == cohort - 1 - 9) &amp; cohort &gt; 0</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> <span class="kw">k</span> = 10/12 {</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> rel_timeminus<span class="ot">`k'</span> = (<span class="fu">year</span> == cohort - 1 - <span class="ot">`k'</span>) &amp; cohort &gt; 0</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus13 = (<span class="fu">year</span> &lt;= cohort - 1 - 13) &amp; cohort &gt; 0</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="kw">drop</span> rel_time14 rel_time15 rel_time16</span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> rel_time13 = (<span class="fu">year</span> &gt;= cohort - 1 + 13) &amp; cohort &gt; 0</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>* Never treated: cohort <span class="fu">missing</span></span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> cohort = . <span class="kw">if</span> cohort == 0</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>eventstudyinteract div_rate rel_time* [<span class="kw">aweight</span>=stpop], absorb(i.state i.<span class="fu">year</span>) cohort(cohort) control_cohort(controlgroup) <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>*Pre-treatment </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> rel_timeminus9=(<span class="fu">year</span>==cohort-1-9)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus10=(<span class="fu">year</span>==cohort-1-10)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus11=(<span class="fu">year</span>==cohort-1-11)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus12=(<span class="fu">year</span>==cohort-1-12)</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus13=(<span class="fu">year</span>&lt;=cohort-1-13) <span class="co">//Bin event time -13 </span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>*Post-treatment</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> rel_time13=(<span class="fu">year</span>&gt;=cohort-1+13)  <span class="co">//Bin event time +13</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>cap <span class="kw">drop</span> rel_time14 rel_time15 rel_time16</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>eventstudyinteract div_rate rel_time* [<span class="kw">aweight</span>=stpop], absorb(i.state i.<span class="fu">year</span>) cohort(cohort) control_cohort(controlgroup) <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>IW estimates for dynamic effects                        Number of obs =  1,565
                                     (Std. err. adjusted for 49 clusters in state)
 ---------------------------------------------------------------------------------
@@ -1683,10 +1712,10 @@ Overall ATT =   -0.1035032  SE =    0.0921859</code></pre>
 <div id="tabset-9-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-3-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> csdid.att_gt <span class="im">import</span> ATTgt</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io, contextlib</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>df7 <span class="op">=</span> df.copy()</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>df7[<span class="st">'cohort_cs'</span>] <span class="op">=</span> df7[<span class="st">'cohort'</span>].replace({<span class="dv">0</span>: <span class="dv">0</span>})</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>df7[<span class="st">'cohort_cs'</span>] <span class="op">=</span> df7[<span class="st">'cohort'</span>]</span>
 <span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>df7[<span class="st">'state_id'</span>] <span class="op">=</span> df7[<span class="st">'state'</span>].astype(<span class="bu">str</span>).factorize()[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>att <span class="op">=</span> ATTgt(</span>
@@ -1695,61 +1724,58 @@ Overall ATT =   -0.1035032  SE =    0.0921859</code></pre>
 <span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    control_group<span class="op">=</span><span class="st">'notyettreated'</span>,</span>
 <span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    weights_name<span class="op">=</span><span class="st">'stpop'</span>, clustervar<span class="op">=</span><span class="st">'state_id'</span>)</span>
 <span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> contextlib.redirect_stdout(io.StringIO()):</span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>    att.fit()</span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>    agg <span class="op">=</span> att.aggte(typec<span class="op">=</span><span class="st">'dynamic'</span>)</span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(agg.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
-------------------------------------------------------------------------------------------
-Tm28                   -0.2233961      0.0936317      -2.39   [  -0.4069143,   -0.0398779]
-Tm27                    0.3663263      0.1334745       2.74   [   0.1047162,    0.6279364]
-Tm26                    0.0570399      0.0581707       0.98   [  -0.0569747,    0.1710544]
-Tm25                    0.2044700      0.1361344       1.50   [  -0.0623534,    0.4712933]
-Tm24                   -0.0244712      0.1001912      -0.24   [  -0.2208460,    0.1719036]
-Tm23                   -0.0021277      0.0506729      -0.04   [  -0.1014465,    0.0971912]
-Tm22                    0.0999999      0.0725529       1.38   [  -0.0422038,    0.2422036]
-Tm21                   -0.0303078      0.1048544      -0.29   [  -0.2358225,    0.1752069]
-Tm20                    0.1084581      0.1045963       1.04   [  -0.0965507,    0.3134669]
-Tm19                    0.1297398      0.1831896       0.71   [  -0.2293118,    0.4887915]
-Tm18                   -0.3489485      0.4845407      -0.72   [  -1.2986482,    0.6007512]
-Tm17                    0.1384995      0.0920787       1.50   [  -0.0419746,    0.3189737]
-Tm16                    0.0777791      0.1410539       0.55   [  -0.1986865,    0.3542447]
-Tm15                   -0.0693005      0.1083954      -0.64   [  -0.2817555,    0.1431545]
-Tm14                   -0.1317015      0.0757055      -1.74   [  -0.2800843,    0.0166813]
-Tm13                   -0.0704353      0.2015877      -0.35   [  -0.4655472,    0.3246765]
-Tm12                    0.0567663      0.1227837       0.46   [  -0.1838897,    0.2974224]
-Tm11                    0.0909585      0.0872299       1.04   [  -0.0800122,    0.2619291]
-Tm10                   -0.0263780      0.0816451      -0.32   [  -0.1864024,    0.1336464]
-Tm9                     0.0950518      0.1930972       0.49   [  -0.2834187,    0.4735224]
-Tm8                    -0.2104189      0.2592266      -0.81   [  -0.7185031,    0.2976653]
-Tm7                    -0.1283395      0.0802020      -1.60   [  -0.2855354,    0.0288564]
-Tm6                     0.0388129      0.0997698       0.39   [  -0.1567358,    0.2343617]
-Tm5                     0.2402228      0.2232213       1.08   [  -0.1972909,    0.6777365]
-Tm4                     0.0681958      0.0802747       0.85   [  -0.0891427,    0.2255343]
-Tm3                    -0.2251065      0.3196671      -0.70   [  -0.8516540,    0.4014411]
-Tm2                     0.0834029      0.0978781       0.85   [  -0.1084383,    0.2752440]
-Tm1                     0.0231851      0.2116527       0.11   [  -0.3916542,    0.4380244]
-Tp0                    -0.1155390      0.2491181      -0.46   [  -0.6038104,    0.3727324]
-Tp1                     0.0379529      0.2626928       0.14   [  -0.4769250,    0.5528308]
-Tp2                    -0.0279096      0.3680645      -0.08   [  -0.7493159,    0.6934968]
-Tp3                    -0.1229107      0.4988474      -0.25   [  -1.1006516,    0.8548303]
-Tp4                    -0.2687485      0.5429705      -0.49   [  -1.3329707,    0.7954738]
-Tp5                    -0.2252805      0.5466557      -0.41   [  -1.2967256,    0.8461645]
-Tp6                    -0.2424976      0.5426509      -0.45   [  -1.3060933,    0.8210981]
-Tp7                    -0.2730504      0.4678463      -0.58   [  -1.1900291,    0.6439284]
-Tp8                    -0.4059456      0.3752860      -1.08   [  -1.1415061,    0.3296150]
-Tp9                    -0.5882539      0.5237508      -1.12   [  -1.6148054,    0.4382975]
-Tp10                   -0.5337039      0.5573509      -0.96   [  -1.6261116,    0.5587039]
-Tp11                   -0.6200492      0.5471620      -1.13   [  -1.6924868,    0.4523884]
-Tp12                   -0.6073452      0.6191073      -0.98   [  -1.8207954,    0.6061051]
-Tp13                   -0.7602710      0.5941000      -1.28   [  -1.9247069,    0.4041649]
-Tp14                   -0.7509689      0.6599931      -1.14   [  -2.0445553,    0.5426176]
-Tp15                   -0.8464566      0.7483630      -1.13   [  -2.3132481,    0.6203348]
-Tp16                   -0.2603509      0.1823087      -1.43   [  -0.6176760,    0.0969743]
-Tp17                   -0.4099414      0.1902270      -2.16   [  -0.7827863,   -0.0370966]
-Tp18                   -0.6719297      0.3449367      -1.95   [  -1.3480056,    0.0041461]
-Tp19                   -0.1210525      0.1572955      -0.77   [  -0.4293517,    0.1872466]
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>att.fit()</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>att.aggte(typec<span class="op">=</span><span class="st">'dynamic'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Dynamic Effects:
+    Event time  Estimate  Std. Error  [95.0% Simult.   Conf. Band   
+0          -28   -0.2691      0.0537          -0.3742     -0.1639  
+1          -27    0.2237      0.0553           0.1152      0.3321  
+2          -26   -0.0479      0.0278          -0.1023      0.0065   
+3          -25    0.1362      0.0399           0.0580      0.2143  
+4          -24   -0.0259      0.0272          -0.0792      0.0274   
+5          -23   -0.0068      0.0615          -0.1273      0.1137   
+6          -22    0.0521      0.0189           0.0151      0.0892  
+7          -21    0.0188      0.0245          -0.0291      0.0668   
+8          -20    0.0275      0.0594          -0.0888      0.1438   
+9          -19    0.0012      0.1004          -0.1956      0.1980   
+10         -18    0.0214      0.0529          -0.0823      0.1252   
+11         -17    0.0166      0.0516          -0.0845      0.1176   
+12         -16    0.1268      0.2302          -0.3244      0.5780   
+13         -15   -0.1468      0.1487          -0.4383      0.1446   
+14         -14   -0.1239      0.0648          -0.2508      0.0031   
+15         -13   -0.0269      0.0605          -0.1454      0.0916   
+16         -12    0.0595      0.0565          -0.0513      0.1702   
+17         -11    0.0409      0.0503          -0.0577      0.1395   
+18         -10    0.0596      0.0276           0.0055      0.1137  
+19          -9   -0.0770      0.1003          -0.2735      0.1196   
+20          -8   -0.0163      0.0475          -0.1094      0.0767   
+21          -7   -0.0422      0.0350          -0.1108      0.0263   
+22          -6    0.0694      0.0239           0.0225      0.1163  
+23          -5    0.0483      0.1168          -0.1807      0.2772   
+24          -4    0.0130      0.0729          -0.1298      0.1558   
+25          -3   -0.0342      0.0522          -0.1366      0.0682   
+26          -2    0.0277      0.0316          -0.0343      0.0896   
+27          -1   -0.0540      0.0561          -0.1639      0.0560   
+28           0    0.3503      0.2963          -0.2305      0.9311   
+29           1    0.3698      0.0932           0.1871      0.5525  
+30           2    0.3349      0.0722           0.1934      0.4765  
+31           3    0.2425      0.0890           0.0681      0.4168  
+32           4    0.1821      0.1086          -0.0308      0.3949   
+33           5    0.1757      0.1239          -0.0672      0.4186   
+34           6    0.1898      0.1330          -0.0710      0.4505   
+35           7    0.1035      0.1352          -0.1616      0.3685   
+36           8   -0.0333      0.1316          -0.2911      0.2246   
+37           9   -0.1488      0.1164          -0.3770      0.0794   
+38          10   -0.2405      0.1423          -0.5195      0.0384   
+39          11   -0.4033      0.1572          -0.7114     -0.0951  
+40          12   -0.4200      0.1505          -0.7150     -0.1250  
+41          13   -0.4550      0.1766          -0.8012     -0.1088  
+42          14   -0.3278      0.1291          -0.5809     -0.0748  
+43          15   -0.4645      0.1738          -0.8052     -0.1238  
+44          16   -0.4569      0.2067          -0.8620     -0.0518  
+45          17   -0.5944      0.2279          -1.0411     -0.1476  
+46          18   -0.9616      0.2555          -1.4623     -0.4608  
+47          19    0.0652      0.1552          -0.2389      0.3692   
 
 Note: Python csdid uses doubly-robust estimator with different weighting;
 estimates differ from Stata/R which use regression adjustment with iweights.</code></pre>
@@ -1801,7 +1827,7 @@ Test of joint nullity of the effects : p-value = 0
 
              |  Estimate         SE      LB CI      UB CI          N
 -------------+--------------------------------------------------------------
-  Av_tot_eff | -.0530975   .1047252  -.2583552   .1521601        903
+  Av_tot_eff | -.0151066   .0987446  -.2086425   .1784293        837
 --------------------------------------------------------------------------------
 Average number of time periods over which a treatment's effect is accumulated = 6.2285012
 
@@ -1885,54 +1911,77 @@ Test of joint nullity of the placebos : p-value = 0.5254</code></pre>
 <div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_multiplegt_dyn.did_multiplegt_dyn <span class="im">import</span> did_multiplegt_main</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>df_dyn <span class="op">=</span> df[[<span class="st">'div_rate'</span>, <span class="st">'state'</span>, <span class="st">'year'</span>, <span class="st">'udl'</span>, <span class="st">'stpop'</span>]].copy().dropna()</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>df_dyn[<span class="st">'state_num'</span>] <span class="op">=</span> df_dyn[<span class="st">'state'</span>].astype(<span class="bu">str</span>).factorize()[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>df_pl <span class="op">=</span> pl.from_pandas(df_dyn[[<span class="st">'div_rate'</span>, <span class="st">'state_num'</span>, <span class="st">'year'</span>, <span class="st">'udl'</span>, <span class="st">'stpop'</span>]])</span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> did_multiplegt_main(</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>    df_pl, outcome<span class="op">=</span><span class="st">'div_rate'</span>, group<span class="op">=</span><span class="st">'state_num'</span>,</span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>    time<span class="op">=</span><span class="st">'year'</span>, treatment<span class="op">=</span><span class="st">'udl'</span>,</span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    effects<span class="op">=</span><span class="dv">13</span>, placebo<span class="op">=</span><span class="dv">13</span>,</span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    weight<span class="op">=</span><span class="st">'stpop'</span>)</span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>dmd <span class="op">=</span> result[<span class="st">'did_multiplegt_dyn'</span>]</span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Effects:"</span>)</span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dmd[<span class="st">'Effects'</span>][[<span class="st">'Estimate'</span>, <span class="st">'SE'</span>, <span class="st">'LB CI'</span>, <span class="st">'UB CI'</span>, <span class="st">'N'</span>, <span class="st">'Switchers'</span>]].to_string())</span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Placebos:"</span>)</span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dmd[<span class="st">'Placebos'</span>][[<span class="st">'Estimate'</span>, <span class="st">'SE'</span>, <span class="st">'LB CI'</span>, <span class="st">'UB CI'</span>, <span class="st">'N'</span>, <span class="st">'Switchers'</span>]].to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> erfc, sqrt</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_multiplegt_dyn.did_multiplegt_dyn <span class="im">import</span> did_multiplegt_main</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Wolfers%202006/wolfers2006_didtextbook.parquet"</span>)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>df_dyn <span class="op">=</span> df[[<span class="st">'div_rate'</span>, <span class="st">'state'</span>, <span class="st">'year'</span>, <span class="st">'udl'</span>, <span class="st">'stpop'</span>]].copy().dropna()</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>df_dyn[<span class="st">'state_num'</span>] <span class="op">=</span> df_dyn[<span class="st">'state'</span>].astype(<span class="bu">str</span>).factorize()[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>df_pl <span class="op">=</span> pl.from_pandas(df_dyn[[<span class="st">'div_rate'</span>, <span class="st">'state_num'</span>, <span class="st">'year'</span>, <span class="st">'udl'</span>, <span class="st">'stpop'</span>]])</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> did_multiplegt_main(</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    df_pl, outcome<span class="op">=</span><span class="st">'div_rate'</span>, group<span class="op">=</span><span class="st">'state_num'</span>,</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    time<span class="op">=</span><span class="st">'year'</span>, treatment<span class="op">=</span><span class="st">'udl'</span>,</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>    effects<span class="op">=</span><span class="dv">13</span>, placebo<span class="op">=</span><span class="dv">13</span>,</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    weight<span class="op">=</span><span class="st">'stpop'</span>)</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>dmd <span class="op">=</span> result[<span class="st">'did_multiplegt_dyn'</span>]</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Effects:"</span>)</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dmd[<span class="st">'Effects'</span>][[<span class="st">'Estimate'</span>, <span class="st">'SE'</span>, <span class="st">'LB CI'</span>, <span class="st">'UB CI'</span>, <span class="st">'N'</span>, <span class="st">'Switchers'</span>]].to_string())</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>ate <span class="op">=</span> dmd[<span class="st">'ATE'</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> ate[<span class="st">'Estimate'</span>] <span class="op">/</span> ate[<span class="st">'SE'</span>]</span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>p_ate <span class="op">=</span> erfc(<span class="bu">abs</span>(z) <span class="op">/</span> sqrt(<span class="dv">2</span>))</span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Average total effect per treatment unit:"</span>)</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dmd[<span class="st">'ATE'</span>][[<span class="st">'Estimate'</span>, <span class="st">'SE'</span>, <span class="st">'LB CI'</span>, <span class="st">'UB CI'</span>, <span class="st">'N'</span>, <span class="st">'Switchers'</span>]].to_string())</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"z = </span><span class="sc">{</span>z<span class="sc">:.4f}</span><span class="ss">, p-value = </span><span class="sc">{</span>p_ate<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Average number of time periods over which a treatment's effect is accumulated = </span><span class="sc">{</span>dmd[<span class="st">'delta_D_avg_total'</span>]<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Test of joint nullity of the effects: p-value = </span><span class="sc">{</span>dmd[<span class="st">'p_jointeffects'</span>]<span class="sc">:.4g}</span><span class="ss">"</span>)</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Placebos:"</span>)</span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dmd[<span class="st">'Placebos'</span>][[<span class="st">'Estimate'</span>, <span class="st">'SE'</span>, <span class="st">'LB CI'</span>, <span class="st">'UB CI'</span>, <span class="st">'N'</span>, <span class="st">'Switchers'</span>]].to_string())</span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Test of joint nullity of the placebos: p-value = </span><span class="sc">{</span>dmd[<span class="st">'p_jointplacebo'</span>]<span class="sc">:.4g}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Effects:
-            Estimate        SE     LB CI     UB CI      N  Switchers
-Effect_1   0.3009668  0.0875908  0.1292921  0.4726416  320.0      27.0
-Effect_2   0.3035895  0.0727610  0.1609806  0.4461984  294.0      27.0
-Effect_3   0.2683828  0.0758296  0.1197596  0.4170061  271.0      27.0
-Effect_4   0.1816435  0.0848985  0.0152454  0.3480415  255.0      27.0
-Effect_5   0.1192688  0.1007013 -0.0781021  0.3166398  220.0      26.0
-Effect_6   0.1148243  0.1107215 -0.1021858  0.3318343  215.0      26.0
-Effect_7   0.1225242  0.1306844 -0.1336126  0.3786610  212.0      26.0
-Effect_8   0.0653645  0.1164027 -0.1627805  0.2935095  209.0      26.0
-Effect_9  -0.0758406  0.1196254 -0.3103020  0.1586208  206.0      26.0
-Effect_10 -0.2138813  0.1334247 -0.4753890  0.0476264  205.0      26.0
-Effect_11 -0.2581056  0.1376535 -0.5279015  0.0116903  205.0      26.0
-Effect_12 -0.4385846  0.1438404 -0.7205066 -0.1566625  203.0      26.0
-Effect_13 -0.5012723  0.1654563 -0.8255606 -0.1769838  181.0      25.0
+           Estimate        SE     LB CI     UB CI      N  Switchers
+Effect_1   0.300967  0.087591  0.129292  0.472642  320.0       27.0
+Effect_2   0.303590  0.072761  0.160981  0.446198  294.0       27.0
+Effect_3   0.268383  0.075830  0.119760  0.417006  271.0       27.0
+Effect_4   0.181643  0.084899  0.015245  0.348042  255.0       27.0
+Effect_5   0.119269  0.100701 -0.078102  0.316640  220.0       26.0
+Effect_6   0.114824  0.110721 -0.102186  0.331834  215.0       26.0
+Effect_7   0.122524  0.130684 -0.133613  0.378661  212.0       26.0
+Effect_8   0.065365  0.116403 -0.162780  0.293510  209.0       26.0
+Effect_9  -0.075841  0.119625 -0.310302  0.158621  206.0       26.0
+Effect_10 -0.213881  0.133425 -0.475389  0.047626  205.0       26.0
+Effect_11 -0.258106  0.137653 -0.527902  0.011690  205.0       26.0
+Effect_12 -0.438585  0.143840 -0.720507 -0.156663  203.0       26.0
+Effect_13 -0.501272  0.165456 -0.825561 -0.176984  181.0       25.0
+
+Average total effect per treatment unit:
+                      Estimate        SE     LB CI     UB CI      N  Switchers
+Average_Total_Effect -0.015107  0.098745 -0.208642  0.178429  837.0      341.0
+z = -0.1530, p-value = 0.8784
+Average number of time periods over which a treatment's effect is accumulated = 6.9296
+
+Test of joint nullity of the effects: p-value = 6.739e-12
 
 Placebos:
-             Estimate        SE     LB CI     UB CI      N  Switchers
-Placebo_1   0.0468044  0.0493928 -0.0500037  0.1436124  319.0      27.0
-Placebo_2   0.0578159  0.0600959 -0.0599699  0.1756017  293.0      27.0
-Placebo_3   0.0978812  0.0763021 -0.0516681  0.2474305  270.0      27.0
-Placebo_4   0.0522300  0.0838890 -0.1121895  0.2166495  254.0      27.0
-Placebo_5   0.0567550  0.0989039 -0.1370931  0.2506030  219.0      26.0
-Placebo_6   0.0062875  0.1000968 -0.1898987  0.2024737  213.0      26.0
-Placebo_7   0.0181658  0.1033329 -0.1843629  0.2206946  209.0      26.0
-Placebo_8   0.0736940  0.1259978 -0.1732571  0.3206451  207.0      26.0
-Placebo_9   0.0983373  0.1380443 -0.1722246  0.3688992  205.0      26.0
-Placebo_10  0.0397753  0.1524889 -0.2591000  0.3386506  205.0      26.0
-Placebo_11  0.0396775  0.1616889 -0.2772288  0.3565838  203.0      26.0
-Placebo_12  0.0539247  0.1697544 -0.2787899  0.3866393  181.0      25.0
-Placebo_13  0.0256646  0.1832985 -0.3335925  0.3849217  160.0      24.0</code></pre>
+            Estimate        SE     LB CI     UB CI      N  Switchers
+Placebo_1   0.046804  0.049393 -0.050004  0.143612  319.0       27.0
+Placebo_2   0.057816  0.060096 -0.059970  0.175602  293.0       27.0
+Placebo_3   0.097881  0.076302 -0.051668  0.247430  270.0       27.0
+Placebo_4   0.052230  0.083889 -0.112189  0.216649  254.0       27.0
+Placebo_5   0.056755  0.098904 -0.137093  0.250603  219.0       26.0
+Placebo_6   0.006288  0.100097 -0.189899  0.202474  213.0       26.0
+Placebo_7   0.018166  0.103333 -0.184363  0.220695  209.0       26.0
+Placebo_8   0.073694  0.125998 -0.173257  0.320645  207.0       26.0
+Placebo_9   0.098337  0.138044 -0.172225  0.368899  205.0       26.0
+Placebo_10  0.042055  0.152737 -0.257304  0.341415  204.0       26.0
+Placebo_11 -0.012151  0.132660 -0.272159  0.247857  199.0       26.0
+Placebo_12 -0.057835  0.142255 -0.336649  0.220980  194.0       26.0
+Placebo_13  0.025665  0.183299 -0.333594  0.384923  151.0       23.0
+
+Test of joint nullity of the placebos: p-value = 1.226e-06</code></pre>
 </div>
 </div>
 </div>
@@ -2088,13 +2137,160 @@ FE could not be imputed: tau0 tau1 tau2 ... tau12.
 <div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../figures/ch06_fig63_4panel.png" class="img-fluid figure-img"></p>
+<p><img src="../figures/ch06_fig63_4panel_stata.png" class="img-fluid figure-img"></p>
 <figcaption>Four-Panel Comparison (Stata)</figcaption>
 </figure>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb59"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.dta"</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="bn">combine</span> fig62 g1 g2 g4, <span class="bn">cols</span>(2) <span class="bn">title</span>(<span class="st">"Effects of Unilateral Divorce Laws"</span>) <span class="kw">note</span>(<span class="st">"95% CIs shown in red. Weighted by state population. SEs clustered at state level."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>* Panel 1: eventstudyinteract (g1)</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> cohort=. <span class="kw">if</span> controlgroup==1</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="kw">drop</span> <span class="kw">if</span> cohort==1956</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> rel_timeminus9=(<span class="fu">year</span>==cohort-1-9)</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus10=(<span class="fu">year</span>==cohort-1-10)</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus11=(<span class="fu">year</span>==cohort-1-11)</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus12=(<span class="fu">year</span>==cohort-1-12)</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> rel_timeminus13=(<span class="fu">year</span>&lt;=cohort-1-13)</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> rel_time13=(<span class="fu">year</span>&gt;=cohort-1+13)</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>cap <span class="kw">drop</span> rel_time14 rel_time15 rel_time16</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a><span class="kw">qui</span> eventstudyinteract div_rate rel_time* [<span class="kw">aweight</span>=stpop], absorb(i.state i.<span class="fu">year</span>) cohort(cohort) control_cohort(controlgroup) <span class="kw">vce</span>(<span class="kw">cluster</span> state)</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>* eventstudyinteract stores its <span class="kw">estimates</span> <span class="kw">in</span> <span class="fu">e</span>(b_iw) and <span class="fu">e</span>(V_iw)</span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span> b = <span class="fu">e</span>(b_iw)</span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span> <span class="kw">V</span> = <span class="fu">e</span>(V_iw)</span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a><span class="kw">tempname</span> pf</span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a><span class="kw">tempfile</span> coefs</span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a><span class="kw">postfile</span> <span class="ot">`pf'</span> rel_time coef ci_lo ci_hi <span class="kw">using</span> <span class="ot">`coefs'</span></span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/13 {</span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = b[1, <span class="st">"rel_time`t'"</span>]</span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = <span class="fu">sqrt</span>(<span class="kw">V</span>[<span class="st">"rel_time`t'"</span>, <span class="st">"rel_time`t'"</span>])</span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span>) (<span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span>)</span>
+<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/13 {</span>
+<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = b[1, <span class="st">"rel_timeminus`t'"</span>]</span>
+<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = <span class="fu">sqrt</span>(<span class="kw">V</span>[<span class="st">"rel_timeminus`t'"</span>, <span class="st">"rel_timeminus`t'"</span>])</span>
+<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (-<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span>) (<span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span>)</span>
+<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a><span class="kw">post</span> <span class="ot">`pf'</span> (0) (0) (.) (.)</span>
+<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a><span class="kw">postclose</span> <span class="ot">`pf'</span></span>
+<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="ot">`coefs'</span>, <span class="kw">clear</span></span>
+<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> rel_time</span>
+<span id="cb59-39"><a href="#cb59-39" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (rcap ci_hi ci_lo rel_time, lcolor(<span class="bn">black</span>)) <span class="co">///</span></span>
+<span id="cb59-40"><a href="#cb59-40" aria-hidden="true" tabindex="-1"></a>       (connected coef rel_time, mcolor(<span class="bn">black</span>) lcolor(<span class="bn">black</span>) <span class="bn">msymbol</span>(O)), <span class="co">///</span></span>
+<span id="cb59-41"><a href="#cb59-41" aria-hidden="true" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">"eventstudyinteract"</span>) <span class="co">///</span></span>
+<span id="cb59-42"><a href="#cb59-42" aria-hidden="true" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">"Relative time to year before law"</span>) <span class="co">///</span></span>
+<span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a>       <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="co">///</span></span>
+<span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a>       <span class="kw">xlabel</span>(-13(2)13) <span class="kw">ylabel</span>(-1(.5).5, angle(0)) <span class="bn">yscale</span>(<span class="kw">range</span>(-1.15 0.8)) <span class="co">///</span></span>
+<span id="cb59-45"><a href="#cb59-45" aria-hidden="true" tabindex="-1"></a>       graphregion(<span class="kw">color</span>(<span class="bn">white</span>)) <span class="bn">legend</span>(<span class="kw">off</span>) <span class="co">///</span></span>
+<span id="cb59-46"><a href="#cb59-46" aria-hidden="true" tabindex="-1"></a>       <span class="bn">name</span>(g1, <span class="kw">replace</span>)</span>
+<span id="cb59-47"><a href="#cb59-47" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch06_fig63_panel1_eventstudyinteract.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span>
+<span id="cb59-48"><a href="#cb59-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-49"><a href="#cb59-49" aria-hidden="true" tabindex="-1"></a>* Panel 2: csdid (g2)</span>
+<span id="cb59-50"><a href="#cb59-50" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb59-51"><a href="#cb59-51" aria-hidden="true" tabindex="-1"></a><span class="kw">qui</span> csdid div_rate [<span class="kw">weight</span>=stpop], ivar(state) time(<span class="fu">year</span>) gvar(cohort) notyet agg(event)</span>
+<span id="cb59-52"><a href="#cb59-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-53"><a href="#cb59-53" aria-hidden="true" tabindex="-1"></a><span class="kw">tempname</span> pf</span>
+<span id="cb59-54"><a href="#cb59-54" aria-hidden="true" tabindex="-1"></a><span class="kw">tempfile</span> coefs</span>
+<span id="cb59-55"><a href="#cb59-55" aria-hidden="true" tabindex="-1"></a><span class="kw">postfile</span> <span class="ot">`pf'</span> rel_time coef ci_lo ci_hi <span class="kw">using</span> <span class="ot">`coefs'</span></span>
+<span id="cb59-56"><a href="#cb59-56" aria-hidden="true" tabindex="-1"></a>* Tp0 is the first <span class="fu">year</span> <span class="kw">of</span> the law, i.<span class="fu">e</span>. rel_time = 1</span>
+<span id="cb59-57"><a href="#cb59-57" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 0/12 {</span>
+<span id="cb59-58"><a href="#cb59-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[Tp<span class="ot">`t'</span>]</span>
+<span id="cb59-59"><a href="#cb59-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[Tp<span class="ot">`t'</span>]</span>
+<span id="cb59-60"><a href="#cb59-60" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (<span class="ot">`t'</span> + 1) (<span class="ot">`b'</span>) (<span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span>) (<span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span>)</span>
+<span id="cb59-61"><a href="#cb59-61" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-62"><a href="#cb59-62" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/13 {</span>
+<span id="cb59-63"><a href="#cb59-63" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[Tm<span class="ot">`t'</span>]</span>
+<span id="cb59-64"><a href="#cb59-64" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[Tm<span class="ot">`t'</span>]</span>
+<span id="cb59-65"><a href="#cb59-65" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (-<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span>) (<span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span>)</span>
+<span id="cb59-66"><a href="#cb59-66" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-67"><a href="#cb59-67" aria-hidden="true" tabindex="-1"></a><span class="kw">post</span> <span class="ot">`pf'</span> (0) (0) (.) (.)</span>
+<span id="cb59-68"><a href="#cb59-68" aria-hidden="true" tabindex="-1"></a><span class="kw">postclose</span> <span class="ot">`pf'</span></span>
+<span id="cb59-69"><a href="#cb59-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-70"><a href="#cb59-70" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="ot">`coefs'</span>, <span class="kw">clear</span></span>
+<span id="cb59-71"><a href="#cb59-71" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> rel_time</span>
+<span id="cb59-72"><a href="#cb59-72" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (rcap ci_hi ci_lo rel_time, lcolor(<span class="bn">black</span>)) <span class="co">///</span></span>
+<span id="cb59-73"><a href="#cb59-73" aria-hidden="true" tabindex="-1"></a>       (connected coef rel_time, mcolor(<span class="bn">black</span>) lcolor(<span class="bn">black</span>) <span class="bn">msymbol</span>(O)), <span class="co">///</span></span>
+<span id="cb59-74"><a href="#cb59-74" aria-hidden="true" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">"csdid"</span>) <span class="co">///</span></span>
+<span id="cb59-75"><a href="#cb59-75" aria-hidden="true" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">"Relative time to year before law"</span>) <span class="co">///</span></span>
+<span id="cb59-76"><a href="#cb59-76" aria-hidden="true" tabindex="-1"></a>       <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="co">///</span></span>
+<span id="cb59-77"><a href="#cb59-77" aria-hidden="true" tabindex="-1"></a>       <span class="kw">xlabel</span>(-13(2)13) <span class="kw">ylabel</span>(-1(.5).5, angle(0)) <span class="bn">yscale</span>(<span class="kw">range</span>(-1.15 0.8)) <span class="co">///</span></span>
+<span id="cb59-78"><a href="#cb59-78" aria-hidden="true" tabindex="-1"></a>       graphregion(<span class="kw">color</span>(<span class="bn">white</span>)) <span class="bn">legend</span>(<span class="kw">off</span>) <span class="co">///</span></span>
+<span id="cb59-79"><a href="#cb59-79" aria-hidden="true" tabindex="-1"></a>       <span class="bn">name</span>(g2, <span class="kw">replace</span>)</span>
+<span id="cb59-80"><a href="#cb59-80" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch06_fig63_panel2_csdid.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span>
+<span id="cb59-81"><a href="#cb59-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-82"><a href="#cb59-82" aria-hidden="true" tabindex="-1"></a>* Panel 3: did_multiplegt_dyn (g3)</span>
+<span id="cb59-83"><a href="#cb59-83" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb59-84"><a href="#cb59-84" aria-hidden="true" tabindex="-1"></a><span class="kw">qui</span> did_multiplegt_dyn div_rate state <span class="fu">year</span> udl, <span class="kw">effects</span>(13) placebo(13) <span class="kw">weight</span>(stpop) graph_off</span>
+<span id="cb59-85"><a href="#cb59-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-86"><a href="#cb59-86" aria-hidden="true" tabindex="-1"></a><span class="kw">tempname</span> pf</span>
+<span id="cb59-87"><a href="#cb59-87" aria-hidden="true" tabindex="-1"></a><span class="kw">tempfile</span> coefs</span>
+<span id="cb59-88"><a href="#cb59-88" aria-hidden="true" tabindex="-1"></a><span class="kw">postfile</span> <span class="ot">`pf'</span> rel_time coef ci_lo ci_hi <span class="kw">using</span> <span class="ot">`coefs'</span></span>
+<span id="cb59-89"><a href="#cb59-89" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/13 {</span>
+<span id="cb59-90"><a href="#cb59-90" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[Effect_<span class="ot">`t'</span>]</span>
+<span id="cb59-91"><a href="#cb59-91" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[Effect_<span class="ot">`t'</span>]</span>
+<span id="cb59-92"><a href="#cb59-92" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span>) (<span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span>)</span>
+<span id="cb59-93"><a href="#cb59-93" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-94"><a href="#cb59-94" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/13 {</span>
+<span id="cb59-95"><a href="#cb59-95" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[Placebo_<span class="ot">`t'</span>]</span>
+<span id="cb59-96"><a href="#cb59-96" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[Placebo_<span class="ot">`t'</span>]</span>
+<span id="cb59-97"><a href="#cb59-97" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (-<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span>) (<span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span>)</span>
+<span id="cb59-98"><a href="#cb59-98" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-99"><a href="#cb59-99" aria-hidden="true" tabindex="-1"></a><span class="kw">post</span> <span class="ot">`pf'</span> (0) (0) (.) (.)</span>
+<span id="cb59-100"><a href="#cb59-100" aria-hidden="true" tabindex="-1"></a><span class="kw">postclose</span> <span class="ot">`pf'</span></span>
+<span id="cb59-101"><a href="#cb59-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-102"><a href="#cb59-102" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="ot">`coefs'</span>, <span class="kw">clear</span></span>
+<span id="cb59-103"><a href="#cb59-103" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> rel_time</span>
+<span id="cb59-104"><a href="#cb59-104" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (rcap ci_hi ci_lo rel_time, lcolor(<span class="bn">black</span>)) <span class="co">///</span></span>
+<span id="cb59-105"><a href="#cb59-105" aria-hidden="true" tabindex="-1"></a>       (connected coef rel_time, mcolor(<span class="bn">black</span>) lcolor(<span class="bn">black</span>) <span class="bn">msymbol</span>(O)), <span class="co">///</span></span>
+<span id="cb59-106"><a href="#cb59-106" aria-hidden="true" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">"did_multiplegt_dyn"</span>) <span class="co">///</span></span>
+<span id="cb59-107"><a href="#cb59-107" aria-hidden="true" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">"Relative time to year before law"</span>) <span class="co">///</span></span>
+<span id="cb59-108"><a href="#cb59-108" aria-hidden="true" tabindex="-1"></a>       <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="co">///</span></span>
+<span id="cb59-109"><a href="#cb59-109" aria-hidden="true" tabindex="-1"></a>       <span class="kw">xlabel</span>(-13(2)13) <span class="kw">ylabel</span>(-1(.5).5, angle(0)) <span class="bn">yscale</span>(<span class="kw">range</span>(-1.15 0.8)) <span class="co">///</span></span>
+<span id="cb59-110"><a href="#cb59-110" aria-hidden="true" tabindex="-1"></a>       graphregion(<span class="kw">color</span>(<span class="bn">white</span>)) <span class="bn">legend</span>(<span class="kw">off</span>) <span class="co">///</span></span>
+<span id="cb59-111"><a href="#cb59-111" aria-hidden="true" tabindex="-1"></a>       <span class="bn">name</span>(g3, <span class="kw">replace</span>)</span>
+<span id="cb59-112"><a href="#cb59-112" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch06_fig63_panel3_did_multiplegt_dyn.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span>
+<span id="cb59-113"><a href="#cb59-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-114"><a href="#cb59-114" aria-hidden="true" tabindex="-1"></a>* Panel 4: did_imputation (g4)</span>
+<span id="cb59-115"><a href="#cb59-115" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"wolfers2006_didtextbook.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb59-116"><a href="#cb59-116" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> cohort=. <span class="kw">if</span> cohort==0</span>
+<span id="cb59-117"><a href="#cb59-117" aria-hidden="true" tabindex="-1"></a><span class="kw">qui</span> did_imputation div_rate state <span class="fu">year</span> cohort [<span class="kw">aweight</span>=stpop], horizons(0/12) autosample minn(0) pre(13)</span>
+<span id="cb59-118"><a href="#cb59-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-119"><a href="#cb59-119" aria-hidden="true" tabindex="-1"></a><span class="kw">tempname</span> pf</span>
+<span id="cb59-120"><a href="#cb59-120" aria-hidden="true" tabindex="-1"></a><span class="kw">tempfile</span> coefs</span>
+<span id="cb59-121"><a href="#cb59-121" aria-hidden="true" tabindex="-1"></a><span class="kw">postfile</span> <span class="ot">`pf'</span> rel_time coef ci_lo ci_hi <span class="kw">using</span> <span class="ot">`coefs'</span></span>
+<span id="cb59-122"><a href="#cb59-122" aria-hidden="true" tabindex="-1"></a>* tau0 is the first <span class="fu">year</span> <span class="kw">of</span> the law, i.<span class="fu">e</span>. rel_time = 1</span>
+<span id="cb59-123"><a href="#cb59-123" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 0/12 {</span>
+<span id="cb59-124"><a href="#cb59-124" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[tau<span class="ot">`t'</span>]</span>
+<span id="cb59-125"><a href="#cb59-125" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[tau<span class="ot">`t'</span>]</span>
+<span id="cb59-126"><a href="#cb59-126" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (<span class="ot">`t'</span> + 1) (<span class="ot">`b'</span>) (<span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span>) (<span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span>)</span>
+<span id="cb59-127"><a href="#cb59-127" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-128"><a href="#cb59-128" aria-hidden="true" tabindex="-1"></a><span class="kw">forvalues</span> t = 1/13 {</span>
+<span id="cb59-129"><a href="#cb59-129" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> b  = _b[pre<span class="ot">`t'</span>]</span>
+<span id="cb59-130"><a href="#cb59-130" aria-hidden="true" tabindex="-1"></a>    <span class="kw">local</span> se = _se[pre<span class="ot">`t'</span>]</span>
+<span id="cb59-131"><a href="#cb59-131" aria-hidden="true" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`pf'</span> (-<span class="ot">`t'</span>) (<span class="ot">`b'</span>) (<span class="ot">`b'</span> - 1.96 * <span class="ot">`se'</span>) (<span class="ot">`b'</span> + 1.96 * <span class="ot">`se'</span>)</span>
+<span id="cb59-132"><a href="#cb59-132" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-133"><a href="#cb59-133" aria-hidden="true" tabindex="-1"></a><span class="kw">post</span> <span class="ot">`pf'</span> (0) (0) (.) (.)</span>
+<span id="cb59-134"><a href="#cb59-134" aria-hidden="true" tabindex="-1"></a><span class="kw">postclose</span> <span class="ot">`pf'</span></span>
+<span id="cb59-135"><a href="#cb59-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-136"><a href="#cb59-136" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="ot">`coefs'</span>, <span class="kw">clear</span></span>
+<span id="cb59-137"><a href="#cb59-137" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> rel_time</span>
+<span id="cb59-138"><a href="#cb59-138" aria-hidden="true" tabindex="-1"></a><span class="kw">twoway</span> (rcap ci_hi ci_lo rel_time, lcolor(<span class="bn">black</span>)) <span class="co">///</span></span>
+<span id="cb59-139"><a href="#cb59-139" aria-hidden="true" tabindex="-1"></a>       (connected coef rel_time, mcolor(<span class="bn">black</span>) lcolor(<span class="bn">black</span>) <span class="bn">msymbol</span>(O)), <span class="co">///</span></span>
+<span id="cb59-140"><a href="#cb59-140" aria-hidden="true" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">"did_imputation"</span>) <span class="co">///</span></span>
+<span id="cb59-141"><a href="#cb59-141" aria-hidden="true" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">"Relative time to year before law"</span>) <span class="co">///</span></span>
+<span id="cb59-142"><a href="#cb59-142" aria-hidden="true" tabindex="-1"></a>       <span class="bn">ytitle</span>(<span class="st">"Effect"</span>) <span class="co">///</span></span>
+<span id="cb59-143"><a href="#cb59-143" aria-hidden="true" tabindex="-1"></a>       <span class="kw">xlabel</span>(-13(2)13) <span class="kw">ylabel</span>(-1(.5).5, angle(0)) <span class="bn">yscale</span>(<span class="kw">range</span>(-1.15 0.8)) <span class="co">///</span></span>
+<span id="cb59-144"><a href="#cb59-144" aria-hidden="true" tabindex="-1"></a>       graphregion(<span class="kw">color</span>(<span class="bn">white</span>)) <span class="bn">legend</span>(<span class="kw">off</span>) <span class="co">///</span></span>
+<span id="cb59-145"><a href="#cb59-145" aria-hidden="true" tabindex="-1"></a>       <span class="bn">name</span>(g4, <span class="kw">replace</span>)</span>
+<span id="cb59-146"><a href="#cb59-146" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch06_fig63_panel4_did_imputation.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span>
+<span id="cb59-147"><a href="#cb59-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-148"><a href="#cb59-148" aria-hidden="true" tabindex="-1"></a>* Combine the four panels</span>
+<span id="cb59-149"><a href="#cb59-149" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="bn">combine</span> g1 g2 g3 g4, <span class="bn">cols</span>(2) graphregion(<span class="kw">color</span>(<span class="bn">white</span>)) <span class="bn">name</span>(fig63, <span class="kw">replace</span>)</span>
+<span id="cb59-150"><a href="#cb59-150" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures/ch06_fig63_4panel_stata.png"</span>, <span class="bn">name</span>(fig63) <span class="kw">replace</span> <span class="kw">width</span>(1600)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
 <div class="quarto-figure quarto-figure-center">
