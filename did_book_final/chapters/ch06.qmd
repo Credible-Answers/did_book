@@ -1936,55 +1936,6 @@ bjs_out <- did_imputation(
 
 **Note:** When using `wname = "stpop"` in R and `replace cohort=. if cohort==0` in Stata, the R `didimputation` package and Stata's `did_imputation` produce identical results (matching to 7 decimal places).
 
-### Python
-
-``` python
-# pip install pyfixest
-# Place did_imputation.py (from the book's GitHub repo) in your working directory
-import pandas as pd
-import numpy as np
-from did_imputation import did_imputation
-
-df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
-df['gname'] = df['cohort'].replace(0, np.nan)
-result = did_imputation(
-    data=df, yname='div_rate', gname='gname',
-    tname='year', idname='state', wname='stpop',
-    horizon=list(range(13)), pretrends=list(range(-1, -14, -1)))
-for _, row in result.iterrows():
-    t_stat = row['estimate'] / row['std_error'] if row['std_error'] != 0 else 0
-    print(f"{row['term']:<25s} {row['estimate']:>14.7f} {row['std_error']:>14.7f} {t_stat:>10.2f}   [{row['conf_low']:>12.7f}, {row['conf_high']:>12.7f}]")
-```
-
-```         
-      term     estimate  std.error    conf.low   conf.high
- 1:    -13 -0.078411415 0.07496659 -0.22534593  0.06852310
- 2:    -12  0.001923454 0.10810331 -0.20995902  0.21380593
- 3:    -11  0.064136399 0.12803456 -0.18681133  0.31508413
- 4:    -10  0.101609036 0.12682395 -0.14696592  0.35018399
- 5:     -9  0.054056874 0.11063079 -0.16277947  0.27089322
- 6:     -8  0.036121896 0.13921471 -0.23673894  0.30898273
- 7:     -7 -0.001113401 0.12993784 -0.25579157  0.25356477
- 8:     -6  0.005486066 0.13480729 -0.25873623  0.26970836
- 9:     -5  0.081975855 0.18986272 -0.29015507  0.45410678
-10:     -4  0.099677412 0.15850959 -0.21100138  0.41035620
-11:     -3  0.040401848 0.16819446 -0.28925928  0.37006298
-12:     -2  0.031151639 0.17768913 -0.31711906  0.37942234
-13:     -1 -0.006300605 0.17036166 -0.34020945  0.32760824
-14:      0  0.264912802 0.09729833  0.07420807  0.45561753
-15:      1  0.322811318 0.10244123  0.12202650  0.52359613
-16:      2  0.250872530 0.11593005  0.02364963  0.47809543
-17:      3  0.168947400 0.13098968 -0.08779237  0.42568717
-18:      4  0.125172536 0.15013674 -0.16909547  0.41944054
-19:      5  0.170151695 0.16707652 -0.15731828  0.49762167
-20:      6  0.172081787 0.17163823 -0.16432914  0.50849271
-21:      7  0.110259851 0.16276240 -0.20875445  0.42927415
-22:      8 -0.093305902 0.16599807 -0.41866212  0.23205031
-23:      9 -0.221538407 0.18564569 -0.58540395  0.14232714
-24:     10 -0.245812737 0.19857948 -0.63502852  0.14340304
-25:     11 -0.427667610 0.19724401 -0.81426587 -0.04106935
-26:     12 -0.452101835 0.21766217 -0.87871969 -0.02548398
-```
 :::
 
 **Interpretation:** The R (`didimputation`), Python (`did_imputation.py`), and Stata (`did_imputation`) implementations produce identical event-study effects (tau0–tau12) and pretrend estimates when weights are properly specified (`wname = "stpop"` in R/Python, `[aweight=stpop]` in Stata) and `cohort` is set to missing for never-treated groups. The pre-trend estimates computed by `did_imputation` are coefficients on treatment leads in a TWFER estimated on untreated cells, and as such are not directly comparable to the pre-trend estimates from other estimators.
@@ -2181,7 +2132,6 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 es_plot(axes[0, 0], rt_fig62, co_fig62, lo_fig62, hi_fig62, "TWFE estimates", xlim=(-9.5, 16.5))
 es_plot(axes[0, 1], sa_rt, sa_co, sa_lo, sa_hi, "Sun & Abraham")
 es_plot(axes[1, 0], cs_rt, cs_co, cs_lo, cs_hi, "Callaway & Sant'Anna")
-es_plot(axes[1, 1], bjs_rt, bjs_co, bjs_lo, bjs_hi, "Borusyak, Jaravel & Spiess")
 plt.suptitle("Effects of Unilateral Divorce Laws", fontsize=14)
 fig.text(0.5, 0.01,
     "95% CIs shown in red. Weighted by state population. SEs clustered at state level.",
