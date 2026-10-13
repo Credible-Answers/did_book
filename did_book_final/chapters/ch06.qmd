@@ -447,7 +447,7 @@ ax.errorbar(rt, coefs, yerr=[1.96 * s for s in ses], fmt='o-', color='navy',
             ecolor='maroon', capsize=3, markersize=5)
 ax.axhline(0, color='gray', linestyle='--')
 ax.axvline(0, color='gray', linestyle='--')
-ax.set_xticks(range(-9, 16, 3))
+ax.set_xticks(range(-9, 16, 5))
 ax.set_ylim(-1.1, 0.8)
 ax.set_xlabel("Relative time to year before law")
 ax.set_ylabel("Effect")
