@@ -425,16 +425,36 @@ abline(h = 0, lty = 2, col = "gray60"); abline(v = 0, lty = 2, col = "gray60")
 
 ``` python
 import pandas as pd
+import pyfixest as pf
+import matplotlib.pyplot as plt
+from pathlib import Path
+
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
+
+rt_pos = [f"rel_time{i}" for i in range(1, 17)]
+rt_neg = [f"rel_timeminus{i}" for i in range(9, 0, -1)]
+fml = "div_rate ~ " + " + ".join(rt_pos + rt_neg) + " + i(year) | state"
+m4 = pf.feols(fml, data=df, weights="stpop", vcov={"CRV1": "state"},
+              ssc=pf.ssc(adj=True, fixef_k="full", cluster_adj=True))
+
+rt = list(range(-9, 0)) + [0] + list(range(1, 17))
+names = rt_neg + [None] + rt_pos
+coefs = [m4.coef()[n] if n else 0.0 for n in names]
+ses = [m4.se()[n] if n else 0.0 for n in names]
+
 fig, ax = plt.subplots(figsize=(10, 6))
-ax.errorbar(rt, coefs, yerr=1.96*ses, fmt='o-', color='navy',
+ax.errorbar(rt, coefs, yerr=[1.96 * s for s in ses], fmt='o-', color='navy',
             ecolor='maroon', capsize=3, markersize=5)
 ax.axhline(0, color='gray', linestyle='--')
 ax.axvline(0, color='gray', linestyle='--')
+ax.set_xticks(range(-9, 16, 3))
+ax.set_ylim(-1.1, 0.8)
 ax.set_xlabel("Relative time to year before law")
-ax.set_ylabel("Effect"); ax.set_title("TWFE estimates")
+ax.set_ylabel("Effect")
+ax.set_title("TWFE estimates")
 plt.tight_layout()
-plt.savefig(FIGDIR / "ch06_fig62_twfe_es_Python.png", dpi=150)
+Path("figures").mkdir(exist_ok=True)
+plt.savefig("figures/ch06_fig62_twfe_es_Python.png", dpi=150)
 ```
 :::
 
