@@ -145,11 +145,11 @@ m1.summary(digits=7)
 ```
 
 ```         
-Variable              Coefficient      Std. err.          t   [95% Conf. Interval]
-------------------------------------------------------------------------------------------
-udl                    -0.0548378      0.1507695      -0.36   [  -0.3503461,    0.2406705]
+| Coefficient   |   Estimate |   Std. Error |    t value |   Pr(>|t|) |       2.5% |      97.5% |
+|:--------------|-----------:|-------------:|-----------:|-----------:|-----------:|-----------:|
+| udl           | -0.0548378 |    0.1507695 | -0.3637192 |  0.7176012 | -0.3576673 |  0.2479917 |
 
-N = 1631  |  R-sq = 0.9305
+RMSE: 1031.4486884 R2: 0.9304837 R2 Within: 0.8298766 
 ```
 :::
 
@@ -225,6 +225,7 @@ df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_boo
 result = twowayfeweights(df, "div_rate", "state", "year", "udl",
                           type="feTR", weights="stpop",
                           test_random_weights="exposurelength")
+print(result)
 ```
 
 ```         
@@ -303,6 +304,7 @@ N = 611  |  R-sq = 0.1707
 
 ``` python
 import pandas as pd
+import pyfixest as pf
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df3 = df[(df['cohort'] != 1956) & (df['year'] <= 1968)].copy()
 m3 = pf.feols('div_rate ~ C(early_late_never)',
@@ -540,6 +542,7 @@ Wald test: stat = 0.506103, p-value = 0.870968, on 9 and 1,523 DoF
 
 ``` python
 import pandas as pd
+import pyfixest as pf
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 rt_pos = [c for c in df.columns if c.startswith("rel_time") and "minus" not in c]
 rt_neg = [c for c in df.columns if "rel_timeminus" in c]
