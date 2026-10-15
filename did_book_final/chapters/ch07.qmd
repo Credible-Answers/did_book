@@ -149,6 +149,11 @@ for year in [2001, 2002, 2004, 2005]:
     y = df[f'delta{year}']
     X = sm.add_constant(df['ntrgap'])
     res = sm.OLS(y, X).fit(cov_type='HC2')
+        print(f"--- {year} ---  N = {int(res.nobs)}, R² = {res.rsquared:.5f}")
+    print(f"  {'Variable':<10} {'Coef':>15} {'Std.Err':>12} {'t':>10} {'P>|t|':>10}")
+    for name in res.params.index:
+        print(f"  {name:<10} {res.params[name]:>15.7f} {res.bse[name]:>12.7f} {res.tvalues[name]:>10.3f} {res.pvalues[name]:>10.4f}")
+    print()
 ```
 
 ```
@@ -246,11 +251,12 @@ df["cons"] = 1
 df["ntrgap_D0"] = df["ntrgap"]
 result = twowayfeweights(df, "delta2001", "indusid", "cons", "ntrgap",
                           type="fdTR", D0="ntrgap_D0")
+print(result)
 ```
 
 ```
 Under the common trends assumption,
-beta estimates a weighted sum of 103 ATTs.
+the TWFE coefficient beta, equal to -0.0612, estimates a weighted sum of 103 ATTs.
 62 ATTs receive a positive weight, and 41 receive a negative weight.
 ------------------------------------------------
 Treat. var: ntrgap      # ATTs      Σ weights
@@ -397,10 +403,14 @@ QS = D(1)/(D(2)-D(1)) = 6.1498877
 
 ```python
 import pandas as pd
+import numpy as np
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet")
 ntrgap_sorted = np.sort(df['ntrgap'].values)
 d1, d2 = ntrgap_sorted[0], ntrgap_sorted[1]
 qs = d1 / (d2 - d1)
+print(f"D(1) = {d1:.8f}")
+print(f"D(2) = {d2:.8f}")
+print(f"QS = D(1)/(D(2)-D(1)) = {qs:.7f}")
 ```
 
 ```
