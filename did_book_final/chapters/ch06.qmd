@@ -305,12 +305,26 @@ N = 611  |  R-sq = 0.1707
 ``` python
 import pandas as pd
 import pyfixest as pf
+import numpy as np
+from scipy import stats
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 df3 = df[(df['cohort'] != 1956) & (df['year'] <= 1968)].copy()
 m3 = pf.feols('div_rate ~ C(early_late_never)',
               data=df3, weights='stpop', vcov={'CRV1': 'state'},
               ssc=pf.ssc(adj=True, fixef_k='full', cluster_adj=True))
 m3.summary(digits=7)
+# Joint test: all early_late_never coefficients = 0
+names = list(m3.coef().index)
+tested = [n for n in names if n != "Intercept"]
+idx = [names.index(n) for n in tested]
+b = m3.coef().values[idx]
+V = np.asarray(m3._vcov)[np.ix_(idx, idx)]
+q = len(tested)
+G = df3["state"].nunique()
+F = float(b @ np.linalg.solve(V, b)) / q
+p = stats.f.sf(F, q, G - 1)
+print(f"\nF({q}, {G - 1}) = {F:.2f}     Prob > F = {p:.4f}")
+
 ```
 
 ```         
@@ -321,6 +335,8 @@ m3.summary(digits=7)
 | C(early_late_never)[T.3.0] | -1.3633981 |    0.3751166 | -3.6345987 |  0.0006881 | -2.1180353 | -0.6087610 |
 ---
 RMSE: 2836.5163952 R2: 0.1707435 
+
+F(2, 48) = 7.46     Prob > F = 0.0015
 ```
 :::
 
@@ -563,6 +579,8 @@ Wald test: stat = 0.506103, p-value = 0.870968, on 9 and 1,523 DoF
 ``` python
 import pandas as pd
 import pyfixest as pf
+import numpy as np
+from scipy import stats
 df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Wolfers%202006/wolfers2006_didtextbook.parquet")
 rt_pos = [c for c in df.columns if c.startswith("rel_time") and "minus" not in c]
 rt_neg = [c for c in df.columns if "rel_timeminus" in c]
@@ -570,6 +588,18 @@ fml = "div_rate ~ " + " + ".join(rt_pos + rt_neg) + " + i(year) | state"
 m4 = pf.feols(fml, data=df, weights='stpop', vcov={'CRV1': 'state'},
               ssc=pf.ssc(adj=True, fixef_k='full', cluster_adj=True))
 m4.summary(digits=7)
+# Joint test of the pre-trends: rel_timeminus1 = ... = rel_timeminus9 = 0
+tested = [f"rel_timeminus{i}" for i in range(1, 10)]
+names = list(m4.coef().index)
+idx = [names.index(n) for n in tested]
+b = m4.coef().values[idx]
+V = np.asarray(m4._vcov)[np.ix_(idx, idx)]
+q = len(tested)
+G = df["state"].nunique()
+F = float(b @ np.linalg.solve(V, b)) / q
+p = stats.f.sf(F, q, G - 1)
+print(f"\nF({q}, {G - 1}) = {F:.2f}     Prob > F = {p:.4f}")
+
 ```
 
 ```         
@@ -602,6 +632,8 @@ m4.summary(digits=7)
 | rel_timeminus9 |  0.0558855 |    0.1600016 |  0.3492810 |  0.7283452 | -0.2654871 |  0.3772581 |
 ---
 RMSE: 996.6048219 R2: 0.9351011 R2 Within: 0.8411765 
+
+F(9, 50) = 0.51     Prob > F = 0.8631
 ```
 :::
 
