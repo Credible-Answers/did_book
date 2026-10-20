@@ -20,57 +20,6 @@ This chapter applies the **Heterogeneous Adoption Design (HAD)** framework to st
 
 ---
 
-## PanelView {.unnumbered}
-
-> Note: In the Pierce & Schott (2016) application, treatment is continuous (NTR gap), so the standard binary PanelView is not applicable. See the code below for reference, but plots are omitted.
-
-::: {.panel-tabset}
-
-### Stata
-
-```stata
-* ssc install panelview, replace
-copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta" "pierce_schott_didtextbook.dta", replace
-use "pierce_schott_didtextbook.dta", clear
-preserve
-reshape long delta deltalintrend, i(indusid) j(year)
-panelview delta ntrgap, i(indusid) t(year) type(treat) title("Treatment Dose: Pierce & Schott (2016)") legend(off)
-graph export "$FIGDIR\ch07_panelview_stata.png", replace width(1200)
-restore
-```
-
-### R
-
-```r
-library(panelView); library(tidyr)
-load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"))
-df_long <- df %>% pivot_longer(cols = starts_with("delta"), names_to = "variable", values_to = "value")
-df_long$year <- as.numeric(gsub("delta", "", df_long$variable))
-df_long <- df_long[!is.na(df_long$year), ]
-df_long$treated <- ifelse(df_long$year >= 2001, 1, 0)
-png("figures/ch07_panelview_R.png", width = 1000, height = 600)
-panelview(value ~ treated, data = df_long, index = c("indusid", "year"), type = "treat",
-          main = "Pierce & Schott (2016)", ylab = "")
-dev.off()
-```
-
-### Python
-
-```python
-import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
-df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet")
-cmap = plt.cm.Blues
-norm = mcolors.Normalize(vmin=0, vmax=df['ntrgap'].max() * 1.1)
-# Heatmap: each row = industry (sorted by ntrgap), each column = year
-# Color intensity = NTR gap (continuous treatment dose)
-```
-
-:::
-
----
-
 ## CQ#36: TWFE Regressions
 
 > Regress $\Delta_{2000}^t Y_g$ on $D_g$ (NTR gap) for $t \in \{2001, 2002, 2004, 2005\}$, with HC2 standard errors.
@@ -177,7 +126,7 @@ for year in [2001, 2002, 2004, 2005]:
 
 :::
 
-**Interpretation:** The NTR gap has a significant negative effect on manufacturing employment growth starting from 2002. The effect grows over time: a 10 pp increase in the NTR gap is associated with roughly 5 pp lower employment growth by 2004–2005.
+**Interpretation:** The NTR gap has no significant effect on manufacturing employment growth in 2001, but a significant negative effect from 2002 onward. The effect grows until 2004 and then stabilizes: a 10 pp larger NTR gap is associated with roughly 2.6 pp lower employment growth by 2002 and about 5.4 pp lower employment growth by 2004–2005.
 
 ---
 
@@ -191,7 +140,7 @@ for year in [2001, 2002, 2004, 2005]:
 
 ```stata
 * ssc install twowayfeweights, replace
-copy "https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta" "pierce_schott_didtextbook.dta", replace
+copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta" "pierce_schott_didtextbook.dta", replace
 use "pierce_schott_didtextbook.dta", clear
 twowayfeweights delta2001 indusid cons ntrgap ntrgap, type(fdTR)
 ```
@@ -214,7 +163,7 @@ Total                   103         1.0000
 
 ```r
 library(haven); library(TwoWayFEWeights)
-load(url("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData")); df <- as.data.frame(df)
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData")); df <- as.data.frame(df)
 # Workaround: fdTR with constant time variable crashes in R.
 # Create a 2-period panel and use feTR (equivalent with T=2).
 df_panel <- rbind(
@@ -246,7 +195,7 @@ Summary Measures:
 # pip install twowayfeweights  (install from the authors' repository)
 import pandas as pd
 from twowayfeweights import twowayfeweights
-df = pd.read_parquet("https://raw.githubusercontent.com/anzonyquispe/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet")
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.parquet")
 df["cons"] = 1
 df["ntrgap_D0"] = df["ntrgap"]
 result = twowayfeweights(df, "delta2001", "indusid", "cons", "ntrgap",
@@ -305,7 +254,7 @@ F(4, 98) = 2.39     Prob > F = 0.0560
 ### R
 
 ```r
-library(haven); library(car)
+library(haven); library(car); library(sandwich); library(lmtest)
 load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData")); df <- as.data.frame(df)
 m3 <- lm(ntrgap ~ lemp1997 + lemp1998 + lemp1999 + lemp2000, data = df)
 coeftest(m3, vcov = vcovHC(m3, type = "HC2"))
