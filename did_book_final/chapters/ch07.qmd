@@ -31,10 +31,10 @@ This chapter applies the **Heterogeneous Adoption Design (HAD)** framework to st
 ```stata
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta" "pierce_schott_didtextbook.dta", replace
 use "pierce_schott_didtextbook.dta", clear
-reg delta2001 ntrgap, vce(hc2)
-reg delta2002 ntrgap, vce(hc2)
-reg delta2004 ntrgap, vce(hc2)
-reg delta2005 ntrgap, vce(hc2)
+reg delta2001 ntrgap, vce(hc2 indusid, dfadjust)
+reg delta2002 ntrgap, vce(hc2 indusid, dfadjust)
+reg delta2004 ntrgap, vce(hc2 indusid, dfadjust)
+reg delta2005 ntrgap, vce(hc2 indusid, dfadjust)
 ```
 
 ```
@@ -42,20 +42,20 @@ reg delta2005 ntrgap, vce(hc2)
              |             Robust HC2
    delta2001 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-      ntrgap |  -.0612112   .0401833    -1.52   0.131    -.1409241    .0185017
-       _cons |  -.0141423   .0129623    -1.09   0.278     -.039856    .0115714
+      ntrgap |  -.0612112   .0401833    -1.52   0.136    -.1426751    .0202527
+       _cons |  -.0141423   .0129623    -1.09   0.283    -.0404511    .0121665
 
 --- 2002 ---  N = 103, R² = 0.1263
-      ntrgap |  -.2598747   .0754512    -3.44   0.001    -.4095496   -.1101999
-       _cons |  -.0550989   .0220561    -2.50   0.014    -.0988522   -.0113456
+      ntrgap |  -.2598747   .0754512    -3.44   0.001    -.4128374    -.106912
+       _cons |  -.0550989   .0220561    -2.50   0.017    -.0998649   -.0103329
 
 --- 2004 ---  N = 103, R² = 0.0857
-      ntrgap |  -.5397825   .1527447    -3.53   0.001    -.8427868   -.2367782
-       _cons |  -.0868008   .0524821    -1.65   0.101    -.1909111    .0173095
+      ntrgap |  -.5397825   .1527447    -3.53   0.001    -.8494428   -.2301222
+       _cons |  -.0868008   .0524821    -1.65   0.107    -.1933207     .019719
 
 --- 2005 ---  N = 103, R² = 0.0707
-      ntrgap |  -.5317591   .1666765    -3.19   0.002    -.8624004   -.2011179
-       _cons |  -.1056161   .0536739    -1.97   0.052    -.2120906    .0008584
+      ntrgap |  -.5317591   .1666765    -3.19   0.003    -.8696635   -.1938548
+       _cons |  -.1056161   .0536739    -1.97   0.057    -.2145548    .0033227
 ```
 
 ### R
@@ -234,7 +234,7 @@ Total                   103         1.0000
 ```stata
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.dta" "pierce_schott_didtextbook.dta", replace
 use "pierce_schott_didtextbook.dta", clear
-reg ntrgap lemp1997 lemp1998 lemp1999 lemp2000, vce(hc2)
+reg ntrgap lemp1997 lemp1998 lemp1999 lemp2000, vce(hc2 indusid, dfadjust)
 test lemp1997 lemp1998 lemp1999 lemp2000
 ```
 
@@ -242,13 +242,13 @@ test lemp1997 lemp1998 lemp1999 lemp2000
              |             Robust HC2
       ntrgap | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-    lemp1997 |  -.0219594   .1325814    -0.17   0.869    -.2850629    .2411441
-    lemp1998 |   .6043265   .3103595     1.95   0.054    -.0115719    1.220225
-    lemp1999 |  -.2260641   .4573776    -0.49   0.622    -1.133715    .6815867
-    lemp2000 |  -.3418326   .2938878    -1.16   0.248    -.9250434    .2413782
-       _cons |   .1204804   .1396417     0.86   0.390     -.156634    .3975949
+    lemp1997 |  -.0219594   .1325814    -0.17   0.876    -.3877955    .3438767
+    lemp1998 |   .6043265   .3103595     1.95   0.069    -.0534594    1.262112
+    lemp1999 |  -.2260641   .4573776    -0.49   0.626    -1.172624    .7204955
+    lemp2000 |  -.3418326   .2938878    -1.16   0.256    -.9476972     .264032
+       _cons |   .1204804   .1396417     0.86   0.394    -.1628409    .4038018
 
-F(4, 98) = 2.39     Prob > F = 0.0560
+F(4, 98) = 2.39     Prob > F = 0.0557
 ```
 
 ### R
@@ -412,8 +412,8 @@ replace ntrgap = 0 if year <= 2000
 * --- If using Stata 17 or earlier, compile nprobust from source (once) --------
 * do "https://raw.githubusercontent.com/nppackages/nprobust/master/stata/nprobust_functions.do"
 
-* --- Run did_had with triangular kernel ---------------------------------------
-did_had lemp indusid year ntrgap, effects(4) placebo(3) kernel(triangular)
+* --- Run did_had with default (epanechnikov) kernel ---------------------------------------
+did_had lemp indusid year ntrgap, effects(4) placebo(3)
 ```
 
 **Effect Estimates:**
@@ -425,10 +425,10 @@ did_had lemp indusid year ntrgap, effects(4) placebo(3) kernel(triangular)
 
              |  Estimate         SE      LB CI      UB CI          N         BW    N in BW          T      p-val 
 -------------+---------------------------------------------------------------------------------------------------
-    Effect_1 |  .007268    .078676  -.2385522   .0698521        103   .1465417         21   6.149888   .1398623 
-    Effect_2 | -.133609   .1249707  -.5802821  -.0904061        103   .1465417         21   6.149888   .1398623 
-    Effect_3 |  .0350698   .593448  -1.603513   .7227608        103   .1465417         21   6.149888   .1398623 
-    Effect_4 | -.0217339   .6140438  -1.898538   .5084691        103   .1465417         21   6.149888   .1398623 
+    Effect_1 |  .007268    .078676   -.2385522   .0698521        103   .1465417         21   6.149888   .1398623 
+    Effect_2 | -.133609    .1249707  -.5802821  -.0904061        103   .1465417         21   6.149888   .1398623 
+    Effect_3 |  .0350698   .593448   -1.603513   .7227608        103   .1465417         21   6.149888   .1398623 
+    Effect_4 | -.0217339   .6140438  -1.898538   .5084691        103   .1465417         21   6.149888   .1398623  
 ----------------------------------------------------------------------------------------------------------------
                                                                                           *Quasi-untreated group
 ```
@@ -442,9 +442,9 @@ did_had lemp indusid year ntrgap, effects(4) placebo(3) kernel(triangular)
 
              |  Estimate         SE      LB CI      UB CI          N         BW    N in BW 
 -------------+-----------------------------------------------------------------------------
-   Placebo_1 | -.0266300   .1328800  -.3772700   .1436200        103   .1506800         21 
-   Placebo_2 | -.0474400   .2568500  -.4426400   .5641900        103   .1465400         21 
-   Placebo_3 | -.1147700   .1851600  -.3988900   .3269400        103   .1465400         21 
+   Placebo_1 | -.0198445   .1299684  -.3713658   .1381008        103   .1465417         21 
+   Placebo_2 | -.0565281   .2451583  -.4107375   .5502655        103   .1465417         21 
+   Placebo_3 | -.1213829   .1814087  -.3864638   .3246453        103   .1465417         21 
 ------------------------------------------------------------------------------------------
 ```
 
