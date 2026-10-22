@@ -289,8 +289,8 @@ Average_Total_Effect  0.0160565 0.0047761  0.0066956 0.0254174   8659      4074
            Placebo_4  0.0006573 0.0175032 -0.0336483 0.0349628    910       441
 
 Test of joint nullity of the effects : p-value = 0.006814
-Test of equality of the effects : p-value = 0.415152
-Test of joint nullity of the placebos : p-value = 0.992198
+Test of joint nullity of the placebos: p-value = 0.992198
+Test of equality of the effects: p-value = 0.415152
 ```
 
 ![Python Event Study](../figures/ch08_fig81_nonnormalized_es_Python.png)
@@ -921,9 +921,39 @@ bp.fit(); bp.summary()
 ```
 
 ```         
-Note: The Python py_did_multiplegt_dyn package groups treatment paths differently
-from Stata/R (e.g., (None, 1, None) instead of (0, 1, 1)). Results are not
-directly comparable. Use Stata or R for by_path analysis.
+                              Path (0, 1, 1)
+                              343 switchers
+================================================================================
+               Block  Estimate       SE     LB CI    UB CI      N  Switchers    N.w  Switchers.w
+            Effect_1  0.013149 0.007141 -0.000847 0.027146 4477.0      343.0 4477.0        343.0
+            Effect_2  0.009833 0.009065 -0.007934 0.027601 3673.0      343.0 3673.0        343.0
+Average_Total_Effect  0.011491 0.007451 -0.003113 0.026095 4841.0      686.0 4841.0        686.0
+           Placebo_1  0.002974 0.007324 -0.011381 0.017328 3624.0      315.0 3624.0        315.0
+================================================================================
+Test of joint nullity of the effects: p-value = 0.178040
+
+
+                              Path (0, 1, 0)
+                              187 switchers
+================================================================================
+               Block  Estimate       SE     LB CI    UB CI      N  Switchers    N.w  Switchers.w
+            Effect_1  0.014548 0.010391 -0.005817 0.034913 4321.0      187.0 4321.0        187.0
+            Effect_2  0.008902 0.011569 -0.013773 0.031578 3517.0      187.0 3517.0        187.0
+Average_Total_Effect  0.023450 0.020660 -0.017043 0.063943 4529.0      374.0 4529.0        374.0
+           Placebo_1 -0.010694 0.010761 -0.031784 0.010396 3469.0      160.0 3469.0        160.0
+================================================================================
+Test of joint nullity of the effects: p-value = 0.334025
+
+                              Path (0, 1, 2)
+                              131 switchers
+================================================================================
+               Block  Estimate       SE     LB CI    UB CI      N  Switchers    N.w  Switchers.w
+            Effect_1  0.021508 0.010305  0.001310 0.041707 4265.0      131.0 4265.0        131.0
+            Effect_2  0.032215 0.013281  0.006184 0.058245 3461.0      131.0 3461.0        131.0
+Average_Total_Effect  0.017908 0.007425  0.003355 0.032460 4417.0      262.0 4417.0        262.0
+           Placebo_1  0.009111 0.010579 -0.011623 0.029845 3430.0      121.0 3430.0        121.0
+================================================================================
+Test of joint nullity of the effects: p-value = 0.050280
 ```
 :::
 
