@@ -2,23 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Chapter 7: Designs with Variation in Treatment Dose – Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -75,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch06.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -112,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -291,18 +286,12 @@ window.Quarto = {
 <td>Not available for <code>fdTR</code></td>
 </tr>
 <tr class="odd">
-<td>Treatment visualization</td>
-<td><code>panelview</code> (SSC)</td>
-<td><code>panelView</code> (CRAN)</td>
-<td><code>matplotlib</code> (manual)</td>
-</tr>
-<tr class="even">
 <td>F-test</td>
 <td><code>test</code> (built-in)</td>
 <td><code>car::linearHypothesis</code></td>
 <td><code>scipy</code> + <code>f_test</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>HAD event-study</td>
 <td><code>did_had</code> (SSC) + <code>nprobust</code> (GitHub) + <code>gtools</code> (SSC)</td>
 <td><code>DIDHAD</code> (GitHub) + <code>nprobust</code> (CRAN)</td>
@@ -347,28 +336,37 @@ window.Quarto = {
        _cons |  -.1056161   .0536739    -1.97   0.057    -.2145548    .0033227</code></pre>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(sandwich); <span class="fu">library</span>(lmtest)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(sandwich); <span class="fu">library</span>(lmtest); <span class="fu">library</span>(dfadjust)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Pierce%20and%20Schott%202016/pierce_schott_didtextbook.RData"</span>)); df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(df)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (yr <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>)) {</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"delta"</span>, yr, <span class="st">" ~ ntrgap"</span>)), <span class="at">data =</span> df)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">coeftest</span>(fit, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(fit, <span class="at">type =</span> <span class="st">"HC2"</span>)))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (yr <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2001</span>, <span class="dv">2002</span>, <span class="dv">2004</span>, <span class="dv">2005</span>)) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"delta"</span>, yr, <span class="st">" ~ ntrgap"</span>)), <span class="at">data =</span> df)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">dfadjustSE</span>(fit)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    est <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    se  <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(res<span class="sc">$</span>vcov))            <span class="co"># HC2</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    dfs <span class="ot">&lt;-</span> res<span class="sc">$</span>coefficients[, <span class="st">"df"</span>]        <span class="co"># df de Bell-McCaffrey</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    t   <span class="ot">&lt;-</span> est <span class="sc">/</span> se</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">Estimate =</span> est, <span class="st">`</span><span class="at">Std. Error</span><span class="st">`</span> <span class="ot">=</span> se, <span class="st">`</span><span class="at">t value</span><span class="st">`</span> <span class="ot">=</span> t,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">Pr(&gt;|t|)</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">pt</span>(<span class="sc">-</span><span class="fu">abs</span>(t), dfs))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">---"</span>, yr, <span class="st">"---  N ="</span>, <span class="fu">nobs</span>(fit), <span class="st">", R² ="</span>, <span class="fu">round</span>(<span class="fu">summary</span>(fit)<span class="sc">$</span>r.squared, <span class="dv">5</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">printCoefmat</span>(tab, <span class="at">digits =</span> <span class="dv">7</span>, <span class="at">P.values =</span> <span class="cn">TRUE</span>, <span class="at">has.Pvalue =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>--- 2001 ---  N = 103, R² = 0.02366
              Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -0.0141423  0.0129623 -1.0910   0.2779
-ntrgap      -0.0612112  0.0401833 -1.5233   0.1308
+(Intercept) -0.0141423  0.0129623 -1.0910   0.2827
+ntrgap      -0.0612112  0.0401833 -1.5233   0.1363
 
 --- 2002 ---  N = 103, R² = 0.12631
-(Intercept) -0.0550989  0.0220561 -2.4981   0.0141
-ntrgap      -0.2598747  0.0754512 -3.4443   0.0008
+(Intercept) -0.0550989  0.0220561 -2.4981   0.0173
+ntrgap      -0.2598747  0.0754512 -3.4443   0.0015
 
 --- 2004 ---  N = 103, R² = 0.08567
-(Intercept) -0.0868008  0.0524821 -1.6539   0.1012
-ntrgap      -0.5397825  0.1527447 -3.5339   0.0006
+(Intercept) -0.0868008  0.0524821 -1.6539   0.1070
+ntrgap      -0.5397825  0.1527447 -3.5339   0.0011
 
 --- 2005 ---  N = 103, R² = 0.07072
-(Intercept) -0.1056161  0.0536739 -1.9677   0.0518
-ntrgap      -0.5317591  0.1666765 -3.1904   0.0019</code></pre>
+(Intercept) -0.1056161  0.0536739 -1.9677   0.0570
+ntrgap      -0.5317591  0.1666765 -3.1904   0.0029</code></pre>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -512,7 +510,7 @@ F(4, 98) = 2.39     Prob &gt; F = 0.0557</code></pre>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftest</span>(m3, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(m3, <span class="at">type =</span> <span class="st">"HC2"</span>))</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">linearHypothesis</span>(m3, <span class="fu">c</span>(<span class="st">"lemp1997=0"</span>,<span class="st">"lemp1998=0"</span>,<span class="st">"lemp1999=0"</span>,<span class="st">"lemp2000=0"</span>),</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">vcov. =</span> <span class="fu">vcovHC</span>(m3, <span class="at">type =</span> <span class="st">"HC2"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>             Estimate Std. Error t value Pr(&gt;|t|)
+<pre><code>             Estimate  Std. Error t value  Pr(&gt;|t|)
 (Intercept)  0.1204804  0.1396417  0.8628   0.3904
 lemp1997    -0.0219594  0.1325814 -0.1656   0.8688
 lemp1998     0.6043265  0.3103595  1.9472   0.0544
@@ -547,7 +545,7 @@ F(4, 98) = 2.3901     Prob &gt; F = 0.0560</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> The joint F-test yields <span class="math inline">\(p = 0.056\)</span>, marginally insignificant at 5%. Pre-treatment employment levels are not strong predictors of the NTR gap, consistent with (approximate) random assignment of the treatment dose.</p>
+<p><strong>Interpretation:</strong> The joint F-test yields <span class="math inline">\(p = 0.056\)</span>, marginally insignificant at 5%.</p>
 <hr>
 </section>
 <section id="quasi-stayer-test" class="level2">
@@ -638,7 +636,7 @@ QS = D(1)/(D(2)-D(1)) = 6.1498877</code></pre>
                                     Effect Estimates                                              QUG* Test
 ------------------------------------------------------------------------------------------ ---------------------
 
-             |  Estimate         SE      LB CI      UB CI          N         BW    N in BW          T      p-val 
+             |  Estimate         SE      LB CI      UB CI         N         BW    N in BW          T      p-val 
 -------------+---------------------------------------------------------------------------------------------------
     Effect_1 |  .007268    .078676   -.2385522   .0698521        103   .1465417         21   6.149888   .1398623 
     Effect_2 | -.133609    .1249707  -.5802821  -.0904061        103   .1465417         21   6.149888   .1398623 
@@ -707,7 +705,7 @@ QS = D(1)/(D(2)-D(1)) = 6.1498877</code></pre>
 <pre><code>-----------------------------------------------------------------------------
                            Effect Estimates                       QUG* Test
          ---------------------------------------------------- ---------------
-         Estimate SE       LB.CI    UB.CI    N   BW      N.BW T       p.val  
+           Estimate  SE          LB.CI       UB.CI    N    BW     N.BW    T        p.val  
 Effect_1  0.0072700  0.0787500 -0.2387000  0.0700000 103 0.1465400 21   6.1498900 0.1398600
 Effect_2 -0.1336100  0.1250000 -0.5803500 -0.0903400 103 0.1465400 21   6.1498900 0.1398600
 Effect_3  0.0350700  0.5934600 -1.6035300  0.7227800 103 0.1465400 21   6.1498900 0.1398600
@@ -717,7 +715,7 @@ Effect_4 -0.0217300  0.6140600 -1.8985800  0.5085100 103 0.1465400 21   6.149890
 <pre><code>------------------------------------------------------------
                           Placebo Estimates
           --------------------------------------------------
-          Estimate    SE        LB.CI      UB.CI     N   BW        N.BW
+          Estimate    SE         LB.CI      UB.CI      N    BW      N.BW
 Placebo_1 -0.0266300  0.1328800 -0.3772700  0.1436200 103 0.1506800 21  
 Placebo_2 -0.0474400  0.2568500 -0.4426400  0.5641900 103 0.1465400 21  
 Placebo_3 -0.1147700  0.1851600 -0.3988900  0.3269400 103 0.1465400 21  </code></pre>
@@ -759,7 +757,7 @@ Confidence level: 95%
 ---------------------------------------------------------------------------
                           Effect Estimates                      QUG* Test
          --------------------------------------------------- ---------------
-          Estimate       SE     LB.CI     UB.CI     N      BW    N.BW        T    p.val
+          Estimate       SE     LB.CI     UB.CI     N      BW    N.BW     T     p.val
 Effect_1   0.00727  0.07875  -0.23870   0.07000   103 0.14654     21  6.14989  0.13986
 Effect_2  -0.13361  0.12500  -0.58035  -0.09034   103 0.14654     21  6.14989  0.13986
 Effect_3   0.03507  0.59346  -1.60353   0.72278   103 0.14654     21  6.14989  0.13986

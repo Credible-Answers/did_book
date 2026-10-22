@@ -358,9 +358,11 @@ N = 15,629</code></pre>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>m8 <span class="op">=</span> pf.feols(<span class="st">"prestout ~ numdailies + lag_numdailies + C(year) | cnty90"</span>, data<span class="op">=</span>df, vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"cnty90"</span>}, ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"full"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m8.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>  Variable                          Coef      Std.Err          t      P&gt;|t|
-  numdailies                  -0.0007962    0.0014419     -0.552     0.5810
-  lag_numdailies               0.0050348    0.0015052      3.345     0.0008
+<pre><code>| Coefficient     |   Estimate |   Std. Error |     t value |   Pr(&gt;|t|) |       2.5% |      97.5% |
+|:----------------|-----------:|-------------:|------------:|-----------:|-----------:|-----------:|
+| numdailies      | -0.0007962 |    0.0014419 |  -0.5521731 |  0.5809331 | -0.0036250 |  0.0020327 |
+| lag_numdailies  |  0.0050348 |    0.0015052 |   3.3449258 |  0.0008486 |  0.0020817 |  0.0079880 |
+
   N = 15,629</code></pre>
 </div>
 </div>
@@ -538,8 +540,8 @@ Average_Total_Effect  0.0160565 0.0047761  0.0066956 0.0254174   8659      4074
            Placebo_4  0.0006573 0.0175032 -0.0336483 0.0349628    910       441
 
 Test of joint nullity of the effects : p-value = 0.006814
-Test of equality of the effects : p-value = 0.415152
-Test of joint nullity of the placebos : p-value = 0.992198</code></pre>
+Test of joint nullity of the placebos: p-value = 0.992198
+Test of equality of the effects: p-value = 0.415152</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../figures/ch08_fig81_nonnormalized_es_Python.png" class="img-fluid figure-img"></p>
@@ -1119,9 +1121,39 @@ Test of joint nullity of the effects : p-value = 0.0484</code></pre>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>df_pl <span class="op">=</span> pl.from_pandas(df)</span>
 <span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>bp <span class="op">=</span> DidMultiplegtDyn(df<span class="op">=</span>df_pl, outcome<span class="op">=</span><span class="st">"prestout"</span>, group<span class="op">=</span><span class="st">"cnty90"</span>, time<span class="op">=</span><span class="st">"year"</span>, treatment<span class="op">=</span><span class="st">"numdailies"</span>, effects<span class="op">=</span><span class="dv">2</span>, by_path<span class="op">=</span><span class="dv">3</span>, cluster<span class="op">=</span><span class="st">"cnty90"</span>)</span>
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>bp.fit()<span class="op">;</span> bp.summary()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>Note: The Python py_did_multiplegt_dyn package groups treatment paths differently
-from Stata/R (e.g., (None, 1, None) instead of (0, 1, 1)). Results are not
-directly comparable. Use Stata or R for by_path analysis.</code></pre>
+<pre><code>                              Path (0, 1, 1)
+                              343 switchers
+================================================================================
+               Block  Estimate       SE     LB CI    UB CI      N  Switchers    N.w  Switchers.w
+            Effect_1  0.013149 0.007141 -0.000847 0.027146 4477.0      343.0 4477.0        343.0
+            Effect_2  0.009833 0.009065 -0.007934 0.027601 3673.0      343.0 3673.0        343.0
+Average_Total_Effect  0.011491 0.007451 -0.003113 0.026095 4841.0      686.0 4841.0        686.0
+           Placebo_1  0.002974 0.007324 -0.011381 0.017328 3624.0      315.0 3624.0        315.0
+================================================================================
+Test of joint nullity of the effects: p-value = 0.178040
+
+
+                              Path (0, 1, 0)
+                              187 switchers
+================================================================================
+               Block  Estimate       SE     LB CI    UB CI      N  Switchers    N.w  Switchers.w
+            Effect_1  0.014548 0.010391 -0.005817 0.034913 4321.0      187.0 4321.0        187.0
+            Effect_2  0.008902 0.011569 -0.013773 0.031578 3517.0      187.0 3517.0        187.0
+Average_Total_Effect  0.023450 0.020660 -0.017043 0.063943 4529.0      374.0 4529.0        374.0
+           Placebo_1 -0.010694 0.010761 -0.031784 0.010396 3469.0      160.0 3469.0        160.0
+================================================================================
+Test of joint nullity of the effects: p-value = 0.334025
+
+                              Path (0, 1, 2)
+                              131 switchers
+================================================================================
+               Block  Estimate       SE     LB CI    UB CI      N  Switchers    N.w  Switchers.w
+            Effect_1  0.021508 0.010305  0.001310 0.041707 4265.0      131.0 4265.0        131.0
+            Effect_2  0.032215 0.013281  0.006184 0.058245 3461.0      131.0 3461.0        131.0
+Average_Total_Effect  0.017908 0.007425  0.003355 0.032460 4417.0      262.0 4417.0        262.0
+           Placebo_1  0.009111 0.010579 -0.011623 0.029845 3430.0      121.0 3430.0        121.0
+================================================================================
+Test of joint nullity of the effects: p-value = 0.050280</code></pre>
 </div>
 </div>
 </div>
