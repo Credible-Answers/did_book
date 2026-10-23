@@ -16,7 +16,6 @@ Key topics: static TWFE decompositions with multiple treatments (`twowayfeweight
 
 | Task | Stata | R | Python |
 |------------------|------------------|------------------|-------------------|
-| PanelView | `panelview` (SSC) | `panelView` (CRAN) | `matplotlib` (manual) |
 | OLS / TWFE | `reg`, `areg` | `fixest`, `sandwich` | `statsmodels` |
 | Weight decomposition | `twowayfeweights` (SSC) | `TwoWayFEWeights` (CRAN) | Not available (`other_treatments`) |
 | Event-study DID | `did_multiplegt_dyn` (SSC) | `DIDmultiplegtDYN` (CRAN) | `py-did-multiplegt-dyn` (PyPI) |
@@ -29,7 +28,7 @@ Key topics: static TWFE decompositions with multiple treatments (`twowayfeweight
 -   **Python `did_multiplegt_dyn`:** `pip install py-did-multiplegt-dyn`. Requires `polars` DataFrames.
 -   **Python `did_multiplegt_stat`:** Local notebook-based translation; see `py_did_multiplegt_stat`.
 
-**Note on cross-platform differences:** CQ40–CQ43 and CQ45 match exactly between Stata and R to 7 decimals. CQ49 (`did_multiplegt_stat`) shows small differences between Stata, R, and Python due to internal implementation variations.. N, switchers, and stayers counts are identical across all three.
+**Note on cross-platform differences:** CQ40–CQ43 and CQ45 match exactly between Stata and R to 7 decimals. CQ49 (`did_multiplegt_stat`) shows small differences between Stata, R, and Python due to internal implementation variations. N, switchers, and stayers counts are identical across all three.
 
 ------------------------------------------------------------------------
 
@@ -140,7 +139,7 @@ gq3b <- twowayfeweights(df, "prestout", "cnty90", "year", "lag_numdailies", type
 ```         
 --- Decomposition of beta on numdailies (β = -0.0008) ---
  Σ positive weights = 1.8541 (5,754 ATTs)
- Σ negative weights = -0.8541 (4,302 ATTs)
+ Σ negastive weights = -0.8541 (4,302 ATTs)
  Other treatment: 4,721 pos (Σ = 1.2137) | 4,618 neg (Σ = -1.2137)
 
 --- Decomposition of beta on lag_numdailies (β = 0.0050) ---
@@ -228,12 +227,12 @@ Test of joint nullity of the placebos : p-value = 0.9922
 ### R
 
 ``` r
-library(haven); library(DIDmultiplegtDYN)
+library(haven); library(polars); library(DIDmultiplegtDYN)
 load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
 gq4 <- did_multiplegt_dyn(
-    df = df, outcome = "prestout", group = "cnty90",
-    time = "year", treatment = "numdailies",
-    effects = 4, placebo = 4, effects_equal = TRUE, cluster = "cnty90")
+  df = df, outcome = "prestout", group = "cnty90",
+  time = "year", treatment = "numdailies",
+  effects = 4, placebo = 4, effects_equal = TRUE, cluster = "cnty90")
 ggsave("figures/ch08_fig81_nonnormalized_es_R.png",
        plot = gq4$plot, width = 8, height = 5, dpi = 150)
 ```
@@ -302,9 +301,9 @@ Test of equality of the effects: p-value = 0.415152
 
 ------------------------------------------------------------------------
 
-## CQ#43–44: Treatment Path Descriptions
+## CQ#43: Detecting Treatment Paths
 
-> Rerun `did_multiplegt_dyn` with `design(0.8,console)` for $\ell = 1, 2, 4$. What are the three most common "actual-versus-status-quo" comparisons averaged in $AVSQ_\ell$?
+> Rerun the previous command, estimating one event-study effect and adding `design(0.8,console)` at the end, to see the most common treatment paths that together account for 80% of switchers' $(F_g - 1)$-to-$F_g$ paths. Rerun the previous command, estimating two event-study effects. Rerun the previous command, estimating four event-study effects.
 
 ::: panel-tabset
 ### Stata
@@ -514,6 +513,7 @@ load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd
 gq5_l1 <- did_multiplegt_dyn(df=df, outcome="prestout", group="cnty90",
     time="year", treatment="numdailies", effects=1,
     design=c(0.8,"console"), graph_off=TRUE)
+print(gq5_l1)
 ```
 
 ```         
@@ -593,6 +593,7 @@ Design interpretation (first row):
 gq5_l4 <- did_multiplegt_dyn(df=df, outcome="prestout", group="cnty90",
     time="year", treatment="numdailies", effects=4,
     design=c(0.8,"console"), graph_off=TRUE)
+print(gq5_l4)
 ```
 
 ```         
@@ -843,7 +844,19 @@ ERC REALLYCREDIBLE - GA N. 101043899
 ```
 :::
 
-**Interpretation:** At $\ell = 1$, most switchers transition from 0 to 1 newspaper (64%). As $\ell$ increases, the treatment paths become more heterogeneous: by $\ell = 4$, the top 3 paths account for only about 34% of all effects. Some counties gain newspapers and keep them, others gain and lose them. This heterogeneity complicates interpretation of $AVSQ_\ell$ at longer horizons.
+## CQ#44: Interpreting the Treatment Paths
+
+> Interpret the results of the previous estimations: what are the three most common "actual-versus-status-quo" comparisons averaged in $AVSQ_1$? In $AVSQ_2$? In $AVSQ_4$?
+
+Each row of the `design` output compares a group's actual treatment path from $F_g$ to $F_g - 1 + \ell$ with its status-quo path, in which the treatment would have stayed at its period-$(F_g - 1)$ value.
+
+| | Most common | Second | Third | Top 3 share |
+|---|---|---|---|---|
+| $AVSQ_1$ | 1 vs. 0 newspapers (64.0%) | 2 vs. 0 (12.3%) | 2 vs. 1 (4.8%) | 81.2% |
+| $AVSQ_2$ | (1,1) vs. (0,0) (32.1%) | (1,0) vs. (0,0) (17.5%) | (1,2) vs. (0,0) (12.3%) | 62.0% |
+| $AVSQ_4$ | (1,1,1,1) vs. (0,0,0,0) (15.1%) | (1,0,0,0) vs. (0,0,0,0) (13.6%) | (1,2,2,2) vs. (0,0,0,0) (4.6%) | 33.3% |
+
+**Interpretation:** $AVSQ_1$ mostly compares counties going from zero to one newspaper with counties that would have kept zero. As $\ell$ increases, the paths being compared become much more heterogeneous: by $\ell = 4$, the three most common paths account for only a third of switchers. Some counties gain a newspaper and keep it, while others gain one and lose it right after (the second most common path at $\ell = 2$ and $\ell = 4$). Hence, $AVSQ_4$ averages effects of very different treatment paths, which complicates its interpretation.
 
 ------------------------------------------------------------------------
 
@@ -960,10 +973,9 @@ Test of joint nullity of the effects: p-value = 0.050280
 **Interpretation:** Event-study effects are insignificant for the $(D_{g,F_g-1}, D_{g,F_g}, D_{g,F_g+1}) = (0, 1, 1)$ and $(0, 1, 0)$ paths, and significant for the $(0, 1, 2)$ path. This might suggest that sustained exposure to an increasing number of newspapers is necessary to generate an effect, though event-study effects are noisy and may not significantly differ across paths.
 
 ------------------------------------------------------------------------
+## CQ#46: Normalized Event-Study Effects (Figure 8.2)
 
-## CQ#46–47: Normalized Event-Study Effects (Figure 8.2)
-
-> Compute normalized event-study estimates $\widehat{AVSQ}^n_\ell$ for $\ell \in \{1, \ldots, 4\}$ and normalized pre-trends. Test whether all normalized effects are equal. Produce Figure 8.2.
+> Compute, for $\ell \in \{1, \ldots, 4\}$, normalized event-study estimates $\widehat{AVSQ}^n_\ell$, as well as the weights $w_{\ell,k}$ that normalized effect $\ell$ puts on the effect of the $k$th treatment lag for $k \in \{0, \ldots, \ell - 1\}$. Compute also normalized pre-trend estimates $\widehat{AVSQ}^n_{-\ell}$ for $\ell \in \{1, \ldots, 4\}$.
 
 ::: panel-tabset
 ### Stata
@@ -1019,8 +1031,8 @@ Test of joint nullity of the placebos : p-value = 0.9922
 ### R
 
 ``` r
-library(haven); library(DIDmultiplegtDYN)
-load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
+library(haven); library(polars); library(DIDmultiplegtDYN)
+load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData")); df <- as.data.frame(df)
 gq6 <- did_multiplegt_dyn(
     df = df, outcome = "prestout", group = "cnty90",
     time = "year", treatment = "numdailies",
@@ -1089,9 +1101,21 @@ Equality of effects : p = 0.165258
 ![Python Normalized ES](../figures/ch08_fig82_normalized_es_Python.png)
 :::
 
-**Interpretation:** Normalized effects are decreasing with $\ell$ (from 0.0120 to 0.0054), but the equality test cannot reject the null ($p = 0.1653$). The weights $w_{\ell,k}$ are approximately equal across lags within each $\ell$: for $\ell = 4$, the weight on contemporaneous newspapers ($w_{4,0} = 0.28$) is similar to that on the third lag ($w_{4,3} = 0.24$). The decreasing pattern of normalized effects may suggest that lagged newspapers have a smaller effect than contemporaneous newspapers.
-
 *Figure 8.2: Normalized DID estimates of effects of newspapers on turnout. Standard errors clustered at the county level. 95% confidence intervals shown in red.*
+
+## CQ#47: Interpreting the Normalized Effects
+
+> Interpret the previous results. Does it seem that the effect of lagged newspapers on turnout is larger or smaller than the effect of contemporaneous newspapers?
+
+Normalized event-study and pre-trend estimates are shown in Figure 8.2. Normalized event-study estimates are decreasing with $\ell$, but one cannot reject the null that all effects are equal (p-value = 0.17).
+
+- $w_{1,0} = 1$: the first event-study estimate is an effect of current newspapers on turnout.
+- $w_{2,0} = 0.48$ and $w_{2,1} = 0.52$: the second normalized event-study estimate is an average of the effects of current and lagged newspapers, with approximately equal weights.
+- $w_{3,0} = 0.35$, $w_{3,1} = 0.31$, and $w_{3,2} = 0.33$: the third normalized event-study estimate is an average of the effects of current newspapers and of the first and second lag of newspapers, with approximately equal weights.
+- $w_{4,0} = 0.28$, $w_{4,1} = 0.26$, $w_{4,2} = 0.23$, and $w_{4,3} = 0.24$: the fourth normalized event-study estimate is an average of the effects of current newspapers and of the first, second, and third lag of newspapers, again with approximately equal weights.
+
+Then, as normalized event-study estimates and the weights assigned to the current number of newspapers are both decreasing with $\ell$, lagged newspapers may have a smaller effect on turnout than current newspapers.
+
 
 ------------------------------------------------------------------------
 
@@ -1259,7 +1283,9 @@ WAOSS -0.0000123 0.0022931 -0.0045067 0.0044821 2,349   7,764
 |:---:|:---:|:---|
 | CQ#40 | Distributed-lag TWFE | Current effect NS (−0.0008), lag significant (0.0050); severe negative weights (Σ = −0.85) and cross-contamination (Σ = ±1.21) |
 | CQ#42 | `did_multiplegt_dyn` | All effects positive & significant; placebos NS (joint p = 0.992) |
-| CQ#43–44 | `design` option | Treatment paths increasingly heterogeneous as ℓ grows |
-| CQ#46–47 | Normalized ES | Decreasing effects; cannot reject equality (p = 0.165); roughly equal lag weights |
+| CQ#43 | `design` option | Most common path at ℓ = 1 is 0 → 1 newspaper (64% of switchers); number of paths needed to cover 80% of switchers grows with ℓ |
+| CQ#44 | `design` option | Top 3 paths cover 81% of switchers at ℓ = 1, 62% at ℓ = 2, 33% at ℓ = 4 → $AVSQ_\ell$ averages increasingly heterogeneous comparisons |
+| CQ#46 | Normalized ES | Normalized effects decrease from 0.0120 to 0.0054; placebos NS (joint p = 0.992); roughly equal weights across lags |
+| CQ#47 | Normalized ES | Cannot reject equality of effects (p = 0.165); lagged newspapers may have a smaller effect than current ones |
 | CQ#48 | No-dynamics test | Effects 1 & 2 not different (p = 0.83) → consistent with no dynamic effects |
 | CQ#49 | `did_multiplegt_stat` | ATS ≈ WATS ≈ 0.006 (significant); placebos NS |
