@@ -973,6 +973,7 @@ Test of joint nullity of the effects: p-value = 0.050280
 **Interpretation:** Event-study effects are insignificant for the $(D_{g,F_g-1}, D_{g,F_g}, D_{g,F_g+1}) = (0, 1, 1)$ and $(0, 1, 0)$ paths, and significant for the $(0, 1, 2)$ path. This might suggest that sustained exposure to an increasing number of newspapers is necessary to generate an effect, though event-study effects are noisy and may not significantly differ across paths.
 
 ------------------------------------------------------------------------
+
 ## CQ#46: Normalized Event-Study Effects (Figure 8.2)
 
 > Compute, for $\ell \in \{1, \ldots, 4\}$, normalized event-study estimates $\widehat{AVSQ}^n_\ell$, as well as the weights $w_{\ell,k}$ that normalized effect $\ell$ puts on the effect of the $k$th treatment lag for $k \in \{0, \ldots, \ell - 1\}$. Compute also normalized pre-trend estimates $\widehat{AVSQ}^n_{-\ell}$ for $\ell \in \{1, \ldots, 4\}$.
