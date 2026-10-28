@@ -17,7 +17,7 @@ Key topics: static TWFE decompositions with multiple treatments (`twowayfeweight
 | Task | Stata | R | Python |
 |------------------|------------------|------------------|-------------------|
 | OLS / TWFE | `reg`, `areg` | `fixest`, `sandwich` | `statsmodels` |
-| Weight decomposition | `twowayfeweights` (SSC) | `TwoWayFEWeights` (CRAN) | Not available (`other_treatments`) |
+| Weight decomposition | `twowayfeweights` (SSC) | `TwoWayFEWeights` (CRAN) | `twowayfeweights` |
 | Event-study DID | `did_multiplegt_dyn` (SSC) | `DIDmultiplegtDYN` (CRAN) | `py-did-multiplegt-dyn` (PyPI) |
 | Static DID (ATS/WATS) | `did_multiplegt_stat` (SSC) | `DIDmultiplegtSTAT` (GitHub) | `py_did_multiplegt_stat` (local) |
 
@@ -1272,21 +1272,56 @@ WAOSS -0.0000123 0.0022931 -0.0045067 0.0044821 2,349   7,764
 141 switchers dropped (baseline treatment not in stayers' support)
 22 stayers dropped (baseline treatment not in switchers' support)
 ```
+### Python
+
+``` python
+# pip install did-multiplegt-stat
+import pandas as pd
+from did_multiplegt_stat import DIDMultiplegtStat
+
+df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.parquet")
+model = DIDMultiplegtStat(
+    estimator=["as", "was"],
+    order=1,
+    placebo=1,
+    exact_match=True,
+    asinstata=True,
+)
+model.fit(df, Y="prestout", ID="cnty90", Time="year", D="numdailies")
+model.summary()
+```
+
+```   
+N                =            15466
+WAS Method       =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AS
+----------------------------------------------------------------------
+     Estimate         SE      LB CI      UB CI Switchers Stayers
+AS  0.0061145  0.0016266  0.0029263  0.0093027     4,423  11,043
+
+----------------------------------------------------------------------
+               Placebo(s) AS
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0011280  0.0025056  -0.0060389  0.0037829     2,287   7,743
+
+----------------------------------------------------------------------
+                    Estimation of WAS
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0057750  0.0014865  0.0028614  0.0086885     4,423  11,043
+
+----------------------------------------------------------------------
+               Placebo(s) WAS
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0000125  0.0022931  -0.0045071  0.0044820     2,287   7,743
+```
+
 :::
 
 **Interpretation:** The ATS ($\approx 0.006$) and WATS ($\approx 0.006$) are significant and positive. The placebo estimates are small and insignificant, supporting the parallel-trends assumption. These estimates are roughly half the magnitude of $\widehat{AVSQ}^n_1 = 0.012$, which suggests a non-linear treatment response.
-
-------------------------------------------------------------------------
-
-## Summary of Results
-
-| CQ# | Method | Key Finding |
-|:---:|:---:|:---|
-| CQ#40 | Distributed-lag TWFE | Current effect NS (−0.0008), lag significant (0.0050); severe negative weights (Σ = −0.85) and cross-contamination (Σ = ±1.21) |
-| CQ#42 | `did_multiplegt_dyn` | All effects positive & significant; placebos NS (joint p = 0.992) |
-| CQ#43 | `design` option | Most common path at ℓ = 1 is 0 → 1 newspaper (64% of switchers); number of paths needed to cover 80% of switchers grows with ℓ |
-| CQ#44 | `design` option | Top 3 paths cover 81% of switchers at ℓ = 1, 62% at ℓ = 2, 33% at ℓ = 4 → $AVSQ_\ell$ averages increasingly heterogeneous comparisons |
-| CQ#46 | Normalized ES | Normalized effects decrease from 0.0120 to 0.0054; placebos NS (joint p = 0.992); roughly equal weights across lags |
-| CQ#47 | Normalized ES | Cannot reject equality of effects (p = 0.165); lagged newspapers may have a smaller effect than current ones |
-| CQ#48 | No-dynamics test | Effects 1 & 2 not different (p = 0.83) → consistent with no dynamic effects |
-| CQ#49 | `did_multiplegt_stat` | ATS ≈ WATS ≈ 0.006 (significant); placebos NS |
