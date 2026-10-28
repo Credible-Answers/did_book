@@ -297,7 +297,7 @@ Test of equality of the effects: p-value = 0.415152
 
 **Interpretation:** All four non-normalized event-study effects are positive and significant, suggesting newspapers increase turnout. The effects grow with $\ell$, from 0.0144 at $\ell = 1$ to 0.0273 at $\ell = 4$. However, one cannot reject the null that all effects are equal (p-value = 0.4152). All placebo estimates are small and insignificant, with a joint p-value of 0.9922, strongly supporting the parallel-trends assumption. The average cumulative effect per treatment unit is 0.0161 (SE = 0.0048).
 
-*Figure 8.1: Non-normalized DID estimates of the effect of being exposed to a weakly larger number of newspapers for* $\ell$ periods on turnout. Standard errors clustered at the county level. 95% confidence intervals shown in red.
+*Figure 8.1: Non-normalized DID estimates of the effect of being exposed to a weakly larger number of newspapers for* $\ell$ periods on turnout. Standard errors clustered at the county level.
 
 ------------------------------------------------------------------------
 
@@ -1102,7 +1102,7 @@ Equality of effects : p = 0.165258
 ![Python Normalized ES](../figures/ch08_fig82_normalized_es_Python.png)
 :::
 
-*Figure 8.2: Normalized DID estimates of effects of newspapers on turnout. Standard errors clustered at the county level. 95% confidence intervals shown in red.*
+*Figure 8.2: Normalized DID estimates of effects of newspapers on turnout. Standard errors clustered at the county level.*
 
 ## CQ#47: Interpreting the Normalized Effects
 
@@ -1325,3 +1325,4 @@ Placebo_1  -0.0000125  0.0022931  -0.0045071  0.0044820     2,287   7,743
 :::
 
 **Interpretation:** The ATS ($\approx 0.006$) and WATS ($\approx 0.006$) are significant and positive. The placebo estimates are small and insignificant, supporting the parallel-trends assumption. These estimates are roughly half the magnitude of $\widehat{AVSQ}^n_1 = 0.012$, which suggests a non-linear treatment response.
+
