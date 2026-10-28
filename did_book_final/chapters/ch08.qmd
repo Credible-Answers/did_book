@@ -28,7 +28,7 @@ Key topics: static TWFE decompositions with multiple treatments (`twowayfeweight
 -   **Python `did_multiplegt_dyn`:** `pip install py-did-multiplegt-dyn`. Requires `polars` DataFrames.
 -   **Python `did_multiplegt_stat`:** Local notebook-based translation; see `py_did_multiplegt_stat`.
 
-**Note on cross-platform differences:** CQ40–CQ43 and CQ45 match exactly between Stata and R to 7 decimals. CQ49 (`did_multiplegt_stat`) shows small differences between Stata, R, and Python due to internal implementation variations. N, switchers, and stayers counts are identical across all three.
+**Note on cross-platform differences:** CQ41–CQ43 match exactly between Stata and R to 7 decimals. CQ49 (`did_multiplegt_stat`) shows small differences between Stata, R, and Python due to internal implementation variations. N, switchers, and stayers counts are identical across all three.
 
 ------------------------------------------------------------------------
 
@@ -159,15 +159,59 @@ res_b = twowayfeweights(df, "prestout", "cnty90", "year", "lag_numdailies", type
 ```
 
 ```         
-Decomposition of beta on numdailies:
-Positive weights: 5754, Σ = 1.8541
-Negative weights: 4302, Σ = -0.8541
-Other treat (lag_numdailies): 4721 pos (1.2137) | 4618 neg (-1.2137)
+Under the common trends assumption,
+the TWFE coefficient beta, equal to -0.0008, estimates the sum of several terms.
 
-Decomposition of beta on lag_numdailies:
-Positive weights: 5273, Σ = 1.7820
-Negative weights: 4066, Σ = -0.7820
-Other treat (numdailies): 4933 pos (1.3558) | 5123 neg (-1.3558)
+The first term is a weighted sum of 10056 ATTs of the treatment.
+5754 ATTs receive a positive weight, and 4302 receive a negative weight.
+------------------------------------------------
+Treat. var: numdailies  # ATTs      Σ weights
+------------------------------------------------
+Positive weights        5754        1.8541
+Negative weights        4302        -0.8541
+------------------------------------------------
+Total                   10056       1.0000
+------------------------------------------------
+
+The next term is a weighted sum of 9339 ATTs of treatment 1 included in the other_treatments option.
+4721 ATTs receive a positive weight, and 4618 receive a negative weight.
+------------------------------------------------------
+Other treat.: lag_numdailies  # ATTs      Σ weights
+------------------------------------------------------
+Positive weights              4721        1.2137
+Negative weights              4618        -1.2137
+------------------------------------------------------
+Total                         9339        0.0000
+------------------------------------------------------
+
+
+The development of this package was funded by the European Union (ERC, REALLYCREDIBLE,GA N°101043899).
+
+Under the common trends assumption,
+the TWFE coefficient beta, equal to 0.0050, estimates the sum of several terms.
+
+The first term is a weighted sum of 9339 ATTs of the treatment.
+5273 ATTs receive a positive weight, and 4066 receive a negative weight.
+----------------------------------------------------
+Treat. var: lag_numdailies  # ATTs      Σ weights
+----------------------------------------------------
+Positive weights            5273        1.7820
+Negative weights            4066        -0.7820
+----------------------------------------------------
+Total                       9339        1.0000
+----------------------------------------------------
+
+The next term is a weighted sum of 10056 ATTs of treatment 1 included in the other_treatments option.
+4933 ATTs receive a positive weight, and 5123 receive a negative weight.
+--------------------------------------------------
+Other treat.: numdailies  # ATTs      Σ weights
+--------------------------------------------------
+Positive weights          4933        1.3558
+Negative weights          5123        -1.3558
+--------------------------------------------------
+Total                     10056       0.0000
+--------------------------------------------------
+
 ```
 :::
 
