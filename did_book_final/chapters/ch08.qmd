@@ -114,17 +114,46 @@ twowayfeweights prestout cnty90 year lag_numdailies, other_treatments(numdailies
 ```         
 --- Decomposition of beta on numdailies (β = -0.0008) ---
 Under the common trends assumption, beta estimates a weighted sum of 10,056 ATTs.
- 5,754 ATTs receive a positive weight, and 4,302 receive a negative weight.
- Σ positive weights = 1.8541  |  Σ negative weights = -0.8541
- Other treatment (lag_numdailies):
-   4,721 positive (Σ = 1.2137) | 4,618 negative (Σ = -1.2137)
+------------------------------------------------
+Treat. var: numdailies  # ATTs      Σ weights  
+------------------------------------------------
+Positive weights        5754        1.8541      
+Negative weights        4302        -0.8541     
+------------------------------------------------
+Total                   10056       1.0000      
+------------------------------------------------
+
+Other treatment (lag_numdailies):
+------------------------------------------------
+Other treat.: lag_numd~s# ATTs      Σ weights  
+------------------------------------------------
+Positive weights        4721        1.2137      
+Negative weights        4618        -1.2137     
+------------------------------------------------
+Total                   9339        0.0000      
+------------------------------------------------
+
 
 --- Decomposition of beta on lag_numdailies (β = 0.0050) ---
 Under the common trends assumption, beta estimates a weighted sum of 9,339 ATTs.
- 5,273 ATTs receive a positive weight, and 4,066 receive a negative weight.
- Σ positive weights = 1.7820  |  Σ negative weights = -0.7820
- Other treatment (numdailies):
-   4,933 positive (Σ = 1.3558) | 5,123 negative (Σ = -1.3558)
+------------------------------------------------
+Treat. var: lag_numdai~s# ATTs      Σ weights  
+------------------------------------------------
+Positive weights        5273        1.7820      
+Negative weights        4066        -0.7820     
+------------------------------------------------
+Total                   9339        1.0000      
+------------------------------------------------
+
+Other treatment (numdailies):
+------------------------------------------------
+Other treat.: numdailies# ATTs      Σ weights  
+------------------------------------------------
+Positive weights        4933        1.3558      
+Negative weights        5123        -1.3558     
+------------------------------------------------
+Total                   10056       0.0000      
+------------------------------------------------
 ```
 
 ### R
@@ -231,7 +260,7 @@ Total                     10056       0.0000
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
 use "gentzkowetal_didtextbook.dta", clear
 did_multiplegt_dyn prestout cnty90 year numdailies, effects(4) placebo(4) effects_equal(all) cluster(cnty90)
-graph export "$FIGDIR\ch08_fig81_nonnormalized_es.png", replace width(1200)
+graph export "figures\ch08_fig81_nonnormalized_es.png", replace width(1200)
 ```
 
 ```         
@@ -1030,7 +1059,7 @@ Test of joint nullity of the effects: p-value = 0.050280
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
 use "gentzkowetal_didtextbook.dta", clear
 did_multiplegt_dyn prestout cnty90 year numdailies, effects(4) placebo(4) normalized effects_equal(all) normalized_weights cluster(cnty90)
-graph export "$FIGDIR\ch08_fig82_normalized_es.png", replace width(1200)
+graph export "figures\ch08_fig82_normalized_es.png", replace width(1200)
 ```
 
 ```         
