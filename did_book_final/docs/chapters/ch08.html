@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Chapter 8: General Designs – Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -68,15 +74,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch07.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -106,7 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -231,7 +236,6 @@ window.Quarto = {
   <li><a href="#cq47-interpreting-the-normalized-effects" id="toc-cq47-interpreting-the-normalized-effects" class="nav-link" data-scroll-target="#cq47-interpreting-the-normalized-effects">CQ#47: Interpreting the Normalized Effects</a></li>
   <li><a href="#cq48-joint-test-of-no-dynamic-effects" id="toc-cq48-joint-test-of-no-dynamic-effects" class="nav-link" data-scroll-target="#cq48-joint-test-of-no-dynamic-effects">CQ#48: Joint Test of No Dynamic Effects</a></li>
   <li><a href="#cq49-ats-and-wats-estimators-did_multiplegt_stat" id="toc-cq49-ats-and-wats-estimators-did_multiplegt_stat" class="nav-link" data-scroll-target="#cq49-ats-and-wats-estimators-did_multiplegt_stat">CQ#49: ATS and WATS Estimators (<code>did_multiplegt_stat</code>)</a></li>
-  <li><a href="#summary-of-results" id="toc-summary-of-results" class="nav-link" data-scroll-target="#summary-of-results">Summary of Results</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Credible-Answers/did_book/edit/main/chapters/ch08.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Credible-Answers/did_book/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -290,7 +294,7 @@ window.Quarto = {
 <td>Weight decomposition</td>
 <td><code>twowayfeweights</code> (SSC)</td>
 <td><code>TwoWayFEWeights</code> (CRAN)</td>
-<td>Not available (<code>other_treatments</code>)</td>
+<td><code>twowayfeweights</code></td>
 </tr>
 <tr class="odd">
 <td>Event-study DID</td>
@@ -313,7 +317,7 @@ window.Quarto = {
 <li><strong>Python <code>did_multiplegt_dyn</code>:</strong> <code>pip install py-did-multiplegt-dyn</code>. Requires <code>polars</code> DataFrames.</li>
 <li><strong>Python <code>did_multiplegt_stat</code>:</strong> Local notebook-based translation; see <code>py_did_multiplegt_stat</code>.</li>
 </ul>
-<p><strong>Note on cross-platform differences:</strong> CQ40–CQ43 and CQ45 match exactly between Stata and R to 7 decimals. CQ49 (<code>did_multiplegt_stat</code>) shows small differences between Stata, R, and Python due to internal implementation variations. N, switchers, and stayers counts are identical across all three.</p>
+<p><strong>Note on cross-platform differences:</strong> CQ41–CQ43 match exactly between Stata and R to 7 decimals. CQ49 (<code>did_multiplegt_stat</code>) shows small differences between Stata, R, and Python due to internal implementation variations. N, switchers, and stayers counts are identical across all three.</p>
 <hr>
 </section>
 <section id="cq40-distributed-lag-twfe-regression" class="level2">
@@ -381,17 +385,46 @@ N = 15,629</code></pre>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>twowayfeweights prestout cnty90 <span class="fu">year</span> lag_numdailies, other_treatments(numdailies) <span class="dv">type</span>(feTR)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>--- Decomposition of beta on numdailies (β = -0.0008) ---
 Under the common trends assumption, beta estimates a weighted sum of 10,056 ATTs.
- 5,754 ATTs receive a positive weight, and 4,302 receive a negative weight.
- Σ positive weights = 1.8541  |  Σ negative weights = -0.8541
- Other treatment (lag_numdailies):
-   4,721 positive (Σ = 1.2137) | 4,618 negative (Σ = -1.2137)
+------------------------------------------------
+Treat. var: numdailies  # ATTs      Σ weights  
+------------------------------------------------
+Positive weights        5754        1.8541      
+Negative weights        4302        -0.8541     
+------------------------------------------------
+Total                   10056       1.0000      
+------------------------------------------------
+
+Other treatment (lag_numdailies):
+------------------------------------------------
+Other treat.: lag_numd~s# ATTs      Σ weights  
+------------------------------------------------
+Positive weights        4721        1.2137      
+Negative weights        4618        -1.2137     
+------------------------------------------------
+Total                   9339        0.0000      
+------------------------------------------------
+
 
 --- Decomposition of beta on lag_numdailies (β = 0.0050) ---
 Under the common trends assumption, beta estimates a weighted sum of 9,339 ATTs.
- 5,273 ATTs receive a positive weight, and 4,066 receive a negative weight.
- Σ positive weights = 1.7820  |  Σ negative weights = -0.7820
- Other treatment (numdailies):
-   4,933 positive (Σ = 1.3558) | 5,123 negative (Σ = -1.3558)</code></pre>
+------------------------------------------------
+Treat. var: lag_numdai~s# ATTs      Σ weights  
+------------------------------------------------
+Positive weights        5273        1.7820      
+Negative weights        4066        -0.7820     
+------------------------------------------------
+Total                   9339        1.0000      
+------------------------------------------------
+
+Other treatment (numdailies):
+------------------------------------------------
+Other treat.: numdailies# ATTs      Σ weights  
+------------------------------------------------
+Positive weights        4933        1.3558      
+Negative weights        5123        -1.3558     
+------------------------------------------------
+Total                   10056       0.0000      
+------------------------------------------------</code></pre>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(TwoWayFEWeights)</span>
@@ -414,15 +447,59 @@ Under the common trends assumption, beta estimates a weighted sum of 9,339 ATTs.
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>res_a <span class="op">=</span> twowayfeweights(df, <span class="st">"prestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>, <span class="st">"numdailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, other_treatments<span class="op">=</span><span class="st">"lag_numdailies"</span>)</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>res_b <span class="op">=</span> twowayfeweights(df, <span class="st">"prestout"</span>, <span class="st">"cnty90"</span>, <span class="st">"year"</span>, <span class="st">"lag_numdailies"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"feTR"</span>, other_treatments<span class="op">=</span><span class="st">"numdailies"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>Decomposition of beta on numdailies:
-Positive weights: 5754, Σ = 1.8541
-Negative weights: 4302, Σ = -0.8541
-Other treat (lag_numdailies): 4721 pos (1.2137) | 4618 neg (-1.2137)
+<pre><code>Under the common trends assumption,
+the TWFE coefficient beta, equal to -0.0008, estimates the sum of several terms.
 
-Decomposition of beta on lag_numdailies:
-Positive weights: 5273, Σ = 1.7820
-Negative weights: 4066, Σ = -0.7820
-Other treat (numdailies): 4933 pos (1.3558) | 5123 neg (-1.3558)</code></pre>
+The first term is a weighted sum of 10056 ATTs of the treatment.
+5754 ATTs receive a positive weight, and 4302 receive a negative weight.
+------------------------------------------------
+Treat. var: numdailies  # ATTs      Σ weights
+------------------------------------------------
+Positive weights        5754        1.8541
+Negative weights        4302        -0.8541
+------------------------------------------------
+Total                   10056       1.0000
+------------------------------------------------
+
+The next term is a weighted sum of 9339 ATTs of treatment 1 included in the other_treatments option.
+4721 ATTs receive a positive weight, and 4618 receive a negative weight.
+------------------------------------------------------
+Other treat.: lag_numdailies  # ATTs      Σ weights
+------------------------------------------------------
+Positive weights              4721        1.2137
+Negative weights              4618        -1.2137
+------------------------------------------------------
+Total                         9339        0.0000
+------------------------------------------------------
+
+
+The development of this package was funded by the European Union (ERC, REALLYCREDIBLE,GA N°101043899).
+
+Under the common trends assumption,
+the TWFE coefficient beta, equal to 0.0050, estimates the sum of several terms.
+
+The first term is a weighted sum of 9339 ATTs of the treatment.
+5273 ATTs receive a positive weight, and 4066 receive a negative weight.
+----------------------------------------------------
+Treat. var: lag_numdailies  # ATTs      Σ weights
+----------------------------------------------------
+Positive weights            5273        1.7820
+Negative weights            4066        -0.7820
+----------------------------------------------------
+Total                       9339        1.0000
+----------------------------------------------------
+
+The next term is a weighted sum of 10056 ATTs of treatment 1 included in the other_treatments option.
+4933 ATTs receive a positive weight, and 5123 receive a negative weight.
+--------------------------------------------------
+Other treat.: numdailies  # ATTs      Σ weights
+--------------------------------------------------
+Positive weights          4933        1.3558
+Negative weights          5123        -1.3558
+--------------------------------------------------
+Total                     10056       0.0000
+--------------------------------------------------
+</code></pre>
 </div>
 </div>
 </div>
@@ -442,7 +519,7 @@ Other treat (numdailies): 4933 pos (1.3558) | 5123 neg (-1.3558)</code></pre>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn prestout cnty90 <span class="fu">year</span> numdailies, <span class="kw">effects</span>(4) placebo(4) effects_equal(<span class="ot">all</span>) <span class="kw">cluster</span>(cnty90)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"$FIGDIR\ch08_fig81_nonnormalized_es.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures\ch08_fig81_nonnormalized_es.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>----------------------------------------------------------------------
        Estimation of treatment effects: Event-study effects
 ----------------------------------------------------------------------
@@ -548,7 +625,7 @@ Test of equality of the effects: p-value = 0.415152</code></pre>
 </div>
 </div>
 <p><strong>Interpretation:</strong> All four non-normalized event-study effects are positive and significant, suggesting newspapers increase turnout. The effects grow with <span class="math inline">\(\ell\)</span>, from 0.0144 at <span class="math inline">\(\ell = 1\)</span> to 0.0273 at <span class="math inline">\(\ell = 4\)</span>. However, one cannot reject the null that all effects are equal (p-value = 0.4152). All placebo estimates are small and insignificant, with a joint p-value of 0.9922, strongly supporting the parallel-trends assumption. The average cumulative effect per treatment unit is 0.0161 (SE = 0.0048).</p>
-<p><em>Figure 8.1: Non-normalized DID estimates of the effect of being exposed to a weakly larger number of newspapers for</em> <span class="math inline">\(\ell\)</span> periods on turnout. Standard errors clustered at the county level. 95% confidence intervals shown in red.</p>
+<p><em>Figure 8.1: Non-normalized DID estimates of the effect of being exposed to a weakly larger number of newspapers for</em> <span class="math inline">\(\ell\)</span> periods on turnout. Standard errors clustered at the county level.</p>
 <hr>
 </section>
 <section id="cq43-detecting-treatment-paths" class="level2">
@@ -1219,7 +1296,7 @@ Test of joint nullity of the effects: p-value = 0.050280</code></pre>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>did_multiplegt_dyn prestout cnty90 <span class="fu">year</span> numdailies, <span class="kw">effects</span>(4) placebo(4) normalized effects_equal(<span class="ot">all</span>) normalized_weights <span class="kw">cluster</span>(cnty90)</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"$FIGDIR\ch08_fig82_normalized_es.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">"figures\ch08_fig82_normalized_es.png"</span>, <span class="kw">replace</span> <span class="kw">width</span>(1200)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>----------------------------------------------------------------------
        Estimation of treatment effects: Event-study effects
 ----------------------------------------------------------------------
@@ -1332,7 +1409,7 @@ Equality of effects : p = 0.165258</code></pre>
 </div>
 </div>
 </div>
-<p><em>Figure 8.2: Normalized DID estimates of effects of newspapers on turnout. Standard errors clustered at the county level. 95% confidence intervals shown in red.</em></p>
+<p><em>Figure 8.2: Normalized DID estimates of effects of newspapers on turnout. Standard errors clustered at the county level.</em></p>
 </section>
 <section id="cq47-interpreting-the-normalized-effects" class="level2">
 <h2 class="anchored" data-anchor-id="cq47-interpreting-the-normalized-effects">CQ#47: Interpreting the Normalized Effects</h2>
@@ -1444,7 +1521,7 @@ ERC REALLYCREDIBLE - GA N. 101043899</code></pre>
 <p>Using <code>did_multiplegt_stat</code>, compute the ATS and WATS estimators with <code>exact_match</code> and one placebo. Compare to the normalized event-study effects.</p>
 </blockquote>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">Stata</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">Stata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content">
 <div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>* <span class="kw">ssc</span> install did_multiplegt_stat, <span class="kw">replace</span></span>
@@ -1484,69 +1561,53 @@ WAOSS -0.0000123 0.0022931 -0.0045067 0.0044821 2,349   7,764
 141 switchers dropped (baseline treatment not in stayers' support)
 22 stayers dropped (baseline treatment not in switchers' support)</code></pre>
 </div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install did-multiplegt-stat</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> did_multiplegt_stat <span class="im">import</span> DIDMultiplegtStat</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> DIDMultiplegtStat(</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span>[<span class="st">"as"</span>, <span class="st">"was"</span>],</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>    order<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>    placebo<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>    exact_match<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>    asinstata<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>model.fit(df, Y<span class="op">=</span><span class="st">"prestout"</span>, ID<span class="op">=</span><span class="st">"cnty90"</span>, Time<span class="op">=</span><span class="st">"year"</span>, D<span class="op">=</span><span class="st">"numdailies"</span>)</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>model.summary()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>N                =            15466
+WAS Method       =  Reg. Adjustment
+Common Support   =   Exact Matching
+-----------------------------------
+
+----------------------------------------------------------------------
+                    Estimation of AS
+----------------------------------------------------------------------
+     Estimate         SE      LB CI      UB CI Switchers Stayers
+AS  0.0061145  0.0016266  0.0029263  0.0093027     4,423  11,043
+
+----------------------------------------------------------------------
+               Placebo(s) AS
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0011280  0.0025056  -0.0060389  0.0037829     2,287   7,743
+
+----------------------------------------------------------------------
+                    Estimation of WAS
+----------------------------------------------------------------------
+      Estimate         SE      LB CI      UB CI Switchers Stayers
+WAS  0.0057750  0.0014865  0.0028614  0.0086885     4,423  11,043
+
+----------------------------------------------------------------------
+               Placebo(s) WAS
+----------------------------------------------------------------------
+             Estimate         SE       LB CI      UB CI Switchers Stayers
+Placebo_1  -0.0000125  0.0022931  -0.0045071  0.0044820     2,287   7,743</code></pre>
+</div>
 </div>
 </div>
 <p><strong>Interpretation:</strong> The ATS (<span class="math inline">\(\approx 0.006\)</span>) and WATS (<span class="math inline">\(\approx 0.006\)</span>) are significant and positive. The placebo estimates are small and insignificant, supporting the parallel-trends assumption. These estimates are roughly half the magnitude of <span class="math inline">\(\widehat{AVSQ}^n_1 = 0.012\)</span>, which suggests a non-linear treatment response.</p>
-<hr>
-</section>
-<section id="summary-of-results" class="level2">
-<h2 class="anchored" data-anchor-id="summary-of-results">Summary of Results</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 35%">
-<col style="width: 35%">
-<col style="width: 28%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">CQ#</th>
-<th style="text-align: center;">Method</th>
-<th style="text-align: left;">Key Finding</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">CQ#40</td>
-<td style="text-align: center;">Distributed-lag TWFE</td>
-<td style="text-align: left;">Current effect NS (−0.0008), lag significant (0.0050); severe negative weights (Σ = −0.85) and cross-contamination (Σ = ±1.21)</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">CQ#42</td>
-<td style="text-align: center;"><code>did_multiplegt_dyn</code></td>
-<td style="text-align: left;">All effects positive &amp; significant; placebos NS (joint p = 0.992)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">CQ#43</td>
-<td style="text-align: center;"><code>design</code> option</td>
-<td style="text-align: left;">Most common path at ℓ = 1 is 0 → 1 newspaper (64% of switchers); number of paths needed to cover 80% of switchers grows with ℓ</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">CQ#44</td>
-<td style="text-align: center;"><code>design</code> option</td>
-<td style="text-align: left;">Top 3 paths cover 81% of switchers at ℓ = 1, 62% at ℓ = 2, 33% at ℓ = 4 → <span class="math inline">\(AVSQ_\ell\)</span> averages increasingly heterogeneous comparisons</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">CQ#46</td>
-<td style="text-align: center;">Normalized ES</td>
-<td style="text-align: left;">Normalized effects decrease from 0.0120 to 0.0054; placebos NS (joint p = 0.992); roughly equal weights across lags</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">CQ#47</td>
-<td style="text-align: center;">Normalized ES</td>
-<td style="text-align: left;">Cannot reject equality of effects (p = 0.165); lagged newspapers may have a smaller effect than current ones</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">CQ#48</td>
-<td style="text-align: center;">No-dynamics test</td>
-<td style="text-align: left;">Effects 1 &amp; 2 not different (p = 0.83) → consistent with no dynamic effects</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">CQ#49</td>
-<td style="text-align: center;"><code>did_multiplegt_stat</code></td>
-<td style="text-align: left;">ATS ≈ WATS ≈ 0.006 (significant); placebos NS</td>
-</tr>
-</tbody>
-</table>
 
 
 </section>
