@@ -1,12 +1,12 @@
 ---
-title: "Chapter 8: General Designs"
+title: "Chapter 8: Staggered first switch designs"
 ---
 
 ## Overview {.unnumbered}
 
 Dataset: **Gentzkow, Shapiro & Sinkinson (2011)** — `gentzkowetal_didtextbook.dta (Stata), gentzkowetal_didtextbook.RData (R), gentzkowetal_didtextbook.parquet (Python)` (16,872 observations, 1,195 counties, 16 election years 1868–1928)
 
-This chapter studies **general designs** where the treatment may be non-binary (taking values 0, 1, 2, …) and/or non-absorbing (groups can enter and exit treatment), and where treatment lags may affect the outcome. The running example measures the effect of the number of daily newspapers (`numdailies`) on presidential voter turnout (`prestout`).
+This chapter studies **staggered first switch designs** where groups experience their first treatment change at different points in time. These designs nest staggered adoption designs. But staggered first switch designs also encompass more general designs, where the treatment may be nonbinary and/or non-absorbing. The running example measures the effect of the number of daily newspapers (`numdailies`) on presidential voter turnout (`prestout`).
 
 Key topics: static TWFE decompositions with multiple treatments (`twowayfeweights`), non-normalized and normalized event-study estimators (`did_multiplegt_dyn`), treatment-path descriptions (`design` option), and heterogeneity-robust estimators ruling out dynamic effects (`did_multiplegt_stat`).
 
@@ -244,7 +244,7 @@ Total                     10056       0.0000
 ```
 :::
 
-**Interpretation:** Both coefficients are severely contaminated: the positive weights sum to 1.85, the negative weights to $-0.85$, and the cross-contamination from the other treatment sums to $\pm 1.21$. This means neither coefficient can be interpreted as a convex combination of causal effects.
+**Interpretation:** $\hat\beta^{dl}_0$ estimates the sum of two terms. The first term is a weighted combination of 10 056 $(g,t)$-specific effects of current newspapers, where 5754 effects receive a positive weight, 4302 receive a negative weight, and where positive (resp. negative) weights sum to 1.85 (resp. $-0.85$). Negative weights are almost twice as large as in the basic TWFER without the lagged treatment. The second term is a zero-sum-weight combination of 9339 $(g,t)$-specific effects of lagged newspapers, where 4721 effects receive a positive weight, 4618 receive a negative weight, and where positive (resp. negative) weights sum to 1.21 (resp. $-1.21$): the contamination of $\hat\beta^{dl}_0$ by effects of the lagged treatment is very substantial in this application. The results are similar for $\hat\beta^{dl}_1$.
 
 ------------------------------------------------------------------------
 
@@ -1175,7 +1175,6 @@ Equality of effects : p = 0.165258
 ![Python Normalized ES](../figures/ch08_fig82_normalized_es_Python.png)
 :::
 
-*Figure 8.2: Normalized DID estimates of effects of newspapers on turnout. Standard errors clustered at the county level.*
 
 ## CQ#47: Interpreting the Normalized Effects
 
