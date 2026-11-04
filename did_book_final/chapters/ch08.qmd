@@ -10,16 +10,16 @@ This chapter studies **staggered first switch designs** where groups experience 
 
 Key topics: static TWFE decompositions with multiple treatments (`twowayfeweights`), non-normalized and normalized event-study estimators (`did_multiplegt_dyn`), treatment-path descriptions (`design` option), and heterogeneity-robust estimators ruling out dynamic effects (`did_multiplegt_stat`).
 
-7 computer questions + 2 Figures + 1 Bonus test.
+7 computer questions + 2 Figures.
 
 **Packages used:**
 
 | Task | Stata | R | Python |
 |------------------|------------------|------------------|-------------------|
-| OLS / TWFE | `reg`, `areg` | `fixest`, `sandwich` | `statsmodels` |
+| OLS / TWFE | `reg`, `areg` | `fixest`, `sandwich` | `pyfixest` |
 | Weight decomposition | `twowayfeweights` (SSC) | `TwoWayFEWeights` (CRAN) | `twowayfeweights` |
 | Event-study DID | `did_multiplegt_dyn` (SSC) | `DIDmultiplegtDYN` (CRAN) | `py-did-multiplegt-dyn` (PyPI) |
-| Static DID (ATS/WATS) | `did_multiplegt_stat` (SSC) | `DIDmultiplegtSTAT` (GitHub) | `py_did_multiplegt_stat` (local) |
+| Static DID (ATS/WATS) | `did_multiplegt_stat` (SSC) | `DIDmultiplegtSTAT` (GitHub) | `py_did_multiplegt_stat` (PyPI) |
 
 **Installation notes:**
 
