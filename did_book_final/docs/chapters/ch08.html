@@ -261,7 +261,7 @@ window.Quarto = {
 <p>Dataset: <strong>Gentzkow, Shapiro &amp; Sinkinson (2011)</strong> — <code>gentzkowetal_didtextbook.dta (Stata), gentzkowetal_didtextbook.RData (R), gentzkowetal_didtextbook.parquet (Python)</code> (16,872 observations, 1,195 counties, 16 election years 1868–1928)</p>
 <p>This chapter studies <strong>staggered first switch designs</strong> where groups experience their first treatment change at different points in time. These designs nest staggered adoption designs. But staggered first switch designs also encompass more general designs, where the treatment may be nonbinary and/or non-absorbing. The running example measures the effect of the number of daily newspapers (<code>numdailies</code>) on presidential voter turnout (<code>prestout</code>).</p>
 <p>Key topics: static TWFE decompositions with multiple treatments (<code>twowayfeweights</code>), non-normalized and normalized event-study estimators (<code>did_multiplegt_dyn</code>), treatment-path descriptions (<code>design</code> option), and heterogeneity-robust estimators ruling out dynamic effects (<code>did_multiplegt_stat</code>).</p>
-<p>7 computer questions + 2 Figures + 1 Bonus test.</p>
+<p>7 computer questions + 2 Figures.</p>
 <p><strong>Packages used:</strong></p>
 <table class="caption-top table">
 <colgroup>
@@ -283,7 +283,7 @@ window.Quarto = {
 <td>OLS / TWFE</td>
 <td><code>reg</code>, <code>areg</code></td>
 <td><code>fixest</code>, <code>sandwich</code></td>
-<td><code>statsmodels</code></td>
+<td><code>pyfixest</code></td>
 </tr>
 <tr class="even">
 <td>Weight decomposition</td>
@@ -301,7 +301,7 @@ window.Quarto = {
 <td>Static DID (ATS/WATS)</td>
 <td><code>did_multiplegt_stat</code> (SSC)</td>
 <td><code>DIDmultiplegtSTAT</code> (GitHub)</td>
-<td><code>py_did_multiplegt_stat</code> (local)</td>
+<td><code>py_did_multiplegt_stat</code> (PyPI)</td>
 </tr>
 </tbody>
 </table>
@@ -340,8 +340,9 @@ N = 15,629</code></pre>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven); <span class="fu">library</span>(fixest)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gq3 <span class="ot">&lt;-</span> <span class="fu">feols</span>(prestout <span class="sc">~</span> numdailies <span class="sc">+</span> lag_numdailies <span class="sc">|</span> cnty90 <span class="sc">+</span> year, <span class="at">data =</span> df, <span class="at">cluster =</span> <span class="sc">~</span>cnty90)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gq3b <span class="ot">&lt;-</span> <span class="fu">feols</span>(prestout <span class="sc">~</span> numdailies <span class="sc">+</span> lag_numdailies <span class="sc">|</span> cnty90 <span class="sc">+</span> year,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> df, <span class="at">cluster =</span> <span class="sc">~</span>cnty90, <span class="at">fixef.tol =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>                 Estimate Std. Error  t value Pr(&gt;|t|)
 numdailies     -0.0007962  0.0013864 -0.5743   0.5658
 lag_numdailies  0.0050348  0.0014472  3.4790   0.0005
@@ -351,12 +352,12 @@ N = 15,629</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyfixest <span class="im">as</span> pf</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data</span><span class="sc">%20s</span><span class="st">ets/Gentzkow</span><span class="sc">%20e</span><span class="st">t%20al%202011/gentzkowetal_didtextbook.parquet"</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>m8 <span class="op">=</span> pf.feols(<span class="st">"prestout ~ numdailies + lag_numdailies + C(year) | cnty90"</span>, data<span class="op">=</span>df, vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"cnty90"</span>}, ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"full"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>m8 <span class="op">=</span> pf.feols(<span class="st">"prestout ~ numdailies + lag_numdailies + C(year) | cnty90"</span>, data<span class="op">=</span>df, vcov<span class="op">=</span>{<span class="st">"CRV1"</span>: <span class="st">"cnty90"</span>}, ssc<span class="op">=</span>pf.ssc(adj<span class="op">=</span><span class="va">True</span>, fixef_k<span class="op">=</span><span class="st">"nonnested"</span>, cluster_adj<span class="op">=</span><span class="va">True</span>))</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m8.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>| Coefficient     |   Estimate |   Std. Error |     t value |   Pr(&gt;|t|) |       2.5% |      97.5% |
 |:----------------|-----------:|-------------:|------------:|-----------:|-----------:|-----------:|
-| numdailies      | -0.0007962 |    0.0014419 |  -0.5521731 |  0.5809331 | -0.0036250 |  0.0020327 |
-| lag_numdailies  |  0.0050348 |    0.0015052 |   3.3449258 |  0.0008486 |  0.0020817 |  0.0079880 |
+| numdailies      | -0.0007962 |    0.0013856 |  -0.5745820 |  0.5656823 | -0.0035147 |  0.0019224 |
+| lag_numdailies  |  0.0050348 |    0.0014465 |   3.4806732 |  0.0005182 |  0.0021968 |  0.0078728 |
 
   N = 15,629</code></pre>
 </div>
