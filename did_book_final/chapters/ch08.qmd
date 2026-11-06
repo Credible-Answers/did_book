@@ -42,7 +42,7 @@ Key topics: static TWFE decompositions with multiple treatments (`twowayfeweight
 ``` stata
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
 use "gentzkowetal_didtextbook.dta", clear
-areg prestout i.year numdailies lag_numdailies, absorb(cnty90) cluster(cnty90)
+reghdfe prestout i.year numdailies lag_numdailies, absorb(cnty90) cluster(cnty90)
 ```
 
 ```         
@@ -51,8 +51,8 @@ areg prestout i.year numdailies lag_numdailies, absorb(cnty90) cluster(cnty90)
                |               Robust
        prestout | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
 ----------------+----------------------------------------------------------------
-    numdailies  |  -.0007962   .0014419    -0.55   0.581    -.0036257    .0020333
- lag_numdailies |   .0050348   .0015052     3.34   0.001     .0020814    .0079882
+    numdailies  |  -.0007962   .0013856    -0.57   0.566    -.0035147    .0019224
+ lag_numdailies |   .0050348   .0014465     3.48   0.001     .0021968    .0078728
 --------------------------------------------------------------------------------
 N = 15,629
 ```

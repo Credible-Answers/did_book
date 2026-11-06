@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Chapter 8: Staggered first switch designs – Causal Inference with Differences-in-Differences: Credible Answers to Hard Questions</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -68,15 +74,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch07.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -106,7 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -326,14 +331,14 @@ window.Quarto = {
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">areg</span> prestout i.<span class="fu">year</span> numdailies lag_numdailies, absorb(cnty90) <span class="kw">cluster</span>(cnty90)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>reghdfe prestout i.<span class="fu">year</span> numdailies lag_numdailies, absorb(cnty90) <span class="kw">cluster</span>(cnty90)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>                               (Std. err. adjusted for 1,195 clusters in cnty90)
 --------------------------------------------------------------------------------
                |               Robust
        prestout | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
 ----------------+----------------------------------------------------------------
-    numdailies  |  -.0007962   .0014419    -0.55   0.581    -.0036257    .0020333
- lag_numdailies |   .0050348   .0015052     3.34   0.001     .0020814    .0079882
+    numdailies  |  -.0007962   .0013856    -0.57   0.566    -.0035147    .0019224
+ lag_numdailies |   .0050348   .0014465     3.48   0.001     .0021968    .0078728
 --------------------------------------------------------------------------------
 N = 15,629</code></pre>
 </div>
@@ -342,7 +347,7 @@ N = 15,629</code></pre>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"</span>))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gq3b <span class="ot">&lt;-</span> <span class="fu">feols</span>(prestout <span class="sc">~</span> numdailies <span class="sc">+</span> lag_numdailies <span class="sc">|</span> cnty90 <span class="sc">+</span> year,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> df, <span class="at">cluster =</span> <span class="sc">~</span>cnty90, <span class="at">fixef.tol =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gq3b)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>                 Estimate Std. Error  t value Pr(&gt;|t|)
 numdailies     -0.0007962  0.0013864 -0.5743   0.5658
 lag_numdailies  0.0050348  0.0014472  3.4790   0.0005
@@ -1522,35 +1527,36 @@ ERC REALLYCREDIBLE - GA N. 101043899</code></pre>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>copy <span class="st">"https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta"</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">replace</span></span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"gentzkowetal_didtextbook.dta"</span>, <span class="kw">clear</span></span>
 <span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>did_multiplegt_stat prestout cnty90 <span class="fu">year</span> numdailies, placebo(1) exact_match</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre><code>-----------------------------------
-N                =            15466
-WAOSS Method     =  Reg. Adjustment
-Common Support   =   Exact Matching
------------------------------------
+<pre><code>-------------------------------------
+N                  =            15466
+Estimation method  =  Reg. Adjustment
+Common Support     =   Exact Matching
+-------------------------------------
 
 ----------------------------------------------------------------------
-                    Estimation of AOSS(s)
+                    Average Slope (AS)
 ----------------------------------------------------------------------
-     Estimate    SE      LB CI   UB CI   Switchers Stayers
-AOSS 0.0060678 0.0016463 0.0028411 0.0092945 4,423  11,043
+    Estimate    SE          LB CI      UB CI        Switchers  Stayers
+AS 0.0060678   0.0016463    0.002841   0.0092947         4423    11043 
 
 ----------------------------------------------------------------------
-               Estimation of AOSS(s) - Placebo
+                    Placebo(s) AS
 ----------------------------------------------------------------------
-     Estimate     SE      LB CI    UB CI   Switchers Stayers
-AOSS -0.0011278 0.0025056 -0.0060387 0.0037831 2,349   7,764
+     Estimate     SE         LB CI        UB CI      Switchers Stayers
+AS -0.0011278   0.0025056  -0.0060387   0.0037832       2287    7743
+
 
 ----------------------------------------------------------------------
-                    Estimation of WAOSS(s)
+                    Weighted Average Slope (WAS)
 ----------------------------------------------------------------------
-      Estimate    SE      LB CI   UB CI   Switchers Stayers
-WAOSS 0.0057351 0.0015079 0.0027796 0.0086906 4,423  11,043
+      Estimate    SE         LB CI      UB CI        Switchers Stayers
+WAS   0.0057351  0.0015079   0.0027796  0.0086905         4423   11043 
 
 ----------------------------------------------------------------------
-               Estimation of WAOSS(s) - Placebo
+                    Placebo(s) WAS
 ----------------------------------------------------------------------
-      Estimate     SE      LB CI    UB CI   Switchers Stayers
-WAOSS -0.0000123 0.0022931 -0.0045067 0.0044821 2,349   7,764
+      Estimate     SE       LB CI       UB CI        Switchers Stayers
+WAS   -0.0000123  0.0022931 -0.0045069  0.0044822      2287       7743
 
 141 switchers dropped (baseline treatment not in stayers' support)
 22 stayers dropped (baseline treatment not in switchers' support)</code></pre>
