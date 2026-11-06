@@ -42,7 +42,7 @@ Key topics: static TWFE decompositions with multiple treatments (`twowayfeweight
 ``` stata
 copy "https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.dta" "gentzkowetal_didtextbook.dta", replace
 use "gentzkowetal_didtextbook.dta", clear
-areg prestout i.year numdailies lag_numdailies, absorb(cnty90) cluster(cnty90)
+reghdfe prestout i.year numdailies lag_numdailies, absorb(cnty90) cluster(cnty90)
 ```
 
 ```         
@@ -51,8 +51,8 @@ areg prestout i.year numdailies lag_numdailies, absorb(cnty90) cluster(cnty90)
                |               Robust
        prestout | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
 ----------------+----------------------------------------------------------------
-    numdailies  |  -.0007962   .0014419    -0.55   0.581    -.0036257    .0020333
- lag_numdailies |   .0050348   .0015052     3.34   0.001     .0020814    .0079882
+    numdailies  |  -.0007962   .0013856    -0.57   0.566    -.0035147    .0019224
+ lag_numdailies |   .0050348   .0014465     3.48   0.001     .0021968    .0078728
 --------------------------------------------------------------------------------
 N = 15,629
 ```
@@ -1310,35 +1310,36 @@ did_multiplegt_stat prestout cnty90 year numdailies, placebo(1) exact_match
 ```
 
 ```         
------------------------------------
-N                =            15466
-WAOSS Method     =  Reg. Adjustment
-Common Support   =   Exact Matching
------------------------------------
+-------------------------------------
+N                  =            15466
+Estimation method  =  Reg. Adjustment
+Common Support     =   Exact Matching
+-------------------------------------
 
 ----------------------------------------------------------------------
-                    Estimation of AOSS(s)
+                    Average Slope (AS)
 ----------------------------------------------------------------------
-     Estimate    SE      LB CI   UB CI   Switchers Stayers
-AOSS 0.0060678 0.0016463 0.0028411 0.0092945 4,423  11,043
+    Estimate    SE          LB CI      UB CI        Switchers  Stayers
+AS 0.0060678   0.0016463    0.002841   0.0092947         4423    11043 
 
 ----------------------------------------------------------------------
-               Estimation of AOSS(s) - Placebo
+                    Placebo(s) AS
 ----------------------------------------------------------------------
-     Estimate     SE      LB CI    UB CI   Switchers Stayers
-AOSS -0.0011278 0.0025056 -0.0060387 0.0037831 2,349   7,764
+     Estimate     SE         LB CI        UB CI      Switchers Stayers
+AS -0.0011278   0.0025056  -0.0060387   0.0037832       2287    7743
+
 
 ----------------------------------------------------------------------
-                    Estimation of WAOSS(s)
+                    Weighted Average Slope (WAS)
 ----------------------------------------------------------------------
-      Estimate    SE      LB CI   UB CI   Switchers Stayers
-WAOSS 0.0057351 0.0015079 0.0027796 0.0086906 4,423  11,043
+      Estimate    SE         LB CI      UB CI        Switchers Stayers
+WAS   0.0057351  0.0015079   0.0027796  0.0086905         4423   11043 
 
 ----------------------------------------------------------------------
-               Estimation of WAOSS(s) - Placebo
+                    Placebo(s) WAS
 ----------------------------------------------------------------------
-      Estimate     SE      LB CI    UB CI   Switchers Stayers
-WAOSS -0.0000123 0.0022931 -0.0045067 0.0044821 2,349   7,764
+      Estimate     SE       LB CI       UB CI        Switchers Stayers
+WAS   -0.0000123  0.0022931 -0.0045069  0.0044822      2287       7743
 
 141 switchers dropped (baseline treatment not in stayers' support)
 22 stayers dropped (baseline treatment not in switchers' support)
