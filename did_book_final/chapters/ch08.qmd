@@ -64,7 +64,7 @@ library(haven); library(fixest)
 load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
 gq3b <- feols(prestout ~ numdailies + lag_numdailies | cnty90 + year,
               data = df, cluster = ~cnty90, fixef.tol = 1e-12)
-summary(gq3)
+summary(gq3b)
 ```
 
 ```         
@@ -1311,35 +1311,36 @@ did_multiplegt_stat prestout cnty90 year numdailies, placebo(1) exact_match
 ```
 
 ```         
------------------------------------
-N                =            15466
-WAOSS Method     =  Reg. Adjustment
-Common Support   =   Exact Matching
------------------------------------
+-------------------------------------
+N                  =            15466
+Estimation method  =  Reg. Adjustment
+Common Support     =   Exact Matching
+-------------------------------------
 
 ----------------------------------------------------------------------
-                    Estimation of AOSS(s)
+                    Average Slope (AS)
 ----------------------------------------------------------------------
-     Estimate    SE      LB CI   UB CI   Switchers Stayers
-AOSS 0.0060678 0.0016463 0.0028411 0.0092945 4,423  11,043
+    Estimate    SE          LB CI      UB CI        Switchers  Stayers
+AS 0.0060678   0.0016463    0.002841   0.0092947         4423    11043 
 
 ----------------------------------------------------------------------
-               Estimation of AOSS(s) - Placebo
+                    Placebo(s) AS
 ----------------------------------------------------------------------
-     Estimate     SE      LB CI    UB CI   Switchers Stayers
-AOSS -0.0011278 0.0025056 -0.0060387 0.0037831 2,349   7,764
+     Estimate     SE         LB CI        UB CI      Switchers Stayers
+AS -0.0011278   0.0025056  -0.0060387   0.0037832       2287    7743
+
 
 ----------------------------------------------------------------------
-                    Estimation of WAOSS(s)
+                    Weighted Average Slope (WAS)
 ----------------------------------------------------------------------
-      Estimate    SE      LB CI   UB CI   Switchers Stayers
-WAOSS 0.0057351 0.0015079 0.0027796 0.0086906 4,423  11,043
+      Estimate    SE         LB CI      UB CI        Switchers Stayers
+WAS   0.0057351  0.0015079   0.0027796  0.0086905         4423   11043 
 
 ----------------------------------------------------------------------
-               Estimation of WAOSS(s) - Placebo
+                    Placebo(s) WAS
 ----------------------------------------------------------------------
-      Estimate     SE      LB CI    UB CI   Switchers Stayers
-WAOSS -0.0000123 0.0022931 -0.0045067 0.0044821 2,349   7,764
+      Estimate     SE       LB CI       UB CI        Switchers Stayers
+WAS   -0.0000123  0.0022931 -0.0045069  0.0044822      2287       7743
 
 141 switchers dropped (baseline treatment not in stayers' support)
 22 stayers dropped (baseline treatment not in switchers' support)
