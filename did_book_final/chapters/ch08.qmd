@@ -28,7 +28,7 @@ Key topics: static TWFE decompositions with multiple treatments (`twowayfeweight
 -   **Python `did_multiplegt_dyn`:** `pip install py-did-multiplegt-dyn`. Requires `polars` DataFrames.
 -   **Python `did_multiplegt_stat`:** Local notebook-based translation; see `py_did_multiplegt_stat`.
 
-**Note on cross-platform differences:** CQ41–CQ43 match exactly between Stata and R to 7 decimals. CQ49 (`did_multiplegt_stat`) shows small differences between Stata, R, and Python due to internal implementation variations. N, switchers, and stayers counts are identical across all three.
+**Note on cross-platform differences:** CQ41–CQ43 match exactly between Stata and R to 7 decimals. CQ49 (`did_multiplegt_stat`) shows small differences between Stata and Python due to internal implementation variations. N, switchers, and stayers counts are identical across all three.
 
 ------------------------------------------------------------------------
 
@@ -63,14 +63,14 @@ N = 15,629
 library(haven); library(fixest)
 load(url("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Gentzkow%20et%20al%202011/gentzkowetal_didtextbook.RData"))
 gq3b <- feols(prestout ~ numdailies + lag_numdailies | cnty90 + year,
-              data = df, cluster = ~cnty90, fixef.tol = 1e-12)
+              data = df, cluster = ~cnty90)
 summary(gq3b)
 ```
 
 ```         
                  Estimate Std. Error  t value Pr(>|t|)
-numdailies     -0.0007962  0.0013864 -0.5743   0.5658
-lag_numdailies  0.0050348  0.0014472  3.4790   0.0005
+numdailies     -0.0007962  0.0013856 -0.5746   0.5657
+lag_numdailies  0.0050348  0.0014465  3.4807   0.0005
 N = 15,629
 ```
 
@@ -977,21 +977,21 @@ did_multiplegt_dyn(df = as.data.frame(df), outcome = "prestout", group = "cnty90
 ```         
 --- Path (0, 1, 1) ---
              Estimate SE      LB CI    UB CI   N     Switchers
-Effect_1     0.01326  0.00714 -0.00074 0.02725 4,479 343
-Effect_2     0.01003  0.00906 -0.00773 0.02779 3,675 343
-Test of joint nullity of the effects : p-value = 0.1739
+Effect_1     0.01313  0.00714 -0.00085 0.02712 4,529 343
+Effect_2     0.00936  0.00906 -0.00839 0.02711 3,713 343
+Test of joint nullity of the effects : p-value = 0.1750
 
 --- Path (0, 1, 0) ---
              Estimate SE      LB CI    UB CI   N     Switchers
-Effect_1     0.01468  0.01039 -0.00569 0.03504 4,323 187
-Effect_2     0.00920  0.01156 -0.01346 0.03187 3,519 187
-Test of joint nullity of the effects : p-value = 0.3324
+Effect_1     0.01450  0.01039 -0.00586 0.03486 4,373 187
+Effect_2     0.00826  0.01156 -0.01440 0.03093 3,557 187
+Test of joint nullity of the effects : p-value = 0.3223
 
 --- Path (0, 1, 2) ---
              Estimate SE      LB CI   UB CI   N     Switchers
-Effect_1     0.02171  0.01030 0.00151 0.04190 4,267 131
-Effect_2     0.03239  0.01328 0.00637 0.05842 3,463 131
-Test of joint nullity of the effects : p-value = 0.0484
+Effect_1     0.02120  0.01030 0.00101 0.04140 4,317 131
+Effect_2     0.03145  0.01327 0.00543 0.05746 3,501 131
+Test of joint nullity of the effects : p-value = 0.0571
 ```
 
 ### Python
