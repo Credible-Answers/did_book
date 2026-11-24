@@ -22,7 +22,7 @@ Datasets are loaded directly from the book's GitHub repository inside each code 
 ## Requirements
 
 - **Quarto** ≥ 1.4: <https://quarto.org/docs/download/>
-- **Stata 17+** with `nbstata`: `pip install nbstata && python -m nbstata.install`
+- **Stata 17+** with packages: `do "https://raw.githubusercontent.com/Credible-Answers/did_book/Version2/did_book_final/requirements/setup.do"`
 - **R** with packages: ` source("https://raw.githubusercontent.com/Credible-Answers/did_book/Version2/did_book_final/requirements/setup.R")`
 - **Python** with packages: `pip install pandas numpy pyfixest scipy matplotlib pyreadstat`
 
