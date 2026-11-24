@@ -640,43 +640,9 @@ cat("Slope for 50% power:", slope50)
 Slope for 50% power (numpre=6): 0.009796021
 ```
 
-### Python
-
-``` python
-import pandas as pd
-import pyfixest as pf
-from pretrends import slope_for_power
-
-df = pd.read_parquet("https://raw.githubusercontent.com/Credible-Answers/did_book/main/cc_xd_didtextbook_2025_9_30/Data%20sets/Moser%20and%20Voena%202012/moser_voena_didtextbook.parquet")
-for l in range(1, 19):
-    df[f"reltimeminus{l}"] = (df["treatmentgroup"] * (df["year"] == 1918 - l)).astype(float)
-for l in range(1, 22):
-    df[f"reltimeplus{l}"] = (df["treatmentgroup"] * (df["year"] == 1918 + l)).astype(float)
-
-minus_vars = [f"reltimeminus{i}" for i in range(1, 19)]
-plus_vars = [f"reltimeplus{i}" for i in range(1, 22)]
-
-# Full model (matches Stata: reghdfe patents reltimeminus* reltimeplus*)
-fml6 = "patents ~ " + " + ".join(minus_vars + plus_vars) + " | treatmentgroup + year"
-m6 = pf.feols(fml6, data=df, vcov={"CRV1": "subclass"})
-
-# Extract vcov for 6 closest pre-periods
-pre6 = [f"reltimeminus{i}" for i in range(1, 7)]
-vcov6 = pd.DataFrame(m6._vcov, index=m6.coef().index,
-                      columns=m6.coef().index).loc[pre6, pre6].values
-
-slope50 = slope_for_power(vcov6, target_power=0.5,
-                           t_vec=[-6, -5, -4, -3, -2, -1])
-print(f"Slope for 50% power (numpre=6): {slope50:.7f}")
-```
-
-```         
-Slope for 50% power (numpre=6): 0.0098252
-```
 :::
 
-**Note:** All three platforms give essentially identical results: Stata ≈ 0.0098235, R ≈ 0.009796, Python ≈ 0.0098252. The Python `pretrends` package (based on Roth 2022) uses the exact multivariate normal CDF, matching Stata and R.
-
+**Note:** Stata and R give essentially similar results: Stata ≈ 0.0098235, R ≈ 0.009796.
 ------------------------------------------------------------------------
 
 ## CQ#9: Event-Study without Pre-Trends
